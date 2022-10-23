@@ -2118,7 +2118,3 @@ def save(latitudes,longitudes,boundary=None,mask=None,contour=None,contoursearch
     else:
         sys.exit('ERROR - outtype=\''+outtype+'\' is not a valid selection, valid selections are \'np\'/\'xyz\'')
 
-###Classes
-
-
-
