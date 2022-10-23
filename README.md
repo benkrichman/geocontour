@@ -8,6 +8,7 @@ Options for tuning criteria of masks created from input boundary coordinates
 - cell center
 - area ratio
 - node ratio
+
 Useful mask operators
 - return mask connectivity (and null connectivity)
 - return mask edge cells
@@ -22,6 +23,7 @@ Implements 4 existing algorithms for contour tracing, and two improvements on kn
 - pavlidis tracing
 - improved pavlidis tracing (capturing inside corners)
 - fast representative tracing (see doi:10.3390/s16030353)
+
 Options for tuning critera of contours created from tracing input masks
 - trace direction
 - selectable and tunable stopping conditions
@@ -30,6 +32,7 @@ Options for tuning critera of contours created from tracing input masks
 - simplification of output contour (removal of repeating cells)
 - selectable contour closure
 - usable for an associated lat/lon grid or on a non- specified grid
+
 Useful contour operators
 - return full search path for a contour trace
 - return cell neighbors with connectivity and directional input
