@@ -48,7 +48,7 @@ Options for tuning criteria of geocontours created from input contours
 
 ## Visualization
 
-Easy and semi- automated plotting function for visualization of boundaries/masks/contours/contour searches/geocontours
+Easy and semi-automated plotting function for visualization of boundaries/masks/contours/contour searches/geocontours
 - buffers
 - grid overlay
 - mask cell visibility
