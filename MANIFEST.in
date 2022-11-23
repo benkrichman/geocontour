@@ -1,0 +1,6 @@
+include LICENSE.txt
+include README.md
+include <all packages here!!!>
+include images/*
+include requirements.txt
+include setup.py
