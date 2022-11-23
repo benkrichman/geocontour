@@ -462,6 +462,7 @@ def masksearchcenter2(latitudes,longitudes,boundary):
         https://stackoverflow.com/questions/50847827/how-can-i-select-the-pixels-that-fall-within-a-contour-in-an-image-represented-b
         https://stackoverflow.com/questions/16625507/checking-if-a-point-is-inside-a-polygon/23453678#23453678
         https://stackoverflow.com/questions/36399381/whats-the-fastest-way-of-checking-if-a-point-is-inside-a-polygon-in-python
+        https://matplotlib.org/stable/api/path_api.html#matplotlib.path.Path.contains_point
 
     Inputs (Required):
         latitudes - An evenly spaced numpy array of latitude points (degrees)
