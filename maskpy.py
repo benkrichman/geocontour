@@ -737,6 +737,7 @@ def checkconnectivity(mask,checkcells='full',connectivity=8):
     Outputs:
         connected (True/False) - A boolean describing whether the input mask is connected under the input conditions
     """
+    checkmask(mask)
     if checkcells=='full':
         maskcells=np.argwhere(mask==True)
     elif checkcells=='empty':
@@ -775,6 +776,7 @@ def findstartcell(mask,searchdir='ru'):
         startcell - A 1x2 numpy array describing the index of the start cell
         startorientation - A 1x2 numpy array describing the orientation (entry direction) of the start cell
     """
+    checkmask(mask)
     if mask.sum()==0:
         sys.exit('ERROR - Input mask has no full cells')
     if searchdir=='dr':
