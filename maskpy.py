@@ -84,6 +84,8 @@ def checkmask(mask,latitudes=None,longitudes=None):
     if mask.dtype!=bool:
         sys.exit('ERROR - Mask data type is not bool')
     if latitudes is not None and longitudes is not None:
+        checkdim(latitudes)
+        checkdim(longitudes)
         if mask.shape[0]!=len(latitudes):
             sys.exit('ERROR - Mask dimension 0 differs from length of latitude array')
         if mask.shape[1]!=len(longitudes):
@@ -103,8 +105,10 @@ def checkcontour(contour,latitudes=None,longitudes=None):
     """
     contourdiff=np.diff(contour,axis=0)
     if latitudes is not None and longitudes is not None:
-        lonspc=gridspacing(longitudes)
-        latspc=gridspacing(latitudes)
+        checkdim(longitudes)
+        checkdim(latitudes)
+        lonspc=abs(np.diff(longitudes)[0])
+        latspc=abs(np.diff(latitudes)[0])
         spacing=np.array([latspc,lonspc])
         if (contour[:,0]<latitudes.min()).any() or (contour[:,0]>latitudes.max()).any():
             sys.exit('Input contour exceeds latitude range')
@@ -133,8 +137,10 @@ def checkgeocontour(geocontour,latitudes,longitudes):
     Outputs:
         none
     """
-    lonspc=gridspacing(longitudes)
-    latspc=gridspacing(latitudes)
+    checkdim(longitudes)
+    checkdim(latitudes)
+    lonspc=abs(np.diff(longitudes)[0])
+    latspc=abs(np.diff(latitudes)[0])
     spacing=np.array([latspc,lonspc])
     if (geocontour[:,0,0]<latitudes.min()).any() or (geocontour[:,0,0]>latitudes.max()).any():
         sys.exit('Input geocontour exceeds latitude range')
