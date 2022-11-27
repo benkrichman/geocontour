@@ -1,8 +1,7 @@
 import sys
-import warnings
 import numpy
 from scipy.signal import convolve
-import check
+import geocontour.check
 
 def gridspacing(dimension):
     """
@@ -14,7 +13,7 @@ def gridspacing(dimension):
     Outputs:
         gridspacing - A positive float indicating the spacing of the input dimension (degrees)
     """
-    check.checkdim(dimension)
+    geocontour.check.checkdim(dimension)
     spacing=abs(np.diff(dimension)[0])
     return spacing
 
@@ -33,7 +32,7 @@ def longitudelengths(latitudes,spacing=1):
     Outputs:
         longitudelengths - A numpy array of longitude lengths (m)
     """
-    check.checkdim(latitudes)
+    geocontour.check.checkdim(latitudes)
     a=6378137
     b=6356752.3142
     e=np.sqrt((a**2-b**2)/a**2)
@@ -52,7 +51,7 @@ def latitudelengths(latitudes):
     Outputs:
         latitudelengths - A numpy array of latitude lengths (m)
     """
-    check.checkdim(latitudes)
+    geocontour.check.checkdim(latitudes)
     a=6378137
     b=6356752.3142
     e=np.sqrt((a**2-b**2)/a**2)
@@ -112,8 +111,8 @@ def gridareas(latitudes,longitudes,units=1):
     Outputs:
         gridareas - A numpy array of areas, with dimension 0: latitude and dimension 1: longitude (default in m^2)
     """
-    check.checkdim(latitudes)
-    check.checkdim(longitudes)
+    geocontour.check.checkdim(latitudes)
+    geocontour.check.checkdim(longitudes)
     lonspacing=gridspacing(longitudes)
     latlengths=latitudelengths(latitudes)
     lonlengths=longitudelengths(latitudes,spacing=lonspacing)
@@ -154,7 +153,7 @@ def checklatitudedirection(latitudes):
     Outputs:
         latitudedirection ('inc'/'dec') - A descriptor for the direction of the input
     """
-    check.checkdim(latitudes)
+    geocontour.check.checkdim(latitudes)
     indlatmin=latitudes.argmin()
     indlatmax=latitudes.argmax()
     if indlatmin==0 and indlatmax==len(latitudes)-1:
@@ -208,7 +207,7 @@ def findswitchindex(longitudes):
     Outputs:
         switchindex - An index for where array crosses 0 or 180 degrees, or 0 if no such point exists
     """
-    check.checkdim(longitudes)
+    geocontour.check.checkdim(longitudes)
     inprange=checklongituderange(longitudes)
     if inprange=='ind':
         switchindex=0
