@@ -14,7 +14,7 @@ except:
 
 ###Check Functions
 
-def checkdim(dimension,exit_on_error=True):
+def geocontour.check.checkdim(dimension,exit_on_error=True):
     """
     Checks an input dimension array for 1-dimensionality and regular spacing
 
@@ -37,7 +37,7 @@ def checkdim(dimension,exit_on_error=True):
             else:
                 warnings.warn('WARNING - Input dimension (latitude or longitude) has irregular spacing. Output may be innacurate')
 
-def checkboundary(boundary):
+def geocontour.check.checkboundary(boundary):
     """
     Checks a list of boundary points for 2-dimensionality and proper ordering
         Will check whether columns (lat/lon) are ordered correctly but CAN'T GUARANTEE THIS
@@ -65,7 +65,7 @@ def checkboundary(boundary):
     if (np.diff(boundary[:,1]) > 300).any():
         warnings.warn('WARNING - at least one boundary span over 300 deg in length, boundary may cross meridian/date line')
 
-def checkmask(mask,latitudes=None,longitudes=None):
+def geocontour.check.checkmask(mask,latitudes=None,longitudes=None):
     """
     Checks a mask for correct data type and dimensionality, and size if optional latitudes and longitudes are provided
 
@@ -84,14 +84,14 @@ def checkmask(mask,latitudes=None,longitudes=None):
     if mask.dtype!=bool:
         sys.exit('ERROR - Mask data type is not bool')
     if latitudes is not None and longitudes is not None:
-        checkdim(latitudes)
-        checkdim(longitudes)
+        geocontour.check.checkdim(latitudes)
+        geocontour.check.checkdim(longitudes)
         if mask.shape[0]!=len(latitudes):
             sys.exit('ERROR - Mask dimension 0 differs from length of latitude array')
         if mask.shape[1]!=len(longitudes):
             sys.exit('ERROR - Mask dimension 1 differs from length of longitude array')
 
-def checkcontour(contour,latitudes=None,longitudes=None):
+def geocontour.check.checkcontour(contour,latitudes=None,longitudes=None):
     """
     Check contour for repeating cells, closure, and connectivity, and latitude/longitude range if optional latitudes and longitudes are provided
 
@@ -105,8 +105,8 @@ def checkcontour(contour,latitudes=None,longitudes=None):
     """
     contourdiff=np.diff(contour,axis=0)
     if latitudes is not None and longitudes is not None:
-        checkdim(longitudes)
-        checkdim(latitudes)
+        geocontour.check.checkdim(longitudes)
+        geocontour.check.checkdim(latitudes)
         lonspc=abs(np.diff(longitudes)[0])
         latspc=abs(np.diff(latitudes)[0])
         spacing=np.array([latspc,lonspc])
@@ -125,7 +125,7 @@ def checkcontour(contour,latitudes=None,longitudes=None):
     if ((contour[0,:]-contour[-1,:])!=0).any():
         sys.exit('ERROR - Input contour does not close: last_point!=first_point')
 
-def checkgeocontour(geocontour,latitudes,longitudes):
+def geocontour.check.checkgeocontour(geocontour,latitudes,longitudes):
     """
     Check geocontour for latitude/longitude range and dimension
 
@@ -137,8 +137,8 @@ def checkgeocontour(geocontour,latitudes,longitudes):
     Outputs:
         none
     """
-    checkdim(longitudes)
-    checkdim(latitudes)
+    geocontour.check.checkdim(longitudes)
+    geocontour.check.checkdim(latitudes)
     lonspc=abs(np.diff(longitudes)[0])
     latspc=abs(np.diff(latitudes)[0])
     spacing=np.array([latspc,lonspc])
@@ -149,7 +149,7 @@ def checkgeocontour(geocontour,latitudes,longitudes):
 
 ###Grid Functions
 
-def gridspacing(dimension):
+def geocontour.grid.gridspacing(dimension):
     """
     Returns the grid spacing for a given input dimension
     
@@ -159,11 +159,11 @@ def gridspacing(dimension):
     Outputs:
         gridspacing - A positive float indicating the spacing of the input dimension (degrees)
     """
-    checkdim(dimension)
+    geocontour.check.checkdim(dimension)
     spacing=abs(np.diff(dimension)[0])
     return spacing
 
-def longitudelengths(latitudes,spacing=1):
+def geocontour.grid.longitudelengths(latitudes,spacing=1):
     """
     Returns the lengths of a degree (default) of longitude over a range of latitudes 
     Source: https://doi.org/10.5281/ZENODO.35392
@@ -178,7 +178,7 @@ def longitudelengths(latitudes,spacing=1):
     Outputs:
         longitudelengths - A numpy array of longitude lengths (m)
     """
-    checkdim(latitudes)
+    geocontour.check.checkdim(latitudes)
     a=6378137
     b=6356752.3142
     e=np.sqrt((a**2-b**2)/a**2)
@@ -186,7 +186,7 @@ def longitudelengths(latitudes,spacing=1):
     lonlengths=spacing*np.pi*a*np.cos(latrads)/(180*np.sqrt(1-(e*np.sin(latrads))**2))
     return lonlengths
 
-def latitudelengths(latitudes):
+def geocontour.grid.latitudelengths(latitudes):
     """
     Returns the grid lengths of a defined range of latitudes 
     Source: https://doi.org/10.5281/ZENODO.35392
@@ -197,16 +197,16 @@ def latitudelengths(latitudes):
     Outputs:
         latitudelengths - A numpy array of latitude lengths (m)
     """
-    checkdim(latitudes)
+    geocontour.check.checkdim(latitudes)
     a=6378137
     b=6356752.3142
     e=np.sqrt((a**2-b**2)/a**2)
     latrads=latitudes*np.pi/180
-    spacing=gridspacing(latitudes)
+    spacing=geocontour.grid.gridspacing(latitudes)
     latlengths=spacing*np.pi*a*(1-e**2)/(180*(1-(e*np.sin(latrads))**2)**(3/2))
     return latlengths
 
-def longitudelength(latitude):
+def geocontour.grid.longitudelength(latitude):
     """
     Returns the length of a degree of longitude at the input latitude
     Source: https://doi.org/10.5281/ZENODO.35392
@@ -224,7 +224,7 @@ def longitudelength(latitude):
     lonlength=np.pi*a*np.cos(latrad)/(180*np.sqrt(1-(e*np.sin(latrad))**2))
     return lonlength
 
-def latitudelength(latitude):
+def geocontour.grid.latitudelength(latitude):
     """
     Returns the length of a degree of latitude at the input latitude
     Source: https://doi.org/10.5281/ZENODO.35392
@@ -242,7 +242,7 @@ def latitudelength(latitude):
     latlength=np.pi*a*(1-e**2)/(180*(1-(e*np.sin(latrad))**2)**(3/2))
     return latlength
 
-def gridareas(latitudes,longitudes,units=1):
+def geocontour.grid.gridareas(latitudes,longitudes,units=1):
     """
     Returns the cell areas of a grid defined by a range of latitudes and longitudes
 
@@ -257,15 +257,15 @@ def gridareas(latitudes,longitudes,units=1):
     Outputs:
         gridareas - A numpy array of areas, with dimension 0: latitude and dimension 1: longitude (default in m^2)
     """
-    checkdim(latitudes)
-    checkdim(longitudes)
-    lonspacing=gridspacing(longitudes)
-    latlengths=latitudelengths(latitudes)
-    lonlengths=longitudelengths(latitudes,spacing=lonspacing)
+    geocontour.check.checkdim(latitudes)
+    geocontour.check.checkdim(longitudes)
+    lonspacing=geocontour.grid.gridspacing(longitudes)
+    latlengths=geocontour.grid.latitudelengths(latitudes)
+    lonlengths=geocontour.grid.longitudelengths(latitudes,spacing=lonspacing)
     grdareas=np.repeat((latlengths*lonlengths)[:,np.newaxis],len(longitudes),axis=1)/units
     return grdareas
 
-def checklongituderange(longitudes):
+def geocontour.grid.checklongituderange(longitudes):
     """
     Returns a descriptor for the range of a set of longitude points 
         negative (-180 to 180), positive (0 to 360), or indeterminate (0 to 180) range
@@ -288,7 +288,7 @@ def checklongituderange(longitudes):
         longituderange='ind'
     return longituderange
 
-def checklatitudedirection(latitudes):
+def geocontour.grid.checklatitudedirection(latitudes):
     """
     Returns a descriptor for the direction of a set of latitude points
         increasing or decreasing
@@ -299,7 +299,7 @@ def checklatitudedirection(latitudes):
     Outputs:
         latitudedirection ('inc'/'dec') - A descriptor for the direction of the input
     """
-    checkdim(latitudes)
+    geocontour.check.checkdim(latitudes)
     indlatmin=latitudes.argmin()
     indlatmax=latitudes.argmax()
     if indlatmin==0 and indlatmax==len(latitudes)-1:
@@ -310,7 +310,7 @@ def checklatitudedirection(latitudes):
         sys.exit('ERROR - Inconsistency in input latitude array, not ordered small to large or large to small')
     return latitudedirection
 
-def switchlongitudes(longitudes,outrange,print_output='n'):
+def geocontour.grid.switchlongitudes(longitudes,outrange,print_output='n'):
     """
     Returns a set of longitude points switched in place between negative (-180 to 180) and positive (0 to 360)
 
@@ -326,7 +326,7 @@ def switchlongitudes(longitudes,outrange,print_output='n'):
     """
     if outrange!='pos' and outrange!='neg':
         sys.exit('ERROR - Unrecognized longitude output range. Valid inputs are \'pos\' or \'neg\'')
-    inprange=checklongituderange(longitudes)
+    inprange=geocontour.grid.checklongituderange(longitudes)
     if inprange==outrange or inprange=='ind':
         switchlongitudes=longitudes
         if print_output=='y':
@@ -343,7 +343,7 @@ def switchlongitudes(longitudes,outrange,print_output='n'):
         sys.exit('ERROR - Function should not reach this point, check source')
     return switchlongitudes
 
-def findswitchindex(longitudes):
+def geocontour.grid.findswitchindex(longitudes):
     """
     Returns the index where a longitude array either crosses 0 or 180 degrees
 
@@ -353,8 +353,8 @@ def findswitchindex(longitudes):
     Outputs:
         switchindex - An index for where array crosses 0 or 180 degrees, or 0 if no such point exists
     """
-    checkdim(longitudes)
-    inprange=checklongituderange(longitudes)
+    geocontour.check.checkdim(longitudes)
+    inprange=geocontour.grid.checklongituderange(longitudes)
     if inprange=='ind':
         switchindex=0
     elif inprange=='neg':
@@ -365,7 +365,7 @@ def findswitchindex(longitudes):
 
 ###Mask Fucntions
 
-def maskboxset(latitudes,longitudes,boundary):
+def geocontour.maskutil.boxset(latitudes,longitudes,boundary):
     """
     Checks input dimensions (lat/lon) against input boundary and returns min/max indicies of bounding box
 
@@ -380,12 +380,12 @@ def maskboxset(latitudes,longitudes,boundary):
         boxlonmin - The minimum bounding box longitude index
         boxlonmax - The maximum bounding box longitude index
     """
-    checkdim(latitudes)
-    checkdim(longitudes)
-    checkboundary(boundary)
-    latdir=checklatitudedirection(latitudes)
-    loninput=checklongituderange(longitudes)
-    boundloninput=checklongituderange(boundary[:,1])
+    geocontour.check.checkdim(latitudes)
+    geocontour.check.checkdim(longitudes)
+    geocontour.check.checkboundary(boundary)
+    latdir=geocontour.grid.checklatitudedirection(latitudes)
+    loninput=geocontour.grid.checklongituderange(longitudes)
+    boundloninput=geocontour.grid.checklongituderange(boundary[:,1])
     if (loninput=='neg' and boundloninput=='pos') or (loninput=='pos' and boundloninput=='neg'):
         sys.exit('ERROR - Longitude input range is '+loninput+' and boundary longitude range is '+boundloninput)
     boundlatmin=boundary.min(axis=0)[0]
@@ -426,7 +426,7 @@ def maskboxset(latitudes,longitudes,boundary):
         boxlonmax=((longitudes-boundlonmax)>0).nonzero()[0][0]
     return boxlatmin, boxlatmax, boxlonmin, boxlonmax
 
-def masksearchcenter(latitudes,longitudes,boundary,precision=1e-5):
+def geocontour.masksearch.center(latitudes,longitudes,boundary,precision=1e-5):
     """
     Returns a mask over a range of input latitudes and longitudes determined by an input boundary
         Critera for inclusion of a cell is whether the center of the cell falls within the boundary
@@ -443,10 +443,10 @@ def masksearchcenter(latitudes,longitudes,boundary,precision=1e-5):
     Outputs:
         mask - A 2-d boolean numpy array of dimension MxN where M=len(latitudes) and N=len(longitudes)
     """
-    latdir=checklatitudedirection(latitudes)
+    latdir=geocontour.grid.checklatitudedirection(latitudes)
     if latdir=='dec':
         latitudes=np.flip(latitudes)
-    boxlatmin, boxlatmax, boxlonmin, boxlonmax = maskboxset(latitudes,longitudes,boundary)
+    boxlatmin, boxlatmax, boxlonmin, boxlonmax = geocontour.maskutil.boxset(latitudes,longitudes,boundary)
     boxmask=np.full((boxlatmax-boxlatmin+1,boxlonmax-boxlonmin+1),False)
     boundpoly=shg.Polygon(boundary).buffer(precision)
     for la in np.arange(boxlatmin,boxlatmax+1,1):
@@ -459,11 +459,11 @@ def masksearchcenter(latitudes,longitudes,boundary,precision=1e-5):
         mask=np.flip(mask,axis=0)
     return mask
 
-def masksearchcenter2(latitudes,longitudes,boundary):
+def geocontour.masksearch.center2(latitudes,longitudes,boundary):
     """
     Returns a mask over a range of input latitudes and longitudes determined by an input boundary
         Critera for inclusion of a cell is whether the center of the cell falls within the boundary
-        Functionally matches masksearchcenter(), but utilizes matplotlib.path functions, which are probably optimized and thus is roughly 2.5*sqrt(N) faster for N points, though lacks a "precision" buffer input
+        Functionally matches geocontour.masksearch.center(), but utilizes matplotlib.path functions, which are probably optimized and thus is roughly 2.5*sqrt(N) faster for N points, though lacks a "precision" buffer input
     Source:
         https://stackoverflow.com/questions/50847827/how-can-i-select-the-pixels-that-fall-within-a-contour-in-an-image-represented-b
         https://stackoverflow.com/questions/16625507/checking-if-a-point-is-inside-a-polygon/23453678#23453678
@@ -478,11 +478,11 @@ def masksearchcenter2(latitudes,longitudes,boundary):
     Outputs:
         mask - A 2-d boolean numpy array of dimension MxN where M=len(latitudes) and N=len(longitudes)
     """
-    latdir=checklatitudedirection(latitudes)
+    latdir=geocontour.grid.checklatitudedirection(latitudes)
     if latdir=='dec':
         latitudes=np.flip(latitudes)
-    boxlatmin, boxlatmax, boxlonmin, boxlonmax = maskboxset(latitudes,longitudes,boundary)
-    boundpoly=mplp.Path(boundary)
+    boxlatmin, boxlatmax, boxlonmin, boxlonmax = geocontour.maskutil.boxset(latitudes,longitudes,boundary)
+    boundpoly=matplotlib.path.Path(boundary)
     ysp, xsp = np.meshgrid(latitudes[boxlatmin:boxlatmax+1],longitudes[boxlonmin:boxlonmax+1], indexing='ij')
     searchpoints=np.hstack((ysp.reshape((-1,1)), xsp.reshape((-1,1))))
     boxmask=boundpoly.contains_points(searchpoints)
@@ -492,7 +492,7 @@ def masksearchcenter2(latitudes,longitudes,boundary):
         mask=np.flip(mask,axis=0)
     return mask
 
-def masksearchnodes(latitudes,longitudes,boundary,nodes=2,precision=1e-5):
+def geocontour.masksearch.nodes(latitudes,longitudes,boundary,nodes=2,precision=1e-5):
     """
     Returns a mask over a range of input latitudes and longitudes determined by an input boundary
         Critera for inclusion of a cell is whether a given number (default=2) of cell nodes (corners) fall within the boundary 
@@ -514,12 +514,12 @@ def masksearchnodes(latitudes,longitudes,boundary,nodes=2,precision=1e-5):
         warnings.warn('WARNING - valid input for nodes is 1-4, nodes<1 will result in all cells being selected')
     if nodes>4:
         warnings.warn('WARNING - valid input for nodes is 1-4, nodes>4 will result in no cells being selected')
-    latdir=checklatitudedirection(latitudes)
+    latdir=geocontour.grid.checklatitudedirection(latitudes)
     if latdir=='dec':
         latitudes=np.flip(latitudes)
-    boxlatmin, boxlatmax, boxlonmin, boxlonmax = maskboxset(latitudes,longitudes,boundary)
-    latgrdspc=gridspacing(latitudes)
-    longrdspc=gridspacing(longitudes)
+    boxlatmin, boxlatmax, boxlonmin, boxlonmax = geocontour.maskutil.boxset(latitudes,longitudes,boundary)
+    latgrdspc=geocontour.grid.gridspacing(latitudes)
+    longrdspc=geocontour.grid.gridspacing(longitudes)
     boxmask=np.full((boxlatmax-boxlatmin+1,boxlonmax-boxlonmin+1),False)
     boundpoly=shg.Polygon(boundary).buffer(precision)
     for la in np.arange(boxlatmin,boxlatmax+1,1):
@@ -537,11 +537,11 @@ def masksearchnodes(latitudes,longitudes,boundary,nodes=2,precision=1e-5):
         mask=np.flip(mask,axis=0)
     return mask
 
-def masksearchnodes2(latitudes,longitudes,boundary,nodes=2,precision=1e-5):
+def geocontour.masksearch.nodes2(latitudes,longitudes,boundary,nodes=2,precision=1e-5):
     """
     Returns a mask over a range of input latitudes and longitudes determined by an input boundary
         Critera for inclusion of a cell is whether a given number (default=2) of cell nodes (corners) fall within the boundary 
-        Functionally matches masksearchnodes(), but utilizes matplotlib.path functions, though speed is similar to the shapely implementation
+        Functionally matches geocontour.masksearch.nodes(), but utilizes matplotlib.path functions, though speed is similar to the shapely implementation
 
     Inputs (Required):
         latitudes - An evenly spaced numpy array of latitude points (degrees)
@@ -558,14 +558,14 @@ def masksearchnodes2(latitudes,longitudes,boundary,nodes=2,precision=1e-5):
         warnings.warn('WARNING - valid input for nodes is 1-4, nodes<1 will result in all cells being selected')
     if nodes>4:
         warnings.warn('WARNING - valid input for nodes is 1-4, nodes>4 will result in no cells being selected')
-    latdir=checklatitudedirection(latitudes)
+    latdir=geocontour.grid.checklatitudedirection(latitudes)
     if latdir=='dec':
         latitudes=np.flip(latitudes)
-    boxlatmin, boxlatmax, boxlonmin, boxlonmax = maskboxset(latitudes,longitudes,boundary)
-    latgrdspc=gridspacing(latitudes)
-    longrdspc=gridspacing(longitudes)
+    boxlatmin, boxlatmax, boxlonmin, boxlonmax = geocontour.maskutil.boxset(latitudes,longitudes,boundary)
+    latgrdspc=geocontour.grid.gridspacing(latitudes)
+    longrdspc=geocontour.grid.gridspacing(longitudes)
     boxmask=np.full((boxlatmax-boxlatmin+1,boxlonmax-boxlonmin+1),False)
-    boundpoly=mplp.Path(boundary)
+    boundpoly=matplotlib.path.Path(boundary)
     for la in np.arange(boxlatmin,boxlatmax+1,1):
         for lo in np.arange(boxlonmin,boxlonmax+1,1):
             nodeLL=[latitudes[la]-latgrdspc/2,longitudes[lo]-longrdspc/2]
@@ -581,7 +581,7 @@ def masksearchnodes2(latitudes,longitudes,boundary,nodes=2,precision=1e-5):
         mask=np.flip(mask,axis=0)
     return mask
 
-def masksearcharea(latitudes,longitudes,boundary,area=0.5):
+def geocontour.masksearch.area(latitudes,longitudes,boundary,area=0.5):
     """
     Returns a mask over a range of input latitudes and longitudes determined by an input boundary
         Critera for inclusion of a cell is whether the area of the cell enclosed by the boundary is greater than some fraction (default=0.5) 
@@ -601,12 +601,12 @@ def masksearcharea(latitudes,longitudes,boundary,area=0.5):
         warnings.warn('WARNING - valid input for area is 0-1, area>1 will result in no cells being selected')
     if area<=0:
         warnings.warn('WARNING - valid input for area is 0-1, area<=0 will result in all cells being selected')
-    latdir=checklatitudedirection(latitudes)
+    latdir=geocontour.grid.checklatitudedirection(latitudes)
     if latdir=='dec':
         latitudes=np.flip(latitudes)
-    boxlatmin, boxlatmax, boxlonmin, boxlonmax = maskboxset(latitudes,longitudes,boundary)
-    latgrdspc=gridspacing(latitudes)
-    longrdspc=gridspacing(longitudes)
+    boxlatmin, boxlatmax, boxlonmin, boxlonmax = geocontour.maskutil.boxset(latitudes,longitudes,boundary)
+    latgrdspc=geocontour.grid.gridspacing(latitudes)
+    longrdspc=geocontour.grid.gridspacing(longitudes)
     boxmask=np.full((boxlatmax-boxlatmin+1,boxlonmax-boxlonmin+1),False)
     boundpoly=shg.Polygon(boundary)
     for la in np.arange(boxlatmin,boxlatmax+1,1):
@@ -624,7 +624,7 @@ def masksearcharea(latitudes,longitudes,boundary,area=0.5):
         mask=np.flip(mask,axis=0)
     return mask
 
-def maskedgecells(mask,latitudes=None,longitudes=None,connectivity=8):
+def geocontour.maskutil.maskedgecells(mask,latitudes=None,longitudes=None,connectivity=8):
     """
     Returns a mask of only the edge cells, and if latitudes and longitudes are provided also returns an array of the edge cells 
     
@@ -643,9 +643,9 @@ def maskedgecells(mask,latitudes=None,longitudes=None,connectivity=8):
             Only output if optional latitude and longitude arguments are provided
     """
     if latitudes is not None and longitudes is not None:
-        checkmask(mask,latitudes,longitudes)
+        geocontour.check.checkmask(mask,latitudes,longitudes)
     else:
-        checkmask(mask)
+        geocontour.check.checkmask(mask)
     kernel=np.ones((3,3),dtype='int')
     kernel[1,1]=0
     if connectivity==8:
@@ -665,7 +665,7 @@ def maskedgecells(mask,latitudes=None,longitudes=None,connectivity=8):
     else:
         return edgemask
 
-def maskvertexpoints(mask,latitudes,longitudes):
+def geocontour.maskutil.maskvertexpoints(mask,latitudes,longitudes):
     """
     Returns the vertex points of all cells in the input mask, and the vertex points of only the mask edge
 
@@ -678,16 +678,16 @@ def maskvertexpoints(mask,latitudes,longitudes):
         vertexpoints - A 2-d Nx2 numpy array of latitude/longitude points (degrees) of all vertices of mask cells
         edgevertexpoints - A 2-d Nx2 numpy array of latitude/longitude points (degrees) of all vertices of cells at the mask edge (8-connected)
     """
-    checkmask(mask,latitudes,longitudes)
+    geocontour.check.checkmask(mask,latitudes,longitudes)
     vertexmask=np.full((tuple(np.array(mask.shape)+1)),0)
     maskint=mask.astype('int')
     vertexmask[:-1,:-1]+=maskint
     vertexmask[:-1,1:]+=maskint
     vertexmask[1:,:-1]+=maskint
     vertexmask[1:,1:]+=maskint
-    latspc=gridspacing(latitudes)
-    lonspc=gridspacing(longitudes)
-    latdir=checklatitudedirection(latitudes)
+    latspc=geocontour.grid.gridspacing(latitudes)
+    lonspc=geocontour.grid.gridspacing(longitudes)
+    latdir=geocontour.grid.checklatitudedirection(latitudes)
     if latdir=='inc':
         vertexlatitudes=np.append(latitudes-latspc/2,latitudes[-1]+latspc/2)
     elif latdir=='dec':
@@ -698,7 +698,7 @@ def maskvertexpoints(mask,latitudes,longitudes):
     edgevertexpoints=np.vstack((vertexlatitudes[edgevertexmask.nonzero()[0]],vertexlongitudes[edgevertexmask.nonzero()[1]])).T
     return vertexpoints, edgevertexpoints
 
-def findneighbors(cell,connectivity=8,direction='cw'):
+def geocontour.maskutil.findneighbors(cell,connectivity=8,direction='cw'):
     """
     Returns the neighbors of a cell, with selected connectivity and direction
 
@@ -728,7 +728,7 @@ def findneighbors(cell,connectivity=8,direction='cw'):
     neighbors=cell+neighborrange
     return neighbors
 
-def checkconnectivity(mask,checkcells='full',connectivity=8):
+def geocontour.maskutil.checkconnectivity(mask,checkcells='full',connectivity=8):
     """
     Returns whether a mask or its inverse are connected
 
@@ -743,7 +743,7 @@ def checkconnectivity(mask,checkcells='full',connectivity=8):
     Outputs:
         connected (True/False) - A boolean describing whether the input mask is connected under the input conditions
     """
-    checkmask(mask)
+    geocontour.check.checkmask(mask)
     if checkcells=='full':
         maskcells=np.argwhere(mask==True)
     elif checkcells=='empty':
@@ -756,7 +756,7 @@ def checkconnectivity(mask,checkcells='full',connectivity=8):
     tocheck.append(startcell)
     while len(tocheck)>0:
         checked.append(tocheck[0])
-        cellneighbors=findneighbors(tocheck.pop(0),connectivity=connectivity)
+        cellneighbors=geocontour.maskutil.findneighbors(tocheck.pop(0),connectivity=connectivity)
         for k in cellneighbors:
             if (k==maskcells).all(axis=1).any() and not any(np.array_equal(k,x) for x in checked) and not any(np.array_equal(k,x) for x in tocheck):
                 tocheck.append(k)
@@ -768,7 +768,7 @@ def checkconnectivity(mask,checkcells='full',connectivity=8):
 
 ###Contour Functions
 
-def findstartcell(mask,searchdir='ru'):
+def geocontour.contourutil.findstart(mask,searchdir='ru'):
     """
     Returns a starting cell for a contour, given a mask and a search criteria
 
@@ -782,7 +782,7 @@ def findstartcell(mask,searchdir='ru'):
         startcell - A 1x2 numpy array describing the index of the start cell
         startorientation - A 1x2 numpy array describing the orientation (entry direction) of the start cell
     """
-    checkmask(mask)
+    geocontour.check.checkmask(mask)
     if mask.sum()==0:
         sys.exit('ERROR - Input mask has no full cells')
     if searchdir=='dr':
@@ -811,7 +811,7 @@ def findstartcell(mask,searchdir='ru'):
     startorientation=(abs(np.array(sortcode))*np.copysign(1,sortcode[1])).astype('int')
     return startcell,startorientation
 
-def parsestartinput(start,buffermask):
+def geocontour.contourutil.parsestart(start,buffermask):
     """
     Checks start input for contour tracing
     Mainly used internally for contour trace functions
@@ -839,7 +839,7 @@ def parsestartinput(start,buffermask):
         sys.exit('ERROR - Startorientation '+str(startorientation)+' should be a unit vector pointing up/down/left/right')
     return startcell,startorientation
 
-def setstopfunction(stop,startvisits,startcell,startorientation):
+def geocontour.contourutil.setstop(stop,startvisits,startcell,startorientation):
     """
     Returns a stopping function for use in contour tracing while loop
     Mainly used internally for contour trace functions
@@ -881,7 +881,7 @@ def setstopfunction(stop,startvisits,startcell,startorientation):
         sys.exit('ERROR - stop=\''+stop+'\' is not a valid selection, valid selections are \'Elisoff\'/\'Nvisits\'/\'either\'')
     return checkbreak
 
-def cleancontour(contourcells,searchcells,latitudes=None,longitudes=None,closecontour=True,remcontourrepeat=True,remsearchrepeat=False):
+def geocontour.contourutil.clean(contourcells,searchcells,latitudes=None,longitudes=None,closecontour=True,remcontourrepeat=True,remsearchrepeat=False):
     """
     Returns a cleaned contour that will pass checks
     Mainly used internally for contour trace functions
@@ -913,9 +913,9 @@ def cleancontour(contourcells,searchcells,latitudes=None,longitudes=None,closeco
     if remsearchrepeat:
         contoursearch=contoursearch[(np.diff(contoursearch,axis=0,prepend=np.nan)!=0).any(axis=1)]
     if latitudes is not None and longitudes is not None:
-        latspc=gridspacing(latitudes)
-        lonspc=gridspacing(longitudes)
-        latdir=checklatitudedirection(latitudes)
+        latspc=geocontour.grid.gridspacing(latitudes)
+        lonspc=geocontour.grid.gridspacing(longitudes)
+        latdir=geocontour.grid.checklatitudedirection(latitudes)
         if latdir=='inc':
             latitudes_ext=np.concatenate(([latitudes[0]-latspc],latitudes,[latitudes[-1]+latspc]))
         elif latdir=='dec':
@@ -928,7 +928,7 @@ def cleancontour(contourcells,searchcells,latitudes=None,longitudes=None,closeco
         contoursearch-=1
     return contour,contoursearch
 
-def contourtracesquare(mask,latitudes=None,longitudes=None,direction='cw',start='auto',stop='either',startvisits=3,checkconn=False,remcontourrepeat=True,remsearchrepeat=False,closecontour=True):
+def geocontour.contourtrace.square(mask,latitudes=None,longitudes=None,direction='cw',start='auto',stop='either',startvisits=3,checkconn=False,remcontourrepeat=True,remsearchrepeat=False,closecontour=True):
     """
     Returns the contour trace of a mask input using the square tracing algorithm
     Source:
@@ -963,14 +963,14 @@ def contourtracesquare(mask,latitudes=None,longitudes=None,direction='cw',start=
             Note: If latitudes/longitudes not provided, returned contour/contoursearch will be indices of the input mask
     """
     if latitudes is not None and longitudes is not None:
-        checkmask(mask,latitudes,longitudes)
+        geocontour.check.checkmask(mask,latitudes,longitudes)
     else:
-        checkmask(mask)
+        geocontour.check.checkmask(mask)
     buffermask=np.full((tuple(np.array(mask.shape)+2)),False)
     buffermask[1:-1,1:-1]=mask
     if checkconn:
-        fullconnectivity=checkconnectivity(buffermask,checkcells='full',connectivity=4)
-        emptyconnectivity=checkconnectivity(buffermask,checkcells='empty',connectivity=4)
+        fullconnectivity=geocontour.maskutil.checkconnectivity(buffermask,checkcells='full',connectivity=4)
+        emptyconnectivity=geocontour.maskutil.checkconnectivity(buffermask,checkcells='empty',connectivity=4)
         if not fullconnectivity or not emptyconnectivity:
             warnings.warn('WARNING - Mask and/or non-mask not 4-connected: square tracing may not extract the full contour')
     if direction=='cw':
@@ -988,12 +988,12 @@ def contourtracesquare(mask,latitudes=None,longitudes=None,direction='cw',start=
     else:
         sys.exit('ERROR - direction=\''+direction+'\' is not a valid selection, valid selections are \'cw\'/\'ccw\'')
     if type(start) is not str:
-        startcell,startorientation=parsestartinput(start,buffermask)
+        startcell,startorientation=geocontour.contourutil.parsestart(start,buffermask)
     elif start=='auto':
-        startcell,startorientation=findstartcell(buffermask,searchdir=searchdir)
+        startcell,startorientation=geocontour.contourutil.findstart(buffermask,searchdir=searchdir)
     else:
         sys.exit('ERROR - start=\''+start+'\' is not a valid selection, valid selections are \'auto\' or a 2x2 array describing start cell index and start orientation')
-    checkbreak=setstopfunction(stop,startvisits,startcell,startorientation)
+    checkbreak=geocontour.contourutil.setstop(stop,startvisits,startcell,startorientation)
     searchcells=[]
     contourcells=[]
     orientation=startorientation
@@ -1011,10 +1011,10 @@ def contourtracesquare(mask,latitudes=None,longitudes=None,direction='cw',start=
         if (cell==startcell).all():
             Nvisits+=1
         breakloop=checkbreak(cell,orientation,Nvisits)
-    contour,contoursearch=cleancontour(contourcells,searchcells,latitudes=latitudes,longitudes=longitudes,closecontour=closecontour,remcontourrepeat=remcontourrepeat,remsearchrepeat=remsearchrepeat)
+    contour,contoursearch=geocontour.contourutil.clean(contourcells,searchcells,latitudes=latitudes,longitudes=longitudes,closecontour=closecontour,remcontourrepeat=remcontourrepeat,remsearchrepeat=remsearchrepeat)
     return contour,contoursearch
 
-def contourtracemooreneighbor(mask,latitudes=None,longitudes=None,direction='cw',start='auto',stop='either',startvisits=3,remcontourrepeat=True,remsearchrepeat=False,closecontour=True):
+def geocontour.contourtrace.moore(mask,latitudes=None,longitudes=None,direction='cw',start='auto',stop='either',startvisits=3,remcontourrepeat=True,remsearchrepeat=False,closecontour=True):
     """
     Returns the contour trace of a mask input using the Moore neighbor tracing algorithm
     Source:
@@ -1048,9 +1048,9 @@ def contourtracemooreneighbor(mask,latitudes=None,longitudes=None,direction='cw'
             Note: If latitudes/longitudes not provided, returned contour/contoursearch will be indices of the input mask
     """
     if latitudes is not None and longitudes is not None:
-        checkmask(mask,latitudes,longitudes)
+        geocontour.check.checkmask(mask,latitudes,longitudes)
     else:
-        checkmask(mask)
+        geocontour.check.checkmask(mask)
     buffermask=np.full((tuple(np.array(mask.shape)+2)),False)
     buffermask[1:-1,1:-1]=mask
     if direction=='cw':
@@ -1064,11 +1064,11 @@ def contourtracemooreneighbor(mask,latitudes=None,longitudes=None,direction='cw'
     else:
         sys.exit('ERROR - direction=\''+direction+'\' is not a valid selection, valid selections are \'cw\'/\'ccw\'')
     if type(start) is not str:
-        startcell,startorientation=parsestartinput(start,buffermask)
+        startcell,startorientation=geocontour.contourutil.parsestart(start,buffermask)
     elif start=='auto':
         if stop=='either' or stop=='Elisoff':
             for ct,searchdir in enumerate(searchdirstrings):
-                startcell,startorientation=findstartcell(buffermask,searchdir=searchdir)
+                startcell,startorientation=geocontour.contourutil.findstart(buffermask,searchdir=searchdir)
                 I=startcell+insideturn(startorientation)
                 RI=I-startorientation
                 RRI=RI-startorientation
@@ -1094,10 +1094,10 @@ def contourtracemooreneighbor(mask,latitudes=None,longitudes=None,direction='cw'
                         if stop=='either':
                             warnings.warn('Warning - Suitable start cell for Elisoff stop not found, trace will stop on Nvisits only')
         else:
-            startcell,startorientation=findstartcell(buffermask,searchdir='ru')
+            startcell,startorientation=geocontour.contourutil.findstart(buffermask,searchdir='ru')
     else:
         sys.exit('ERROR - start=\''+start+'\' is not a valid selection, valid selections are \'auto\' or a 2x2 array describing start cell index and start orientation')
-    checkbreak=setstopfunction(stop,startvisits,startcell,startorientation)
+    checkbreak=geocontour.contourutil.setstop(stop,startvisits,startcell,startorientation)
     searchcells=[]
     contourcells=[]
     orientation=startorientation
@@ -1108,7 +1108,7 @@ def contourtracemooreneighbor(mask,latitudes=None,longitudes=None,direction='cw'
         searchcells.append(cell)
         if buffermask[cell[0],cell[1]]==True:
             contourcells.append(cell)
-            neighbors=findneighbors(cell,connectivity=8,direction=direction)
+            neighbors=geocontour.maskutil.findneighbors(cell,connectivity=8,direction=direction)
             nextneighborindex=(np.nonzero(((cell-orientation)==neighbors).all(axis=1))[0][0]+1)%8
         else:
             nextneighborindex=(nextneighborindex+1)%8
@@ -1117,10 +1117,10 @@ def contourtracemooreneighbor(mask,latitudes=None,longitudes=None,direction='cw'
         if (cell==startcell).all():
             Nvisits+=1
         breakloop=checkbreak(cell,orientation,Nvisits)
-    contour,contoursearch=cleancontour(contourcells,searchcells,latitudes=latitudes,longitudes=longitudes,closecontour=closecontour,remcontourrepeat=remcontourrepeat,remsearchrepeat=remsearchrepeat)
+    contour,contoursearch=geocontour.contourutil.clean(contourcells,searchcells,latitudes=latitudes,longitudes=longitudes,closecontour=closecontour,remcontourrepeat=remcontourrepeat,remsearchrepeat=remsearchrepeat)
     return contour,contoursearch
 
-def contourtraceimprovedmooreneighbor(mask,latitudes=None,longitudes=None,direction='cw',start='auto',stop='either',startvisits=3,remcontourrepeat=True,remsearchrepeat=False,closecontour=True):
+def geocontour.contourtrace.moore_imp(mask,latitudes=None,longitudes=None,direction='cw',start='auto',stop='either',startvisits=3,remcontourrepeat=True,remsearchrepeat=False,closecontour=True):
     """
     Returns the contour trace of a mask input using an improved Moore neighbor tracing algorithm
     Captures inside corners missed by Moore neighbor tracing
@@ -1152,9 +1152,9 @@ def contourtraceimprovedmooreneighbor(mask,latitudes=None,longitudes=None,direct
             Note: If latitudes/longitudes not provided, returned contour/contoursearch will be indices of the input mask
     """
     if latitudes is not None and longitudes is not None:
-        checkmask(mask,latitudes,longitudes)
+        geocontour.check.checkmask(mask,latitudes,longitudes)
     else:
-        checkmask(mask)
+        geocontour.check.checkmask(mask)
     buffermask=np.full((tuple(np.array(mask.shape)+2)),False)
     buffermask[1:-1,1:-1]=mask
     if direction=='cw':
@@ -1168,11 +1168,11 @@ def contourtraceimprovedmooreneighbor(mask,latitudes=None,longitudes=None,direct
     else:
         sys.exit('ERROR - direction=\''+direction+'\' is not a valid selection, valid selections are \'cw\'/\'ccw\'')
     if type(start) is not str:
-        startcell,startorientation=parsestartinput(start,buffermask)
+        startcell,startorientation=geocontour.contourutil.parsestart(start,buffermask)
     elif start=='auto':
         if stop=='either' or stop=='Elisoff':
             for ct,searchdir in enumerate(searchdirstrings):
-                startcell,startorientation=findstartcell(buffermask,searchdir=searchdir)
+                startcell,startorientation=geocontour.contourutil.findstart(buffermask,searchdir=searchdir)
                 I=startcell+insideturn(startorientation)
                 RI=I-startorientation
                 RRI=RI-startorientation
@@ -1198,17 +1198,17 @@ def contourtraceimprovedmooreneighbor(mask,latitudes=None,longitudes=None,direct
                         if stop=='either':
                             warnings.warn('Warning - Suitable start cell for Elisoff stop not found, trace will stop on Nvisits only')
         else:
-            startcell,startorientation=findstartcell(buffermask,searchdir='ru')
+            startcell,startorientation=geocontour.contourutil.findstart(buffermask,searchdir='ru')
     else:
         sys.exit('ERROR - start=\''+start+'\' is not a valid selection, valid selections are \'auto\' or a 2x2 array describing start cell index and start orientation')
-    checkbreak=setstopfunction(stop,startvisits,startcell,startorientation)
+    checkbreak=geocontour.contourutil.setstop(stop,startvisits,startcell,startorientation)
     cell=startcell
     orientation=startorientation
     searchcells=[]
     contourcells=[]
     searchcells.append(cell)
     contourcells.append(cell)
-    neighbors=findneighbors(cell,connectivity=8,direction=direction)
+    neighbors=geocontour.maskutil.findneighbors(cell,connectivity=8,direction=direction)
     nextneighborindex=(np.nonzero(((cell-orientation)==neighbors).all(axis=1))[0][0]+1)%8
     Nvisits=0
     breakloop=False
@@ -1224,17 +1224,17 @@ def contourtraceimprovedmooreneighbor(mask,latitudes=None,longitudes=None,direct
                 searchcells.insert(-1,nextnextneighbor)
                 contourcells.append(nextnextneighbor)
             contourcells.append(cell)
-            neighbors=findneighbors(cell,connectivity=8,direction=direction)
+            neighbors=geocontour.maskutil.findneighbors(cell,connectivity=8,direction=direction)
             nextneighborindex=(np.nonzero(((cell-orientation)==neighbors).all(axis=1))[0][0]+1)%8
         else:
             nextneighborindex=(nextneighborindex+1)%8
         if (cell==startcell).all():
             Nvisits+=1
         breakloop=checkbreak(cell,orientation,Nvisits)
-    contour,contoursearch=cleancontour(contourcells,searchcells,latitudes=latitudes,longitudes=longitudes,closecontour=closecontour,remcontourrepeat=remcontourrepeat,remsearchrepeat=remsearchrepeat)
+    contour,contoursearch=geocontour.contourutil.clean(contourcells,searchcells,latitudes=latitudes,longitudes=longitudes,closecontour=closecontour,remcontourrepeat=remcontourrepeat,remsearchrepeat=remsearchrepeat)
     return contour,contoursearch
 
-def contourtracepavlidis(mask,latitudes=None,longitudes=None,direction='cw',start='auto',stop='Nvisits',startvisits=1,remcontourrepeat=True,remsearchrepeat=False,closecontour=True):
+def geocontour.contourtrace.pavlidis(mask,latitudes=None,longitudes=None,direction='cw',start='auto',stop='Nvisits',startvisits=1,remcontourrepeat=True,remsearchrepeat=False,closecontour=True):
     """
     Returns the contour trace of a mask input using the Pavlidis tracing algorithm
     Source:
@@ -1269,9 +1269,9 @@ def contourtracepavlidis(mask,latitudes=None,longitudes=None,direction='cw',star
             Note: If latitudes/longitudes not provided, returned contour/contoursearch will be indices of the input mask
     """
     if latitudes is not None and longitudes is not None:
-        checkmask(mask,latitudes,longitudes)
+        geocontour.check.checkmask(mask,latitudes,longitudes)
     else:
-        checkmask(mask)
+        geocontour.check.checkmask(mask)
     buffermask=np.full((tuple(np.array(mask.shape)+2)),False)
     buffermask[1:-1,1:-1]=mask
     if direction=='cw':
@@ -1289,10 +1289,10 @@ def contourtracepavlidis(mask,latitudes=None,longitudes=None,direction='cw',star
     else:
         sys.exit('ERROR - direction=\''+direction+'\' is not a valid selection, valid selections are \'cw\'/\'ccw\'')
     if type(start) is not str:
-        startcell,startorientation=parsestartinput(start,buffermask)
+        startcell,startorientation=geocontour.contourutil.parsestart(start,buffermask)
     elif start=='auto':
         for ct,searchdir in enumerate(searchdirstrings):
-            startcell,startorientation=findstartcell(buffermask,searchdir=searchdir)
+            startcell,startorientation=geocontour.contourutil.findstart(buffermask,searchdir=searchdir)
             RI=startcell-startorientation+insideturn(startorientation)
             if buffermask[RI[0],RI[1]]==False:
                 break
@@ -1305,7 +1305,7 @@ def contourtracepavlidis(mask,latitudes=None,longitudes=None,direction='cw',star
         sys.exit('ERROR - start=\''+start+'\' is not a valid selection, valid selections are \'auto\' or a 2x2 array describing start cell index and start orientation')
     if stop=='Elisoff':
         warnings.warn('WARNING - Pavlidis tracing often will not stop on the Elisoff condition, tracing may become stuck in an infinite loop')
-    checkbreak=setstopfunction(stop,startvisits,startcell,startorientation)
+    checkbreak=geocontour.contourutil.setstop(stop,startvisits,startcell,startorientation)
     searchcells=[]
     contourcells=[]
     searchcells.append(startcell)
@@ -1355,10 +1355,10 @@ def contourtracepavlidis(mask,latitudes=None,longitudes=None,direction='cw',star
             rotations+=1
         if rotations>3:
             sys.exit('ERROR - Stuck on isolated cell '+str(cell))
-    contour,contoursearch=cleancontour(contourcells,searchcells,latitudes=latitudes,longitudes=longitudes,closecontour=closecontour,remcontourrepeat=remcontourrepeat,remsearchrepeat=remsearchrepeat)
+    contour,contoursearch=geocontour.contourutil.clean(contourcells,searchcells,latitudes=latitudes,longitudes=longitudes,closecontour=closecontour,remcontourrepeat=remcontourrepeat,remsearchrepeat=remsearchrepeat)
     return contour,contoursearch
 
-def contourtraceimprovedpavlidis(mask,latitudes=None,longitudes=None,direction='cw',start='auto',stop='Nvisits',startvisits=1,remcontourrepeat=True,remsearchrepeat=False,closecontour=True):
+def geocontour.contourtrace.pavlidis_imp(mask,latitudes=None,longitudes=None,direction='cw',start='auto',stop='Nvisits',startvisits=1,remcontourrepeat=True,remsearchrepeat=False,closecontour=True):
     """
     Returns the contour trace of a mask input using an improved Pavlidis tracing algorithm
     Captures inside corners missed by Pavlidis tracing
@@ -1391,9 +1391,9 @@ def contourtraceimprovedpavlidis(mask,latitudes=None,longitudes=None,direction='
             Note: If latitudes/longitudes not provided, returned contour/contoursearch will be indices of the input mask
     """
     if latitudes is not None and longitudes is not None:
-        checkmask(mask,latitudes,longitudes)
+        geocontour.check.checkmask(mask,latitudes,longitudes)
     else:
-        checkmask(mask)
+        geocontour.check.checkmask(mask)
     buffermask=np.full((tuple(np.array(mask.shape)+2)),False)
     buffermask[1:-1,1:-1]=mask
     if direction=='cw':
@@ -1411,10 +1411,10 @@ def contourtraceimprovedpavlidis(mask,latitudes=None,longitudes=None,direction='
     else:
         sys.exit('ERROR - direction=\''+direction+'\' is not a valid selection, valid selections are \'cw\'/\'ccw\'')
     if type(start) is not str:
-        startcell,startorientation=parsestartinput(start,buffermask)
+        startcell,startorientation=geocontour.contourutil.parsestart(start,buffermask)
     elif start=='auto':
         for ct,searchdir in enumerate(searchdirstrings):
-            startcell,startorientation=findstartcell(buffermask,searchdir=searchdir)
+            startcell,startorientation=geocontour.contourutil.findstart(buffermask,searchdir=searchdir)
             RI=startcell-startorientation+insideturn(startorientation)
             if buffermask[RI[0],RI[1]]==False:
                 break
@@ -1427,7 +1427,7 @@ def contourtraceimprovedpavlidis(mask,latitudes=None,longitudes=None,direction='
         sys.exit('ERROR - start=\''+start+'\' is not a valid selection, valid selections are \'auto\' or a 2x2 array describing start cell index and start orientation')
     if stop=='Elisoff':
         warnings.warn('WARNING - Pavlidis tracing often will not stop on the Elisoff condition, tracing may become stuck in an infinite loop')
-    checkbreak=setstopfunction(stop,startvisits,startcell,startorientation)
+    checkbreak=geocontour.contourutil.setstop(stop,startvisits,startcell,startorientation)
     searchcells=[]
     contourcells=[]
     searchcells.append(startcell)
@@ -1484,12 +1484,12 @@ def contourtraceimprovedpavlidis(mask,latitudes=None,longitudes=None,direction='
             rotations+=1
         if rotations>3:
             sys.exit('ERROR - Stuck on isolated cell '+str(cell))
-    contour,contoursearch=cleancontour(contourcells,searchcells,latitudes=latitudes,longitudes=longitudes,closecontour=closecontour,remcontourrepeat=remcontourrepeat,remsearchrepeat=remsearchrepeat)
+    contour,contoursearch=geocontour.contourutil.clean(contourcells,searchcells,latitudes=latitudes,longitudes=longitudes,closecontour=closecontour,remcontourrepeat=remcontourrepeat,remsearchrepeat=remsearchrepeat)
     return contour,contoursearch
 
-def contourtracefastrepresentative(mask,latitudes=None,longitudes=None,direction='cw',start='auto',stop='either',startvisits=4,remcontourrepeat=True,remsearchrepeat=False,closecontour=True):
+def geocontour.contourtrace.TSR(mask,latitudes=None,longitudes=None,direction='cw',start='auto',stop='either',startvisits=4,remcontourrepeat=True,remsearchrepeat=False,closecontour=True):
     """
-    Returns the contour trace of a mask input using fast representative tracing
+    Returns the contour trace of a mask input using two-step representative tracing
     Source: 10.3390/s16030353
 
     Inputs (Required):
@@ -1520,9 +1520,9 @@ def contourtracefastrepresentative(mask,latitudes=None,longitudes=None,direction
             Note: If latitudes/longitudes not provided, returned contour/contoursearch will be indices of the input mask
     """
     if latitudes is not None and longitudes is not None:
-        checkmask(mask,latitudes,longitudes)
+        geocontour.check.checkmask(mask,latitudes,longitudes)
     else:
-        checkmask(mask)
+        geocontour.check.checkmask(mask)
     buffermask=np.full((tuple(np.array(mask.shape)+2)),False)
     buffermask[1:-1,1:-1]=mask
     if direction=='cw':
@@ -1540,12 +1540,12 @@ def contourtracefastrepresentative(mask,latitudes=None,longitudes=None,direction
     else:
         sys.exit('ERROR - direction=\''+direction+'\' is not a valid selection, valid selections are \'cw\'/\'ccw\'')
     if type(start) is not str:
-        startcell,startorientation=parsestartinput(start,buffermask)
+        startcell,startorientation=geocontour.contourutil.parsestart(start,buffermask)
     elif start=='auto':
-        startcell,startorientation=findstartcell(buffermask,searchdir=searchdir)
+        startcell,startorientation=geocontour.contourutil.findstart(buffermask,searchdir=searchdir)
     else:
         sys.exit('ERROR - start=\''+start+'\' is not a valid selection, valid selections are \'auto\' or a 2x2 array describing start cell index and start orientation')
-    checkbreak=setstopfunction(stop,startvisits,startcell,startorientation)
+    checkbreak=geocontour.contourutil.setstop(stop,startvisits,startcell,startorientation)
     orientation=startorientation
     cell=startcell
     searchcells=[]
@@ -1601,12 +1601,12 @@ def contourtracefastrepresentative(mask,latitudes=None,longitudes=None,direction
         if (cell==startcell).all():
             Nvisits+=1
         breakloop=checkbreak(cell,orientation,Nvisits)
-    contour,contoursearch=cleancontour(contourcells,searchcells,latitudes=latitudes,longitudes=longitudes,closecontour=closecontour,remcontourrepeat=remcontourrepeat,remsearchrepeat=remsearchrepeat)
+    contour,contoursearch=geocontour.contourutil.clean(contourcells,searchcells,latitudes=latitudes,longitudes=longitudes,closecontour=closecontour,remcontourrepeat=remcontourrepeat,remsearchrepeat=remsearchrepeat)
     return contour,contoursearch
 
 ###Geocontour Functions
 
-def geocontour(contour,latitudes,longitudes,connecttype='cell',simplify=False):
+def geocontour.geocontour.build(contour,latitudes,longitudes,connecttype='cell',simplify=False):
     """
     Inputs (Required):
         contour - A 2-d Nx2 numpy array of ordered latitude/longitude points (degrees) describing the edge of a mask
@@ -1623,7 +1623,7 @@ def geocontour(contour,latitudes,longitudes,connecttype='cell',simplify=False):
     Outputs:
         geocontour - A 3-d Nx2x5 numpy array defining a list of N contour cells and their edge points, lengths, and outward unit vectors
     """
-    checkcontour(contour,latitudes,longitudes)
+    geocontour.check.checkcontour(contour,latitudes,longitudes)
     contourdiff=np.diff(contour,axis=0)
     if connecttype=='center':
         geocontour=np.full((2*(contour.shape[0]-1),2,5),np.nan)
@@ -1672,8 +1672,8 @@ def geocontour(contour,latitudes,longitudes,connecttype='cell',simplify=False):
         sys.exit('ERROR - unrecognized connecttype input '+connecttype+', valid options are \'cell\'/\'center\'')
     gridnorm=np.sqrt(np.sum((geocontour[:,:,2]-geocontour[:,:,1])**2,axis=1))
     geocontour[:,0,3]=gridnorm
-    lonlengths=longitudelength(geocontour[:,0,0])
-    latlengths=latitudelength(geocontour[:,0,0])
+    lonlengths=geocontour.grid.longitudelength(geocontour[:,0,0])
+    latlengths=geocontour.grid.latitudelength(geocontour[:,0,0])
     lengths=np.stack((latlengths,lonlengths),axis=1)
     geocontour[:,1,3]=np.sqrt(np.sum(((geocontour[:,:,2]-geocontour[:,:,1])*lengths)**2,axis=1))
     winding=np.sum((contour[:-1,0]+contour[1:,0])*np.diff(contour[:,1]))
@@ -1738,7 +1738,7 @@ def plotdatasize(axobj=None,mult=1,axis='y',plottype='line'):
     else:
         sys.exit('ERROR - \''+plottype+'\' is invalid input, select \'line\' or \'scatter\'')
 
-def plot(latitudes,longitudes,boundary=None,mask=None,contour=None,contoursearch=None,geocontour=None,vertices=None,boundingbox='all',buffer='off',grid='on',cells='default',showcontour='on',startcell='on',contourarrows='on',contoursearcharrows='on',geocontourvectors='on',emptycellcolor='lightgrey',fullcellcolor='sandybrown',boundarycolor='tab:blue',contourcolor='olivedrab',contoursearchcolor='firebrick',geocontourcolor='olivedrab',vertexcolor='tab:cyan',gridcolor='black',lw_boundary='auto',lw_contour='auto',lw_contoursearch='auto',lw_geocontour='auto',mw_contourarrows='auto',mw_contoursearcharrows='auto',mw_vertices='auto',features=None,title=None,outname='plot',outdpi='auto'):
+def geocontour.output.plot(latitudes,longitudes,boundary=None,mask=None,contour=None,contoursearch=None,geocontour=None,vertices=None,boundingbox='all',buffer='off',grid='on',cells='default',showcontour='on',startcell='on',contourarrows='on',contoursearcharrows='on',geocontourvectors='on',emptycellcolor='lightgrey',fullcellcolor='sandybrown',boundarycolor='tab:blue',contourcolor='olivedrab',contoursearchcolor='firebrick',geocontourcolor='olivedrab',vertexcolor='tab:cyan',gridcolor='black',lw_boundary='auto',lw_contour='auto',lw_contoursearch='auto',lw_geocontour='auto',mw_contourarrows='auto',mw_contoursearcharrows='auto',mw_vertices='auto',features=None,title=None,outname='plot',outdpi='auto'):
     """
     Plots any/all maskpy-created elements: boundary, mask, contour, contoursearch, geocontour, vertices
 
@@ -1801,29 +1801,29 @@ def plot(latitudes,longitudes,boundary=None,mask=None,contour=None,contoursearch
 
     Examples of common use cases:
     1) Plot a mask and the boundary used to create it:
-        plot(latitudes,longitudes,boundary=<boundary>,mask=<mask>,lw_boundary=0.2)
+       geocontour.output.plot(latitudes,longitudes,boundary=<boundary>,mask=<mask>,lw_boundary=0.2)
     2) Plot a contour
-        plot(latitudes,longitudes,countour=<countour>,boundingbox='contour',buffer='on')
+       geocontour.output.plot(latitudes,longitudes,countour=<countour>,boundingbox='contour',buffer='on')
     3) Plot a contoursearch overlaying contour cells
-        plot(latitudes,longitudes,contour=<contour>,contoursearch=<contoursearch>,showcontour='off',cells='contour',boundingbox='contoursearch',buffer='on')
+       geocontour.output.plot(latitudes,longitudes,contour=<contour>,contoursearch=<contoursearch>,showcontour='off',cells='contour',boundingbox='contoursearch',buffer='on')
     4) Plot a geocontour overlaid onto a map projection with natural features
-        plot(latitudes,longitudes,geocontour=<geocontour>,cells='geocontour',features='natural')
+       geocontour.output.plot(latitudes,longitudes,geocontour=<geocontour>,cells='geocontour',features='natural')
     """
-    latspc=gridspacing(latitudes)
-    lonspc=gridspacing(longitudes)
+    latspc=geocontour.grid.gridspacing(latitudes)
+    lonspc=geocontour.grid.gridspacing(longitudes)
     gridlatmin=latitudes.min()-latspc/2
     gridlatmax=latitudes.max()+latspc/2
     gridlonmin=longitudes.min()-lonspc/2
     gridlonmax=longitudes.max()+lonspc/2
-    latdir=checklatitudedirection(latitudes)
+    latdir=geocontour.grid.checklatitudedirection(latitudes)
     boundingarray=np.array([[[gridlatmin,gridlatmax],[gridlonmin,gridlonmax]]])
     if boundary is None:
         if boundingbox=='boundary':
             sys.exit('ERROR - Can not use \'boundary\' for boundingbox if no boundary input provided')
     else:
-        checkboundary(boundary)
-        loninput=checklongituderange(longitudes)
-        boundloninput=checklongituderange(boundary[:,1])
+        geocontour.check.checkboundary(boundary)
+        loninput=geocontour.grid.checklongituderange(longitudes)
+        boundloninput=geocontour.grid.checklongituderange(boundary[:,1])
         if (loninput=='neg' and boundloninput=='pos') or (loninput=='pos' and boundloninput=='neg'):
             sys.exit('ERROR - Longitude input range is '+loninput+' and boundary longitude range is '+boundloninput)
         boundlatmin=np.floor((boundary.min(axis=0)[0]-gridlatmin)/latspc)*latspc+gridlatmin
@@ -1837,7 +1837,7 @@ def plot(latitudes,longitudes,boundary=None,mask=None,contour=None,contoursearch
         if cells=='mask' or cells=='maskedge-8' or cells=='maskedge-4':
             sys.exit('ERROR - Can not use \''+cells+'\' for cells if no mask input provided')
     else:
-        checkmask(mask,latitudes,longitudes)
+        geocontour.check.checkmask(mask,latitudes,longitudes)
         masklatitudes=latitudes[mask.sum(axis=1)>0]
         masklongitudes=longitudes[mask.sum(axis=0)>0]
         masklatmin=masklatitudes.min()-latspc/2
@@ -1851,7 +1851,7 @@ def plot(latitudes,longitudes,boundary=None,mask=None,contour=None,contoursearch
         if cells=='contour':
             sys.exit('ERROR - Can not use \'contour\' for cells if no contour input provided')
     else:
-        checkcontour(contour,latitudes,longitudes)
+        geocontour.check.checkcontour(contour,latitudes,longitudes)
         contlatmin=contour[:,0].min()-latspc/2
         contlatmax=contour[:,0].max()+latspc/2
         contlonmin=contour[:,1].min()-lonspc/2
@@ -1872,7 +1872,7 @@ def plot(latitudes,longitudes,boundary=None,mask=None,contour=None,contoursearch
         if cells=='geocontour':
             sys.exit('ERROR - Can not use \'geocontour\' for cells if no geocontour input provided')
     else:
-        checkgeocontour(geocontour,latitudes,longitudes)
+        geocontour.check.checkgeocontour(geocontour,latitudes,longitudes)
         geocontlatmin=geocontour[:,0,0].min()-latspc/2
         geocontlatmax=geocontour[:,0,0].max()+latspc/2
         geocontlonmin=geocontour[:,1,0].min()-lonspc/2
@@ -1934,9 +1934,9 @@ def plot(latitudes,longitudes,boundary=None,mask=None,contour=None,contoursearch
     elif cells=='mask':
         pltmask=mask.astype('int')
     elif cells=='maskedge-8':
-        pltmask=maskedgecells(mask,connectivity=8).astype('int')
+        pltmask=geocontour.maskutil.maskedgecells(mask,connectivity=8).astype('int')
     elif cells=='maskedge-4':
-        pltmask=maskedgecells(mask,connectivity=4).astype('int')
+        pltmask=geocontour.maskutil.maskedgecells(mask,connectivity=4).astype('int')
     elif cells=='contour':
          latinds=latitudes.argsort()[np.searchsorted(latitudes,contour[:,0],sorter=latitudes.argsort())]
          loninds=np.searchsorted(longitudes,contour[:,1])
@@ -2072,7 +2072,7 @@ def plot(latitudes,longitudes,boundary=None,mask=None,contour=None,contoursearch
 
 ###Save Functions
 
-def save(latitudes,longitudes,boundary=None,mask=None,contour=None,contoursearch=None,geocontour=None,vertices=None,outname='save',outtype='np',maskouttxt='off',outformat='%8.3f',outdelim=' '):
+def geocontour.output.save(latitudes,longitudes,boundary=None,mask=None,contour=None,contoursearch=None,geocontour=None,vertices=None,outname='save',outtype='np',maskouttxt='off',outformat='%8.3f',outdelim=' '):
     """
     Saves any/all maskpy-created elements: boundary, mask, contour, contoursearch, geocontour, vertices
 
@@ -2101,22 +2101,22 @@ def save(latitudes,longitudes,boundary=None,mask=None,contour=None,contoursearch
         np.savetxt(outname+'_latitudes.xyz',latitudes,fmt=outformat,delimiter=outdelim)
         np.savetxt(outname+'_longitudes.xyz',longitudes,fmt=outformat,delimiter=outdelim)
         if boundary is not None:
-            checkboundary(boundary)
+            geocontour.check.checkboundary(boundary)
             np.savetxt(outname+'_boundary.xyz',boundary,fmt=outformat,delimiter=outdelim)
         if mask is not None:
-            checkmask(mask,latitudes,longitudes)
+            geocontour.check.checkmask(mask,latitudes,longitudes)
             ysp, xsp = np.meshgrid(latitudes,longitudes,indexing='ij')
             xyzout=np.hstack((xsp.reshape((-1,1)),ysp.reshape((-1,1)),mask.reshape((-1,1))))
             np.savetxt(outname+'_mask.xyz',xyzout,fmt=[outformat, outformat, '%3d'],delimiter=outdelim)
             if maskouttxt=='on':
                 np.savetxt(outname+'_mask.txt',mask.astype('int'),fmt='%1d',delimiter=outdelim)
         if contour is not None:
-            checkcontour(contour,latitudes,longitudes)
+            geocontour.check.checkcontour(contour,latitudes,longitudes)
             np.savetxt(outname+'_contour.xyz',contour,fmt=outformat,delimiter=outdelim)
         if contoursearch is not None:
             np.savetxt(outname+'_contoursearch.xyz',contoursearch,fmt=outformat,delimiter=outdelim)
         if geocontour is not None:
-            checkgeocontour(geocontour,latitudes,longitudes)
+            geocontour.check.checkgeocontour(geocontour,latitudes,longitudes)
             header1='cell'.center(16)+'entry'.center(19)+'exit'.center(18)+'length'.center(25)+'normal vector'.center(25)
             header2='lat'.center(8)+'lon'.center(9)+'lat'.center(9)+'lon'.center(9)+'lat'.center(9)+'lon'.center(9)+'degrees'.center(13)+'meters'.center(12)+'y'.center(13)+'x'.center(12)
             np.savetxt(outname+'_geocontour.xyz',geocontour.reshape((-1,10),order='F'),fmt=[outformat,outformat,outformat,outformat,outformat,outformat,'%12.7f','%12d','%12.7f','%12.7f'],delimiter=outdelim,header=header1+'\n'+header2)
