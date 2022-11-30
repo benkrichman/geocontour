@@ -1,5 +1,7 @@
 import sys
-import numpy
+import numpy as np
+import geocontour.check as gcc
+import geocontour.grid as gcg
 
 def build(contour,latitudes,longitudes,connecttype='cell',simplify=False):
     """
@@ -18,64 +20,64 @@ def build(contour,latitudes,longitudes,connecttype='cell',simplify=False):
     Outputs:
         geocontour - A 3-d Nx2x5 numpy array defining a list of N contour cells and their edge points, lengths, and outward unit vectors
     """
-    geocontour.check.checkcontour(contour,latitudes,longitudes)
-    contourdiff=numpy.diff(contour,axis=0)
+    gcc.ccontour(contour,latitudes,longitudes)
+    contourdiff=np.diff(contour,axis=0)
     if connecttype=='center':
-        geocontour=numpy.full((2*(contour.shape[0]-1),2,5),numpy.nan)
-        geocontour[:,:,0]=numpy.stack((contour[:-1],contour[1:]),axis=1).reshape(-1,2)
-        geocontour[:,:,1]=numpy.stack((contour[:-1],contour[:-1]+contourdiff/2),axis=1).reshape(-1,2)
-        geocontour[:,:,2]=numpy.stack((contour[1:]-contourdiff/2,contour[1:]),axis=1).reshape(-1,2)
+        geocontour=np.full((2*(contour.shape[0]-1),2,5),np.nan)
+        geocontour[:,:,0]=np.stack((contour[:-1],contour[1:]),axis=1).reshape(-1,2)
+        geocontour[:,:,1]=np.stack((contour[:-1],contour[:-1]+contourdiff/2),axis=1).reshape(-1,2)
+        geocontour[:,:,2]=np.stack((contour[1:]-contourdiff/2,contour[1:]),axis=1).reshape(-1,2)
         if simplify:
-            deleteindices=numpy.array([],dtype='int')
-            geocontour_unique,countindex=numpy.unique(geocontour[:,:,0],axis=0,return_counts=True)
+            deleteindices=np.array([],dtype='int')
+            geocontour_unique,countindex=np.unique(geocontour[:,:,0],axis=0,return_counts=True)
             for k in geocontour_unique[countindex>1]:
-                indices=numpy.nonzero(((geocontour[:,:,0]-k)==0).all(axis=1))[0]
+                indices=np.nonzero(((geocontour[:,:,0]-k)==0).all(axis=1))[0]
                 starts=geocontour[indices,:,1]
                 ends=geocontour[indices,:,2]
                 uniquestart=starts[(starts-ends[:,None]).any(axis=2).all(axis=0)]
                 uniqueend=ends[(ends-starts[:,None]).any(axis=2).all(axis=0)]
                 if uniquestart.size==0 and uniqueend.size==0:
-                    deleteindices=numpy.append(deleteindices,indices)
+                    deleteindices=np.append(deleteindices,indices)
                 else:
-                    startkeep=numpy.argwhere((geocontour[:,:,1]==uniquestart[0]).all(axis=1))[0]==indices
-                    endkeep=numpy.argwhere((geocontour[:,:,2]==uniqueend[0]).all(axis=1))[0]==indices
-                    deleteindices=numpy.append(deleteindices,indices[~(startkeep+endkeep)])
-            geocontour=numpy.delete(geocontour,deleteindices,axis=0)
+                    startkeep=np.argwhere((geocontour[:,:,1]==uniquestart[0]).all(axis=1))[0]==indices
+                    endkeep=np.argwhere((geocontour[:,:,2]==uniqueend[0]).all(axis=1))[0]==indices
+                    deleteindices=np.append(deleteindices,indices[~(startkeep+endkeep)])
+            geocontour=np.delete(geocontour,deleteindices,axis=0)
     elif connecttype=='cell':
-        geocontour=numpy.full((contour.shape[0]-1,2,5),numpy.nan)
+        geocontour=np.full((contour.shape[0]-1,2,5),np.nan)
         geocontour[:,:,0]=contour[:-1]
-        geocontour[:,:,1]=geocontour[:,:,0]-numpy.roll(contourdiff/2,1,axis=0)
+        geocontour[:,:,1]=geocontour[:,:,0]-np.roll(contourdiff/2,1,axis=0)
         geocontour[:,:,2]=geocontour[:,:,0]+contourdiff/2
         if simplify:
-            deleteindices=numpy.array([],dtype='int')
-            geocontour_unique,countindex=numpy.unique(geocontour[:,:,0],axis=0,return_counts=True)
+            deleteindices=np.array([],dtype='int')
+            geocontour_unique,countindex=np.unique(geocontour[:,:,0],axis=0,return_counts=True)
             for k in geocontour_unique[countindex>1]:
-                indices=numpy.nonzero(((geocontour[:,:,0]-k)==0).all(axis=1))[0]
+                indices=np.nonzero(((geocontour[:,:,0]-k)==0).all(axis=1))[0]
                 starts=geocontour[indices,:,1]
                 ends=geocontour[indices,:,2]
                 uniquestart=starts[(starts-ends[:,None]).any(axis=2).all(axis=0)]
                 uniqueend=ends[(ends-starts[:,None]).any(axis=2).all(axis=0)]
                 if uniquestart.size==0 and uniqueend.size==0:
-                    deleteindices=numpy.append(deleteindices,indices)
+                    deleteindices=np.append(deleteindices,indices)
                 elif uniquestart.size==2 and uniqueend.size==2:
                     geocontour[indices[0],:,1]=uniquestart[0]
                     geocontour[indices[0],:,2]=uniqueend[0]
-                    deleteindices=numpy.append(deleteindices,indices[1:])
-            deleteindices=numpy.append(deleteindices,numpy.nonzero(((geocontour[:,:,1]-geocontour[:,:,2])==0).all(axis=1))[0])
-            geocontour=numpy.delete(geocontour,deleteindices,axis=0)
+                    deleteindices=np.append(deleteindices,indices[1:])
+            deleteindices=np.append(deleteindices,np.nonzero(((geocontour[:,:,1]-geocontour[:,:,2])==0).all(axis=1))[0])
+            geocontour=np.delete(geocontour,deleteindices,axis=0)
     else:
         sys.exit('ERROR - unrecognized connecttype input '+connecttype+', valid options are \'cell\'/\'center\'')
-    gridnorm=numpy.sqrt(numpy.sum((geocontour[:,:,2]-geocontour[:,:,1])**2,axis=1))
+    gridnorm=np.sqrt(np.sum((geocontour[:,:,2]-geocontour[:,:,1])**2,axis=1))
     geocontour[:,0,3]=gridnorm
-    lonlengths=geocontour.grid.longitudelength(geocontour[:,0,0])
-    latlengths=geocontour.grid.latitudelength(geocontour[:,0,0])
-    lengths=numpy.stack((latlengths,lonlengths),axis=1)
-    geocontour[:,1,3]=numpy.sqrt(numpy.sum(((geocontour[:,:,2]-geocontour[:,:,1])*lengths)**2,axis=1))
-    winding=numpy.sum((contour[:-1,0]+contour[1:,0])*numpy.diff(contour[:,1]))
+    lonlengths=gcg.longitudelength(geocontour[:,0,0])
+    latlengths=gcg.latitudelength(geocontour[:,0,0])
+    lengths=np.stack((latlengths,lonlengths),axis=1)
+    geocontour[:,1,3]=np.sqrt(np.sum(((geocontour[:,:,2]-geocontour[:,:,1])*lengths)**2,axis=1))
+    winding=np.sum((contour[:-1,0]+contour[1:,0])*np.diff(contour[:,1]))
     if winding<0:
-        rotation=numpy.array([-1,1])
+        rotation=np.array([-1,1])
     elif winding>0:
-        rotation=numpy.array([1,-1])
+        rotation=np.array([1,-1])
     else:
         sys.exit('ERROR - Can\'t determine orientation of contour')
     gridnorm[gridnorm==0]=1

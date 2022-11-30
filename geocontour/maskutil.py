@@ -1,9 +1,9 @@
 import sys
 import warnings
-import numpy
+import numpy as np
 from scipy.signal import convolve
-import geocontour.check
-import geocontour.grid
+import geocontour.check as gcc
+import geocontour.grid as gcg
 
 def boxset(latitudes,longitudes,boundary):
     """
@@ -20,12 +20,12 @@ def boxset(latitudes,longitudes,boundary):
         boxlonmin - The minimum bounding box longitude index
         boxlonmax - The maximum bounding box longitude index
     """
-    geocontour.check.checkdim(latitudes)
-    geocontour.check.checkdim(longitudes)
-    geocontour.check.checkboundary(boundary)
-    latdir=geocontour.grid.checklatitudedirection(latitudes)
-    loninput=geocontour.grid.checklongituderange(longitudes)
-    boundloninput=geocontour.grid.checklongituderange(boundary[:,1])
+    gcc.cdim(latitudes)
+    gcc.cdim(longitudes)
+    gcc.cboundary(boundary)
+    latdir=gcg.checklatitudedirection(latitudes)
+    loninput=gcg.checklongituderange(longitudes)
+    boundloninput=gcg.checklongituderange(boundary[:,1])
     if (loninput=='neg' and boundloninput=='pos') or (loninput=='pos' and boundloninput=='neg'):
         sys.exit('ERROR - Longitude input range is '+loninput+' and boundary longitude range is '+boundloninput)
     boundlatmin=boundary.min(axis=0)[0]
@@ -85,10 +85,10 @@ def maskedgecells(mask,latitudes=None,longitudes=None,connectivity=8):
             Only output if optional latitude and longitude arguments are provided
     """
     if latitudes is not None and longitudes is not None:
-        geocontour.check.checkmask(mask,latitudes,longitudes)
+        gcc.cmask(mask,latitudes,longitudes)
     else:
-        geocontour.check.checkmask(mask)
-    kernel=numpy.ones((3,3),dtype='int')
+        gcc.cmask(mask)
+    kernel=np.ones((3,3),dtype='int')
     kernel[1,1]=0
     if connectivity==8:
         pass
@@ -102,7 +102,7 @@ def maskedgecells(mask,latitudes=None,longitudes=None,connectivity=8):
     neighborcount=convolve(mask.astype('int'),kernel,mode='same')
     edgemask=(neighborcount<connectivity)*mask
     if latitudes is not None and longitudes is not None:
-        edgecells=numpy.vstack((latitudes[edgemask.nonzero()[0]],longitudes[edgemask.nonzero()[1]])).T
+        edgecells=np.vstack((latitudes[edgemask.nonzero()[0]],longitudes[edgemask.nonzero()[1]])).T
         return edgemask, edgecells
     else:
         return edgemask
@@ -120,24 +120,24 @@ def maskvertexpoints(mask,latitudes,longitudes):
         vertexpoints - A 2-d Nx2 numpy array of latitude/longitude points (degrees) of all vertices of mask cells
         edgevertexpoints - A 2-d Nx2 numpy array of latitude/longitude points (degrees) of all vertices of cells at the mask edge (8-connected)
     """
-    geocontour.check.checkmask(mask,latitudes,longitudes)
-    vertexmask=numpy.full((tuple(numpy.array(mask.shape)+1)),0)
+    gcc.cmask(mask,latitudes,longitudes)
+    vertexmask=np.full((tuple(np.array(mask.shape)+1)),0)
     maskint=mask.astype('int')
     vertexmask[:-1,:-1]+=maskint
     vertexmask[:-1,1:]+=maskint
     vertexmask[1:,:-1]+=maskint
     vertexmask[1:,1:]+=maskint
-    latspc=geocontour.grid.gridspacing(latitudes)
-    lonspc=geocontour.grid.gridspacing(longitudes)
-    latdir=geocontour.grid.checklatitudedirection(latitudes)
+    latspc=gcg.gridspacing(latitudes)
+    lonspc=gcg.gridspacing(longitudes)
+    latdir=gcg.checklatitudedirection(latitudes)
     if latdir=='inc':
-        vertexlatitudes=numpy.append(latitudes-latspc/2,latitudes[-1]+latspc/2)
+        vertexlatitudes=np.append(latitudes-latspc/2,latitudes[-1]+latspc/2)
     elif latdir=='dec':
-        vertexlatitudes=numpy.append(latitudes+latspc/2,latitudes[-1]-latspc/2)
-    vertexlongitudes=numpy.append(longitudes-lonspc/2,longitudes[-1]+lonspc/2)
-    vertexpoints=numpy.vstack((vertexlatitudes[vertexmask.nonzero()[0]],vertexlongitudes[vertexmask.nonzero()[1]])).T
+        vertexlatitudes=np.append(latitudes+latspc/2,latitudes[-1]-latspc/2)
+    vertexlongitudes=np.append(longitudes-lonspc/2,longitudes[-1]+lonspc/2)
+    vertexpoints=np.vstack((vertexlatitudes[vertexmask.nonzero()[0]],vertexlongitudes[vertexmask.nonzero()[1]])).T
     edgevertexmask=((vertexmask<4)*(vertexmask>0))
-    edgevertexpoints=numpy.vstack((vertexlatitudes[edgevertexmask.nonzero()[0]],vertexlongitudes[edgevertexmask.nonzero()[1]])).T
+    edgevertexpoints=np.vstack((vertexlatitudes[edgevertexmask.nonzero()[0]],vertexlongitudes[edgevertexmask.nonzero()[1]])).T
     return vertexpoints, edgevertexpoints
 
 def findneighbors(cell,connectivity=8,direction='cw'):
@@ -156,9 +156,9 @@ def findneighbors(cell,connectivity=8,direction='cw'):
         neighbors - An 8x2 or 4x2 numpy array of the neighboring cell indices for the input cell 
     """
     if connectivity==8:
-        neighborrange=numpy.array([[-1,0],[-1,1],[0,1],[1,1],[1,0],[1,-1],[0,-1],[-1,-1]])
+        neighborrange=np.array([[-1,0],[-1,1],[0,1],[1,1],[1,0],[1,-1],[0,-1],[-1,-1]])
     elif connectivity==4:
-        neighborrange=numpy.array([[-1,0],[0,1],[1,0],[0,-1]])
+        neighborrange=np.array([[-1,0],[0,1],[1,0],[0,-1]])
     else:
         sys.exit('ERROR - connectivity='+str(connectivity)+' is not a valid selection, valid selections are 4/8')
     if direction=='cw':
@@ -185,11 +185,11 @@ def checkconnectivity(mask,checkcells='full',connectivity=8):
     Outputs:
         connected (True/False) - A boolean describing whether the input mask is connected under the input conditions
     """
-    geocontour.check.checkmask(mask)
+    gcc.cmask(mask)
     if checkcells=='full':
-        maskcells=numpy.argwhere(mask==True)
+        maskcells=np.argwhere(mask==True)
     elif checkcells=='empty':
-        maskcells=numpy.argwhere(mask==False)
+        maskcells=np.argwhere(mask==False)
     else:
         sys.exit('ERROR checkcells=\''+checkcells+'\' is not a valid selection, valid selections are \'full\'/\'empty\'')
     startcell=maskcells[0]
@@ -200,7 +200,7 @@ def checkconnectivity(mask,checkcells='full',connectivity=8):
         checked.append(tocheck[0])
         cellneighbors=findneighbors(tocheck.pop(0),connectivity=connectivity)
         for k in cellneighbors:
-            if (k==maskcells).all(axis=1).any() and not any(numpy.array_equal(k,x) for x in checked) and not any(numpy.array_equal(k,x) for x in tocheck):
+            if (k==maskcells).all(axis=1).any() and not any(np.array_equal(k,x) for x in checked) and not any(np.array_equal(k,x) for x in tocheck):
                 tocheck.append(k)
     if len(checked)==len(maskcells):
         connected=True

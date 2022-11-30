@@ -1,8 +1,11 @@
 import sys
 import warnings
-import numpy
-import matplotlib.pyplot
-import matplotlib.colors
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.colors as mplc
+import geocontour.grid as gcg
+import geocontour.check as gcc
+import geocontour.maskutil as gcmu
 try:
     import cartopy as cp
     cp_exists='y'
@@ -19,7 +22,7 @@ def plotdatasize(axobj=None,mult=1,axis='y',plottype='line'):
         none
 
     Inputs (Optional):
-        axobj - axes object to scale to, default=matplotlib.pyplot.gca() (current pyplot axes object)
+        axobj - axes object to scale to, default=plt.gca() (current pyplot axes object)
         mult - A float multiplier for output, default=1
             e.g. to get a linewidth 1/10 the scale of the plotted units, mult=0.1
         axis ('x','y','xy') - axis to use for data scaling, default='y'
@@ -32,12 +35,12 @@ def plotdatasize(axobj=None,mult=1,axis='y',plottype='line'):
         plotdatasize - linewidth/markersize/s to be used as a direct input to pyplot.plot, pyplot.scatter, etc.        
     """
     if axobj is None:
-        axobj=matplotlib.pyplot.gca()
+        axobj=plt.gca()
     fig=axobj.get_figure()
     pointwidth=72*fig.bbox_inches.width*axobj.get_position().width
     pointheight=72*fig.bbox_inches.height*axobj.get_position().height
-    widthrange=numpy.diff(axobj.get_xlim())[0]
-    heightrange=numpy.diff(axobj.get_ylim())[0]
+    widthrange=np.diff(axobj.get_xlim())[0]
+    heightrange=np.diff(axobj.get_ylim())[0]
     plotdatawidth=pointwidth/widthrange
     plotdataheight=pointheight/heightrange
     if axis=='y':
@@ -46,7 +49,7 @@ def plotdatasize(axobj=None,mult=1,axis='y',plottype='line'):
         plotdatasize=plotdatawidth
     elif axis=='xy':
         if plotdataheight!=plotdatawidth:
-            if not numpy.allclose(plotdataheight,plotdatawidth):
+            if not np.allclose(plotdataheight,plotdatawidth):
                 warnings.warn('WARNING - x and y axes not scaled equally, output will not be precise')
         plotdatasize=(plotdataheight+plotdatawidth)/2
     else:
@@ -129,54 +132,54 @@ def plot(latitudes,longitudes,boundary=None,mask=None,contour=None,contoursearch
     4) Plot a geocontour overlaid onto a map projection with natural features
         plot(latitudes,longitudes,geocontour=<geocontour>,cells='geocontour',features='natural')
     """
-    latspc=geocontour.grid.gridspacing(latitudes)
-    lonspc=geocontour.grid.gridspacing(longitudes)
+    latspc=gcg.gridspacing(latitudes)
+    lonspc=gcg.gridspacing(longitudes)
     gridlatmin=latitudes.min()-latspc/2
     gridlatmax=latitudes.max()+latspc/2
     gridlonmin=longitudes.min()-lonspc/2
     gridlonmax=longitudes.max()+lonspc/2
-    latdir=geocontour.grid.checklatitudedirection(latitudes)
-    boundingarray=numpy.array([[[gridlatmin,gridlatmax],[gridlonmin,gridlonmax]]])
+    latdir=gcg.checklatitudedirection(latitudes)
+    boundingarray=np.array([[[gridlatmin,gridlatmax],[gridlonmin,gridlonmax]]])
     if boundary is None:
         if boundingbox=='boundary':
             sys.exit('ERROR - Can not use \'boundary\' for boundingbox if no boundary input provided')
     else:
-        geocontour.check.checkboundary(boundary)
-        loninput=geocontour.grid.checklongituderange(longitudes)
-        boundloninput=geocontour.grid.checklongituderange(boundary[:,1])
+        gcc.cboundary(boundary)
+        loninput=gcg.checklongituderange(longitudes)
+        boundloninput=gcg.checklongituderange(boundary[:,1])
         if (loninput=='neg' and boundloninput=='pos') or (loninput=='pos' and boundloninput=='neg'):
             sys.exit('ERROR - Longitude input range is '+loninput+' and boundary longitude range is '+boundloninput)
-        boundlatmin=numpy.floor((boundary.min(axis=0)[0]-gridlatmin)/latspc)*latspc+gridlatmin
-        boundlatmax=numpy.ceil((boundary.max(axis=0)[0]-gridlatmax)/latspc)*latspc+gridlatmax
-        boundlonmin=numpy.floor((boundary.min(axis=0)[1]-gridlonmin)/lonspc)*lonspc+gridlonmin
-        boundlonmax=numpy.ceil((boundary.max(axis=0)[1]-gridlonmax)/lonspc)*lonspc+gridlonmax
-        boundingarray=numpy.append(boundingarray,[[[boundlatmin,boundlatmax],[boundlonmin,boundlonmax]]],axis=0)
+        boundlatmin=np.floor((boundary.min(axis=0)[0]-gridlatmin)/latspc)*latspc+gridlatmin
+        boundlatmax=np.ceil((boundary.max(axis=0)[0]-gridlatmax)/latspc)*latspc+gridlatmax
+        boundlonmin=np.floor((boundary.min(axis=0)[1]-gridlonmin)/lonspc)*lonspc+gridlonmin
+        boundlonmax=np.ceil((boundary.max(axis=0)[1]-gridlonmax)/lonspc)*lonspc+gridlonmax
+        boundingarray=np.append(boundingarray,[[[boundlatmin,boundlatmax],[boundlonmin,boundlonmax]]],axis=0)
     if mask is None:
         if boundingbox=='mask':
             sys.exit('ERROR - Can not use \'mask\' for boundingbox if no mask input provided')
         if cells=='mask' or cells=='maskedge-8' or cells=='maskedge-4':
             sys.exit('ERROR - Can not use \''+cells+'\' for cells if no mask input provided')
     else:
-        geocontour.check.checkmask(mask,latitudes,longitudes)
+        gcc.cmask(mask,latitudes,longitudes)
         masklatitudes=latitudes[mask.sum(axis=1)>0]
         masklongitudes=longitudes[mask.sum(axis=0)>0]
         masklatmin=masklatitudes.min()-latspc/2
         masklatmax=masklatitudes.max()+latspc/2
         masklonmin=masklongitudes.min()-lonspc/2
         masklonmax=masklongitudes.max()+lonspc/2
-        boundingarray=numpy.append(boundingarray,[[[masklatmin,masklatmax],[masklonmin,masklonmax]]],axis=0)
+        boundingarray=np.append(boundingarray,[[[masklatmin,masklatmax],[masklonmin,masklonmax]]],axis=0)
     if contour is None:
         if boundingbox=='contour':
             sys.exit('ERROR - Can not use \'contour\' for boundingbox if no contour input provided')
         if cells=='contour':
             sys.exit('ERROR - Can not use \'contour\' for cells if no contour input provided')
     else:
-        geocontour.check.checkcontour(contour,latitudes,longitudes)
+        gcc.ccontour(contour,latitudes,longitudes)
         contlatmin=contour[:,0].min()-latspc/2
         contlatmax=contour[:,0].max()+latspc/2
         contlonmin=contour[:,1].min()-lonspc/2
         contlonmax=contour[:,1].max()+lonspc/2
-        boundingarray=numpy.append(boundingarray,[[[contlatmin,contlatmax],[contlonmin,contlonmax]]],axis=0)
+        boundingarray=np.append(boundingarray,[[[contlatmin,contlatmax],[contlonmin,contlonmax]]],axis=0)
     if contoursearch is None:
         if boundingbox=='contoursearch':
             sys.exit('ERROR - Can not use \'contoursearch\' for boundingbox if no contoursearch input provided')
@@ -185,19 +188,19 @@ def plot(latitudes,longitudes,boundary=None,mask=None,contour=None,contoursearch
         contsrchlatmax=contoursearch[:,0].max()+latspc/2
         contsrchlonmin=contoursearch[:,1].min()-lonspc/2
         contsrchlonmax=contoursearch[:,1].max()+lonspc/2
-        boundingarray=numpy.append(boundingarray,[[[contsrchlatmin,contsrchlatmax],[contsrchlonmin,contsrchlonmax]]],axis=0)
+        boundingarray=np.append(boundingarray,[[[contsrchlatmin,contsrchlatmax],[contsrchlonmin,contsrchlonmax]]],axis=0)
     if geocontour is None:
         if boundingbox=='geocontour':
             sys.exit('ERROR - Can not use \'geocontour\' for boundingbox if no geocontour input provided')
         if cells=='geocontour':
             sys.exit('ERROR - Can not use \'geocontour\' for cells if no geocontour input provided')
     else:
-        geocontour.check.checkgeocontour(geocontour,latitudes,longitudes)
+        gcc.cgeocontour(geocontour,latitudes,longitudes)
         geocontlatmin=geocontour[:,0,0].min()-latspc/2
         geocontlatmax=geocontour[:,0,0].max()+latspc/2
         geocontlonmin=geocontour[:,1,0].min()-lonspc/2
         geocontlonmax=geocontour[:,1,0].max()+lonspc/2
-        boundingarray=numpy.append(boundingarray,[[[geocontlatmin,geocontlatmax],[geocontlonmin,geocontlonmax]]],axis=0)
+        boundingarray=np.append(boundingarray,[[[geocontlatmin,geocontlatmax],[geocontlonmin,geocontlonmax]]],axis=0)
     if boundingbox=='grid':
         ylimmin=gridlatmin
         ylimmax=gridlatmax
@@ -250,22 +253,22 @@ def plot(latitudes,longitudes,boundary=None,mask=None,contour=None,contoursearch
         else:
             cells='none'
     if cells=='none':
-        pltmask=numpy.full((len(latitudes),len(longitudes)),0)
+        pltmask=np.full((len(latitudes),len(longitudes)),0)
     elif cells=='mask':
         pltmask=mask.astype('int')
     elif cells=='maskedge-8':
-        pltmask=geocontour.maskutil.maskedgecells(mask,connectivity=8).astype('int')
+        pltmask=gcmu.maskedgecells(mask,connectivity=8).astype('int')
     elif cells=='maskedge-4':
-        pltmask=geocontour.maskutil.maskedgecells(mask,connectivity=4).astype('int')
+        pltmask=gcmu.maskedgecells(mask,connectivity=4).astype('int')
     elif cells=='contour':
-         latinds=latitudes.argsort()[numpy.searchsorted(latitudes,contour[:,0],sorter=latitudes.argsort())]
-         loninds=numpy.searchsorted(longitudes,contour[:,1])
-         pltmask=numpy.full((len(latitudes),len(longitudes)),0)
+         latinds=latitudes.argsort()[np.searchsorted(latitudes,contour[:,0],sorter=latitudes.argsort())]
+         loninds=np.searchsorted(longitudes,contour[:,1])
+         pltmask=np.full((len(latitudes),len(longitudes)),0)
          pltmask[latinds,loninds]=1
     elif cells=='geocontour':
-         latinds=latitudes.argsort()[numpy.searchsorted(latitudes,geocontour[:,0,0],sorter=latitudes.argsort())]
-         loninds=numpy.searchsorted(longitudes,geocontour[:,1,0])
-         pltmask=numpy.full((len(latitudes),len(longitudes)),0)
+         latinds=latitudes.argsort()[np.searchsorted(latitudes,geocontour[:,0,0],sorter=latitudes.argsort())]
+         loninds=np.searchsorted(longitudes,geocontour[:,1,0])
+         pltmask=np.full((len(latitudes),len(longitudes)),0)
          pltmask[latinds,loninds]=1
     else:
         sys.exit('ERROR - cells=\''+cells+'\' is not a valid selection, valid selections are \'none\'/\'mask\'/\'maskedge-8\'/\'maskedge-4\'/\'contour\'/\'geocontour\'')
@@ -274,13 +277,13 @@ def plot(latitudes,longitudes,boundary=None,mask=None,contour=None,contoursearch
     elif latdir=='dec':
         org='upper'
     ext=[gridlonmin,gridlonmax,gridlatmin,gridlatmax]
-    cmp=matplotlib.colors.ListedColormap([emptycellcolor,fullcellcolor])
-    matplotlib.pyplot.ioff()
-    yminor=numpy.arange(ylimmin,ylimmax+latspc,latspc)
-    xminor=numpy.arange(xlimmin,xlimmax+lonspc,lonspc)
-    ymajor=(yminor[:-1]+latspc/2)[::numpy.ceil(len(yminor)/7).astype('int')]
-    xmajor=(xminor[:-1]+lonspc/2)[::numpy.ceil(len(xminor)/7).astype('int')]
-    fig=matplotlib.pyplot.figure()
+    cmp=mplc.ListedColormap([emptycellcolor,fullcellcolor])
+    plt.ioff()
+    yminor=np.arange(ylimmin,ylimmax+latspc,latspc)
+    xminor=np.arange(xlimmin,xlimmax+lonspc,lonspc)
+    ymajor=(yminor[:-1]+latspc/2)[::np.ceil(len(yminor)/7).astype('int')]
+    xmajor=(xminor[:-1]+lonspc/2)[::np.ceil(len(xminor)/7).astype('int')]
+    fig=plt.figure()
     if features is None:
         ax=fig.add_subplot(111)
     else:
@@ -311,7 +314,7 @@ def plot(latitudes,longitudes,boundary=None,mask=None,contour=None,contoursearch
         if grid=='on':
             gl=ax.gridlines(xlocs=xminor,ylocs=yminor,linestyle=(0,(1,1)),color=gridcolor,linewidth=0.05*pdw,zorder=5)
         if features=='natural':
-            water=numpy.array([0.7,0.75,0.95])
+            water=np.array([0.7,0.75,0.95])
             ax.add_feature(cp.feature.NaturalEarthFeature(category='physical',name='ocean',scale='10m'),color=water,edgecolor='none',linewidth=0,alpha=0.5,zorder=6)
             ax.add_feature(cp.feature.NaturalEarthFeature('physical','land','10m'),facecolor='None',edgecolor='black',alpha=0.7,linewidth=0.01*pdw,zorder=7)
             ax.add_feature(cp.feature.NaturalEarthFeature('physical','lakes','10m'),facecolor=water,edgecolor='black',linewidth=0.01*pdw,alpha=0.7,zorder=8)
@@ -346,8 +349,8 @@ def plot(latitudes,longitudes,boundary=None,mask=None,contour=None,contoursearch
         if startcell=='on':
             ax.scatter(contoursearch[0,1],contoursearch[0,0],marker='o',c=contoursearchcolor,s=mw_contoursearcharrows,linewidth=0,zorder=11)
         if contoursearcharrows=='on':
-            contoursearchdiff=numpy.diff(contoursearch,axis=0)
-            contoursearchpointrotation=-180/numpy.pi*numpy.arctan2(contoursearchdiff[:,1],contoursearchdiff[:,0])
+            contoursearchdiff=np.diff(contoursearch,axis=0)
+            contoursearchpointrotation=-180/np.pi*np.arctan2(contoursearchdiff[:,1],contoursearchdiff[:,0])
             contoursearchpointlocation=contoursearch[:-1]+2*contoursearchdiff/5
             for ct,k in enumerate(contoursearchpointlocation):
                 if (contoursearchdiff[ct,:]==0).all():
@@ -368,8 +371,8 @@ def plot(latitudes,longitudes,boundary=None,mask=None,contour=None,contoursearch
             if startcell=='on':
                 ax.scatter(contour[0,1],contour[0,0],marker='o',c=contourcolor,s=mw_contourarrows,linewidth=0,zorder=12)
             if contourarrows=='on':
-                contourdiff=numpy.diff(contour,axis=0)
-                contourpointrotation=-180/numpy.pi*numpy.arctan2(contourdiff[:,1],contourdiff[:,0])
+                contourdiff=np.diff(contour,axis=0)
+                contourpointrotation=-180/np.pi*np.arctan2(contourdiff[:,1],contourdiff[:,0])
                 contourpointlocation=contour[:-1]+2*contourdiff/5
                 for ct,k in enumerate(contourpointlocation):
                     ax.scatter(k[1],k[0],marker=(3,0,contourpointrotation[ct]),c=contourcolor,s=mw_contourarrows,linewidth=0,zorder=12)
@@ -388,7 +391,7 @@ def plot(latitudes,longitudes,boundary=None,mask=None,contour=None,contoursearch
         if outdpi<150:
             outdpi=150
     fig.savefig(outname,dpi=outdpi,bbox_inches='tight')
-    matplotlib.pyplot.close(fig)
+    plt.close(fig)
 
 def save(latitudes,longitudes,boundary=None,mask=None,contour=None,contoursearch=None,geocontour=None,vertices=None,outname='save',outtype='np',maskouttxt='off',outformat='%8.3f',outdelim=' '):
     """
@@ -416,32 +419,32 @@ def save(latitudes,longitudes,boundary=None,mask=None,contour=None,contoursearch
         none
     """
     if outtype=='xyz':
-        numpy.savetxt(outname+'_latitudes.xyz',latitudes,fmt=outformat,delimiter=outdelim)
-        numpy.savetxt(outname+'_longitudes.xyz',longitudes,fmt=outformat,delimiter=outdelim)
+        np.savetxt(outname+'_latitudes.xyz',latitudes,fmt=outformat,delimiter=outdelim)
+        np.savetxt(outname+'_longitudes.xyz',longitudes,fmt=outformat,delimiter=outdelim)
         if boundary is not None:
-            geocontour.check.checkboundary(boundary)
-            numpy.savetxt(outname+'_boundary.xyz',boundary,fmt=outformat,delimiter=outdelim)
+            gcc.cboundary(boundary)
+            np.savetxt(outname+'_boundary.xyz',boundary,fmt=outformat,delimiter=outdelim)
         if mask is not None:
-            geocontour.check.checkmask(mask,latitudes,longitudes)
-            ysp, xsp = numpy.meshgrid(latitudes,longitudes,indexing='ij')
-            xyzout=numpy.hstack((xsp.reshape((-1,1)),ysp.reshape((-1,1)),mask.reshape((-1,1))))
-            numpy.savetxt(outname+'_mask.xyz',xyzout,fmt=[outformat, outformat, '%3d'],delimiter=outdelim)
+            gcc.cmask(mask,latitudes,longitudes)
+            ysp, xsp = np.meshgrid(latitudes,longitudes,indexing='ij')
+            xyzout=np.hstack((xsp.reshape((-1,1)),ysp.reshape((-1,1)),mask.reshape((-1,1))))
+            np.savetxt(outname+'_mask.xyz',xyzout,fmt=[outformat, outformat, '%3d'],delimiter=outdelim)
             if maskouttxt=='on':
-                numpy.savetxt(outname+'_mask.txt',mask.astype('int'),fmt='%1d',delimiter=outdelim)
+                np.savetxt(outname+'_mask.txt',mask.astype('int'),fmt='%1d',delimiter=outdelim)
         if contour is not None:
-            geocontour.check.checkcontour(contour,latitudes,longitudes)
-            numpy.savetxt(outname+'_contour.xyz',contour,fmt=outformat,delimiter=outdelim)
+            gcc.ccontour(contour,latitudes,longitudes)
+            np.savetxt(outname+'_contour.xyz',contour,fmt=outformat,delimiter=outdelim)
         if contoursearch is not None:
-            numpy.savetxt(outname+'_contoursearch.xyz',contoursearch,fmt=outformat,delimiter=outdelim)
+            np.savetxt(outname+'_contoursearch.xyz',contoursearch,fmt=outformat,delimiter=outdelim)
         if geocontour is not None:
-            geocontour.check.checkgeocontour(geocontour,latitudes,longitudes)
+            gcc.cgeocontour(geocontour,latitudes,longitudes)
             header1='cell'.center(16)+'entry'.center(19)+'exit'.center(18)+'length'.center(25)+'normal vector'.center(25)
             header2='lat'.center(8)+'lon'.center(9)+'lat'.center(9)+'lon'.center(9)+'lat'.center(9)+'lon'.center(9)+'degrees'.center(13)+'meters'.center(12)+'y'.center(13)+'x'.center(12)
-            numpy.savetxt(outname+'_geocontour.xyz',geocontour.reshape((-1,10),order='F'),fmt=[outformat,outformat,outformat,outformat,outformat,outformat,'%12.7f','%12d','%12.7f','%12.7f'],delimiter=outdelim,header=header1+'\n'+header2)
+            np.savetxt(outname+'_geocontour.xyz',geocontour.reshape((-1,10),order='F'),fmt=[outformat,outformat,outformat,outformat,outformat,outformat,'%12.7f','%12d','%12.7f','%12.7f'],delimiter=outdelim,header=header1+'\n'+header2)
         if vertices is not None:
-            numpy.savetxt(outname+'_vertices.xyz',vertices,fmt=outformat,delimiter=outdelim)
+            np.savetxt(outname+'_vertices.xyz',vertices,fmt=outformat,delimiter=outdelim)
     elif outtype=='np':
-        numpy.savez(outname,latitudes=latitudes,longitudes=longitudes,boundary=boundary,mask=mask,contour=contour,contoursearch=contoursearch,geocontour=geocontour,vertices=vertices)
+        np.savez(outname,latitudes=latitudes,longitudes=longitudes,boundary=boundary,mask=mask,contour=contour,contoursearch=contoursearch,geocontour=geocontour,vertices=vertices)
     else:
         sys.exit('ERROR - outtype=\''+outtype+'\' is not a valid selection, valid selections are \'np\'/\'xyz\'')
 

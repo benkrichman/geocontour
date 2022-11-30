@@ -1,7 +1,7 @@
 import sys
-import numpy
-import geocontour.check
-import geocontour.grid
+import numpy as np
+import geocontour.check as gcc
+import geocontour.grid as gcg
 
 def findstart(mask,searchdir='ru'):
     """
@@ -17,7 +17,7 @@ def findstart(mask,searchdir='ru'):
         startcell - A 1x2 numpy array describing the index of the start cell
         startorientation - A 1x2 numpy array describing the orientation (entry direction) of the start cell
     """
-    geocontour.check.checkmask(mask)
+    gcc.cmask(mask)
     if mask.sum()==0:
         sys.exit('ERROR - Input mask has no full cells')
     if searchdir=='dr':
@@ -38,12 +38,12 @@ def findstart(mask,searchdir='ru'):
         sortcode=[-1.,-0.]
     else:
         sys.exit('ERROR - searchdir=\''+searchdir+'\' is not a valid selection, valid selections are \'dr\'\'dl\'\'ur\'\'ul\'\'rd\'\'ru\'\'ld\'\'lu\'')
-    s0s=int(numpy.copysign(1,sortcode[0]))
+    s0s=int(np.copysign(1,sortcode[0]))
     s0c=int(sortcode[0])
-    s1s=int(numpy.copysign(1,sortcode[1]))
+    s1s=int(np.copysign(1,sortcode[1]))
     s1c=int(sortcode[1])
-    startcell=sorted(numpy.argwhere(mask==True),key=lambda x: (s0s*x[s0c],s1s*x[s1c]))[0]
-    startorientation=(abs(numpy.array(sortcode))*numpy.copysign(1,sortcode[1])).astype('int')
+    startcell=sorted(np.argwhere(mask==True),key=lambda x: (s0s*x[s0c],s1s*x[s1c]))[0]
+    startorientation=(abs(np.array(sortcode))*np.copysign(1,sortcode[1])).astype('int')
     return startcell,startorientation
 
 def parsestart(start,buffermask):
@@ -61,7 +61,7 @@ def parsestart(start,buffermask):
         startcell - A 1x2 numpy array describing the index of the start cell
         startorientation - A 1x2 numpy array describing the orientation (entry direction) of the start cell
     """
-    start=numpy.array(start)
+    start=np.array(start)
     if start.dtype!='int':
         sys.exit('ERROR - Start input is wrong datatype, provide start input as int only')
     if start.shape!=(2,2):
@@ -70,7 +70,7 @@ def parsestart(start,buffermask):
     startorientation=start[1,:]
     if buffermask[startcell[0],startcell[1]]==False:
         sys.exit('ERROR - Startcell '+str(startcell-1)+' is not in mask, select a start cell in the mask')
-    if not ((startorientation==0)+(startorientation==1)+(startorientation==-1)).all() or numpy.linalg.norm(startorientation)!=1:
+    if not ((startorientation==0)+(startorientation==1)+(startorientation==-1)).all() or np.linalg.norm(startorientation)!=1:
         sys.exit('ERROR - Startorientation '+str(startorientation)+' should be a unit vector pointing up/down/left/right')
     return startcell,startorientation
 
@@ -141,23 +141,23 @@ def clean(contourcells,searchcells,latitudes=None,longitudes=None,closecontour=T
     if closecontour:
         contourcells.append(contourcells[0])
         searchcells.append(searchcells[0])
-    contour=numpy.array(contourcells)
-    contoursearch=numpy.array(searchcells)
+    contour=np.array(contourcells)
+    contoursearch=np.array(searchcells)
     if remcontourrepeat:
-        contour=contour[(numpy.diff(contour,axis=0,prepend=numpy.nan)!=0).any(axis=1)]
+        contour=contour[(np.diff(contour,axis=0,prepend=np.nan)!=0).any(axis=1)]
     if remsearchrepeat:
-        contoursearch=contoursearch[(numpy.diff(contoursearch,axis=0,prepend=numpy.nan)!=0).any(axis=1)]
+        contoursearch=contoursearch[(np.diff(contoursearch,axis=0,prepend=np.nan)!=0).any(axis=1)]
     if latitudes is not None and longitudes is not None:
-        latspc=geocontour.grid.gridspacing(latitudes)
-        lonspc=geocontour.grid.gridspacing(longitudes)
-        latdir=geocontour.grid.checklatitudedirection(latitudes)
+        latspc=gcg.gridspacing(latitudes)
+        lonspc=gcg.gridspacing(longitudes)
+        latdir=gcg.checklatitudedirection(latitudes)
         if latdir=='inc':
-            latitudes_ext=numpy.concatenate(([latitudes[0]-latspc],latitudes,[latitudes[-1]+latspc]))
+            latitudes_ext=np.concatenate(([latitudes[0]-latspc],latitudes,[latitudes[-1]+latspc]))
         elif latdir=='dec':
-            latitudes_ext=numpy.concatenate(([latitudes[0]+latspc],latitudes,[latitudes[-1]-latspc]))
-        longitudes_ext=numpy.concatenate(([longitudes[0]-lonspc],longitudes,[longitudes[-1]+lonspc]))
-        contour=numpy.stack((latitudes_ext[contour[:,0]],longitudes_ext[contour[:,1]]),axis=1)
-        contoursearch=numpy.stack((latitudes_ext[contoursearch[:,0]],longitudes_ext[contoursearch[:,1]]),axis=1)
+            latitudes_ext=np.concatenate(([latitudes[0]+latspc],latitudes,[latitudes[-1]-latspc]))
+        longitudes_ext=np.concatenate(([longitudes[0]-lonspc],longitudes,[longitudes[-1]+lonspc]))
+        contour=np.stack((latitudes_ext[contour[:,0]],longitudes_ext[contour[:,1]]),axis=1)
+        contoursearch=np.stack((latitudes_ext[contoursearch[:,0]],longitudes_ext[contoursearch[:,1]]),axis=1)
     else:
         contour-=1
         contoursearch-=1

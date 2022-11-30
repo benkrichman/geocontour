@@ -1,9 +1,9 @@
 import sys
 import warnings
-import numpy
-import geocontour.check
-import geocontour.maskutil
-import geocontour.contourutil
+import numpy as np
+import geocontour.check as gcc
+import geocontour.maskutil as gcmu
+import geocontour.contourutil as gccu
 
 def square(mask,latitudes=None,longitudes=None,direction='cw',start='auto',stop='either',startvisits=3,checkconn=False,remcontourrepeat=True,remsearchrepeat=False,closecontour=True):
     """
@@ -40,37 +40,37 @@ def square(mask,latitudes=None,longitudes=None,direction='cw',start='auto',stop=
             Note: If latitudes/longitudes not provided, returned contour/contoursearch will be indices of the input mask
     """
     if latitudes is not None and longitudes is not None:
-        geocontour.check.checkmask(mask,latitudes,longitudes)
+        gcc.cmask(mask,latitudes,longitudes)
     else:
-        geocontour.check.checkmask(mask)
-    buffermask=numpy.full((tuple(numpy.array(mask.shape)+2)),False)
+        gcc.cmask(mask)
+    buffermask=np.full((tuple(np.array(mask.shape)+2)),False)
     buffermask[1:-1,1:-1]=mask
     if checkconn:
-        fullconnectivity=geocontour.maskutils.checkconnectivity(buffermask,checkcells='full',connectivity=4)
-        emptyconnectivity=geocontour.maskutils.checkconnectivity(buffermask,checkcells='empty',connectivity=4)
+        fullconnectivity=gcmu.checkconnectivity(buffermask,checkcells='full',connectivity=4)
+        emptyconnectivity=gcmu.checkconnectivity(buffermask,checkcells='empty',connectivity=4)
         if not fullconnectivity or not emptyconnectivity:
             warnings.warn('WARNING - Mask and/or non-mask not 4-connected: square tracing may not extract the full contour')
     if direction=='cw':
         def outsideturn(orientation):
-            return orientation[::-1]*numpy.array([-1,1])
+            return orientation[::-1]*np.array([-1,1])
         def insideturn(orientation):
-            return orientation[::-1]*numpy.array([1,-1])
+            return orientation[::-1]*np.array([1,-1])
         searchdir='ru'
     elif direction=='ccw':
         def outsideturn(orientation):
-            return orientation[::-1]*numpy.array([1,-1])
+            return orientation[::-1]*np.array([1,-1])
         def insideturn(orientation):
-            return orientation[::-1]*numpy.array([-1,1])
+            return orientation[::-1]*np.array([-1,1])
         searchdir='rd'
     else:
         sys.exit('ERROR - direction=\''+direction+'\' is not a valid selection, valid selections are \'cw\'/\'ccw\'')
     if type(start) is not str:
-        startcell,startorientation=geocontour.contourutil.parsestart(start,buffermask)
+        startcell,startorientation=gccu.parsestart(start,buffermask)
     elif start=='auto':
-        startcell,startorientation=geocontour.contourutil.findstart(buffermask,searchdir=searchdir)
+        startcell,startorientation=gccu.findstart(buffermask,searchdir=searchdir)
     else:
         sys.exit('ERROR - start=\''+start+'\' is not a valid selection, valid selections are \'auto\' or a 2x2 array describing start cell index and start orientation')
-    checkbreak=geocontour.contourutil.setstop(stop,startvisits,startcell,startorientation)
+    checkbreak=gccu.setstop(stop,startvisits,startcell,startorientation)
     searchcells=[]
     contourcells=[]
     orientation=startorientation
@@ -88,7 +88,7 @@ def square(mask,latitudes=None,longitudes=None,direction='cw',start='auto',stop=
         if (cell==startcell).all():
             Nvisits+=1
         breakloop=checkbreak(cell,orientation,Nvisits)
-    contour,contoursearch=geocontour.contourutil.clean(contourcells,searchcells,latitudes=latitudes,longitudes=longitudes,closecontour=closecontour,remcontourrepeat=remcontourrepeat,remsearchrepeat=remsearchrepeat)
+    contour,contoursearch=gccu.clean(contourcells,searchcells,latitudes=latitudes,longitudes=longitudes,closecontour=closecontour,remcontourrepeat=remcontourrepeat,remsearchrepeat=remsearchrepeat)
     return contour,contoursearch
 
 def moore(mask,latitudes=None,longitudes=None,direction='cw',start='auto',stop='either',startvisits=3,remcontourrepeat=True,remsearchrepeat=False,closecontour=True):
@@ -125,27 +125,27 @@ def moore(mask,latitudes=None,longitudes=None,direction='cw',start='auto',stop='
             Note: If latitudes/longitudes not provided, returned contour/contoursearch will be indices of the input mask
     """
     if latitudes is not None and longitudes is not None:
-        geocontour.check.checkmask(mask,latitudes,longitudes)
+        gcc.cmask(mask,latitudes,longitudes)
     else:
-        geocontour.check.checkmask(mask)
-    buffermask=numpy.full((tuple(numpy.array(mask.shape)+2)),False)
+        gcc.cmask(mask)
+    buffermask=np.full((tuple(np.array(mask.shape)+2)),False)
     buffermask[1:-1,1:-1]=mask
     if direction=='cw':
         searchdirstrings=['ru','dr','ld','ul']
         def insideturn(startorientation):
-            return startorientation[::-1]*numpy.array([1,-1])
+            return startorientation[::-1]*np.array([1,-1])
     elif direction=='ccw':
         searchdirstrings=['rd','ur','lu','dl']
         def insideturn(startorientation):
-            return startorientation[::-1]*numpy.array([-1,1])
+            return startorientation[::-1]*np.array([-1,1])
     else:
         sys.exit('ERROR - direction=\''+direction+'\' is not a valid selection, valid selections are \'cw\'/\'ccw\'')
     if type(start) is not str:
-        startcell,startorientation=geocontour.contourutil.parsestart(start,buffermask)
+        startcell,startorientation=gccu.parsestart(start,buffermask)
     elif start=='auto':
         if stop=='either' or stop=='Elisoff':
             for ct,searchdir in enumerate(searchdirstrings):
-                startcell,startorientation=geocontour.contourutil.findstart(buffermask,searchdir=searchdir)
+                startcell,startorientation=gccu.findstart(buffermask,searchdir=searchdir)
                 I=startcell+insideturn(startorientation)
                 RI=I-startorientation
                 RRI=RI-startorientation
@@ -171,10 +171,10 @@ def moore(mask,latitudes=None,longitudes=None,direction='cw',start='auto',stop='
                         if stop=='either':
                             warnings.warn('Warning - Suitable start cell for Elisoff stop not found, trace will stop on Nvisits only')
         else:
-            startcell,startorientation=geocontour.contourutil.findstart(buffermask,searchdir='ru')
+            startcell,startorientation=gccu.findstart(buffermask,searchdir='ru')
     else:
         sys.exit('ERROR - start=\''+start+'\' is not a valid selection, valid selections are \'auto\' or a 2x2 array describing start cell index and start orientation')
-    checkbreak=geocontour.contourutil.setstop(stop,startvisits,startcell,startorientation)
+    checkbreak=gccu.setstop(stop,startvisits,startcell,startorientation)
     searchcells=[]
     contourcells=[]
     orientation=startorientation
@@ -185,8 +185,8 @@ def moore(mask,latitudes=None,longitudes=None,direction='cw',start='auto',stop='
         searchcells.append(cell)
         if buffermask[cell[0],cell[1]]==True:
             contourcells.append(cell)
-            neighbors=geocontour.maskutils.findneighbors(cell,connectivity=8,direction=direction)
-            nextneighborindex=(numpy.nonzero(((cell-orientation)==neighbors).all(axis=1))[0][0]+1)%8
+            neighbors=gcmu.findneighbors(cell,connectivity=8,direction=direction)
+            nextneighborindex=(np.nonzero(((cell-orientation)==neighbors).all(axis=1))[0][0]+1)%8
         else:
             nextneighborindex=(nextneighborindex+1)%8
         orientation=neighbors[nextneighborindex]-cell
@@ -194,7 +194,7 @@ def moore(mask,latitudes=None,longitudes=None,direction='cw',start='auto',stop='
         if (cell==startcell).all():
             Nvisits+=1
         breakloop=checkbreak(cell,orientation,Nvisits)
-    contour,contoursearch=geocontour.contourutil.clean(contourcells,searchcells,latitudes=latitudes,longitudes=longitudes,closecontour=closecontour,remcontourrepeat=remcontourrepeat,remsearchrepeat=remsearchrepeat)
+    contour,contoursearch=gccu.clean(contourcells,searchcells,latitudes=latitudes,longitudes=longitudes,closecontour=closecontour,remcontourrepeat=remcontourrepeat,remsearchrepeat=remsearchrepeat)
     return contour,contoursearch
 
 def moore_imp(mask,latitudes=None,longitudes=None,direction='cw',start='auto',stop='either',startvisits=3,remcontourrepeat=True,remsearchrepeat=False,closecontour=True):
@@ -229,27 +229,27 @@ def moore_imp(mask,latitudes=None,longitudes=None,direction='cw',start='auto',st
             Note: If latitudes/longitudes not provided, returned contour/contoursearch will be indices of the input mask
     """
     if latitudes is not None and longitudes is not None:
-        geocontour.check.checkmask(mask,latitudes,longitudes)
+        gcc.cmask(mask,latitudes,longitudes)
     else:
-        geocontour.check.checkmask(mask)
-    buffermask=numpy.full((tuple(numpy.array(mask.shape)+2)),False)
+        gcc.cmask(mask)
+    buffermask=np.full((tuple(np.array(mask.shape)+2)),False)
     buffermask[1:-1,1:-1]=mask
     if direction=='cw':
         searchdirstrings=['ru','dr','ld','ul']
         def insideturn(startorientation):
-            return startorientation[::-1]*numpy.array([1,-1])
+            return startorientation[::-1]*np.array([1,-1])
     elif direction=='ccw':
         searchdirstrings=['rd','ur','lu','dl']
         def insideturn(startorientation):
-            return startorientation[::-1]*numpy.array([-1,1])
+            return startorientation[::-1]*np.array([-1,1])
     else:
         sys.exit('ERROR - direction=\''+direction+'\' is not a valid selection, valid selections are \'cw\'/\'ccw\'')
     if type(start) is not str:
-        startcell,startorientation=geocontour.contourutil.parsestart(start,buffermask)
+        startcell,startorientation=gccu.parsestart(start,buffermask)
     elif start=='auto':
         if stop=='either' or stop=='Elisoff':
             for ct,searchdir in enumerate(searchdirstrings):
-                startcell,startorientation=geocontour.contourutil.findstart(buffermask,searchdir=searchdir)
+                startcell,startorientation=gccu.findstart(buffermask,searchdir=searchdir)
                 I=startcell+insideturn(startorientation)
                 RI=I-startorientation
                 RRI=RI-startorientation
@@ -275,18 +275,18 @@ def moore_imp(mask,latitudes=None,longitudes=None,direction='cw',start='auto',st
                         if stop=='either':
                             warnings.warn('Warning - Suitable start cell for Elisoff stop not found, trace will stop on Nvisits only')
         else:
-            startcell,startorientation=geocontour.contourutil.findstart(buffermask,searchdir='ru')
+            startcell,startorientation=gccu.findstart(buffermask,searchdir='ru')
     else:
         sys.exit('ERROR - start=\''+start+'\' is not a valid selection, valid selections are \'auto\' or a 2x2 array describing start cell index and start orientation')
-    checkbreak=geocontour.contourutil.setstop(stop,startvisits,startcell,startorientation)
+    checkbreak=gccu.setstop(stop,startvisits,startcell,startorientation)
     cell=startcell
     orientation=startorientation
     searchcells=[]
     contourcells=[]
     searchcells.append(cell)
     contourcells.append(cell)
-    neighbors=geocontour.maskutils.findneighbors(cell,connectivity=8,direction=direction)
-    nextneighborindex=(numpy.nonzero(((cell-orientation)==neighbors).all(axis=1))[0][0]+1)%8
+    neighbors=gcmu.findneighbors(cell,connectivity=8,direction=direction)
+    nextneighborindex=(np.nonzero(((cell-orientation)==neighbors).all(axis=1))[0][0]+1)%8
     Nvisits=0
     breakloop=False
     while not breakloop:
@@ -296,19 +296,19 @@ def moore_imp(mask,latitudes=None,longitudes=None,direction='cw',start='auto',st
         if buffermask[cell[0],cell[1]]==True:
             nextnextneighbor=neighbors[(nextneighborindex+1)%8]
             nextnextinmask=(buffermask[nextnextneighbor[0],nextnextneighbor[1]]==True)
-            normdist=numpy.linalg.norm(contourcells[-1]-cell)
-            if nextnextinmask and normdist==numpy.sqrt(2):
+            normdist=np.linalg.norm(contourcells[-1]-cell)
+            if nextnextinmask and normdist==np.sqrt(2):
                 searchcells.insert(-1,nextnextneighbor)
                 contourcells.append(nextnextneighbor)
             contourcells.append(cell)
-            neighbors=geocontour.maskutils.findneighbors(cell,connectivity=8,direction=direction)
-            nextneighborindex=(numpy.nonzero(((cell-orientation)==neighbors).all(axis=1))[0][0]+1)%8
+            neighbors=gcmu.findneighbors(cell,connectivity=8,direction=direction)
+            nextneighborindex=(np.nonzero(((cell-orientation)==neighbors).all(axis=1))[0][0]+1)%8
         else:
             nextneighborindex=(nextneighborindex+1)%8
         if (cell==startcell).all():
             Nvisits+=1
         breakloop=checkbreak(cell,orientation,Nvisits)
-    contour,contoursearch=geocontour.contourutil.clean(contourcells,searchcells,latitudes=latitudes,longitudes=longitudes,closecontour=closecontour,remcontourrepeat=remcontourrepeat,remsearchrepeat=remsearchrepeat)
+    contour,contoursearch=gccu.clean(contourcells,searchcells,latitudes=latitudes,longitudes=longitudes,closecontour=closecontour,remcontourrepeat=remcontourrepeat,remsearchrepeat=remsearchrepeat)
     return contour,contoursearch
 
 def pavlidis(mask,latitudes=None,longitudes=None,direction='cw',start='auto',stop='Nvisits',startvisits=1,remcontourrepeat=True,remsearchrepeat=False,closecontour=True):
@@ -346,30 +346,30 @@ def pavlidis(mask,latitudes=None,longitudes=None,direction='cw',start='auto',sto
             Note: If latitudes/longitudes not provided, returned contour/contoursearch will be indices of the input mask
     """
     if latitudes is not None and longitudes is not None:
-        geocontour.check.checkmask(mask,latitudes,longitudes)
+        gcc.cmask(mask,latitudes,longitudes)
     else:
-        geocontour.check.checkmask(mask)
-    buffermask=numpy.full((tuple(numpy.array(mask.shape)+2)),False)
+        gcc.cmask(mask)
+    buffermask=np.full((tuple(np.array(mask.shape)+2)),False)
     buffermask[1:-1,1:-1]=mask
     if direction=='cw':
         def outsideturn(orientation):
-            return orientation[::-1]*numpy.array([-1,1])
+            return orientation[::-1]*np.array([-1,1])
         def insideturn(orientation):
-            return orientation[::-1]*numpy.array([1,-1])
+            return orientation[::-1]*np.array([1,-1])
         searchdirstrings=['ru','dr','ld','ul']
     elif direction=='ccw':
         def outsideturn(orientation):
-            return orientation[::-1]*numpy.array([1,-1])
+            return orientation[::-1]*np.array([1,-1])
         def insideturn(orientation):
-            return orientation[::-1]*numpy.array([-1,1])
+            return orientation[::-1]*np.array([-1,1])
         searchdirstrings=['rd','ur','lu','dl']
     else:
         sys.exit('ERROR - direction=\''+direction+'\' is not a valid selection, valid selections are \'cw\'/\'ccw\'')
     if type(start) is not str:
-        startcell,startorientation=geocontour.contourutil.parsestart(start,buffermask)
+        startcell,startorientation=gccu.parsestart(start,buffermask)
     elif start=='auto':
         for ct,searchdir in enumerate(searchdirstrings):
-            startcell,startorientation=geocontour.contourutil.findstart(buffermask,searchdir=searchdir)
+            startcell,startorientation=gccu.findstart(buffermask,searchdir=searchdir)
             RI=startcell-startorientation+insideturn(startorientation)
             if buffermask[RI[0],RI[1]]==False:
                 break
@@ -382,7 +382,7 @@ def pavlidis(mask,latitudes=None,longitudes=None,direction='cw',start='auto',sto
         sys.exit('ERROR - start=\''+start+'\' is not a valid selection, valid selections are \'auto\' or a 2x2 array describing start cell index and start orientation')
     if stop=='Elisoff':
         warnings.warn('WARNING - Pavlidis tracing often will not stop on the Elisoff condition, tracing may become stuck in an infinite loop')
-    checkbreak=geocontour.contourutil.setstop(stop,startvisits,startcell,startorientation)
+    checkbreak=gccu.setstop(stop,startvisits,startcell,startorientation)
     searchcells=[]
     contourcells=[]
     searchcells.append(startcell)
@@ -432,7 +432,7 @@ def pavlidis(mask,latitudes=None,longitudes=None,direction='cw',start='auto',sto
             rotations+=1
         if rotations>3:
             sys.exit('ERROR - Stuck on isolated cell '+str(cell))
-    contour,contoursearch=geocontour.contourutil.clean(contourcells,searchcells,latitudes=latitudes,longitudes=longitudes,closecontour=closecontour,remcontourrepeat=remcontourrepeat,remsearchrepeat=remsearchrepeat)
+    contour,contoursearch=gccu.clean(contourcells,searchcells,latitudes=latitudes,longitudes=longitudes,closecontour=closecontour,remcontourrepeat=remcontourrepeat,remsearchrepeat=remsearchrepeat)
     return contour,contoursearch
 
 def pavlidis_imp(mask,latitudes=None,longitudes=None,direction='cw',start='auto',stop='Nvisits',startvisits=1,remcontourrepeat=True,remsearchrepeat=False,closecontour=True):
@@ -468,30 +468,30 @@ def pavlidis_imp(mask,latitudes=None,longitudes=None,direction='cw',start='auto'
             Note: If latitudes/longitudes not provided, returned contour/contoursearch will be indices of the input mask
     """
     if latitudes is not None and longitudes is not None:
-        geocontour.check.checkmask(mask,latitudes,longitudes)
+        gcc.cmask(mask,latitudes,longitudes)
     else:
-        geocontour.check.checkmask(mask)
-    buffermask=numpy.full((tuple(numpy.array(mask.shape)+2)),False)
+        gcc.cmask(mask)
+    buffermask=np.full((tuple(np.array(mask.shape)+2)),False)
     buffermask[1:-1,1:-1]=mask
     if direction=='cw':
         def outsideturn(orientation):
-            return orientation[::-1]*numpy.array([-1,1])
+            return orientation[::-1]*np.array([-1,1])
         def insideturn(orientation):
-            return orientation[::-1]*numpy.array([1,-1])
+            return orientation[::-1]*np.array([1,-1])
         searchdirstrings=['ru','dr','ld','ul']
     elif direction=='ccw':
         def outsideturn(orientation):
-            return orientation[::-1]*numpy.array([1,-1])
+            return orientation[::-1]*np.array([1,-1])
         def insideturn(orientation):
-            return orientation[::-1]*numpy.array([-1,1])
+            return orientation[::-1]*np.array([-1,1])
         searchdirstrings=['rd','ur','lu','dl']
     else:
         sys.exit('ERROR - direction=\''+direction+'\' is not a valid selection, valid selections are \'cw\'/\'ccw\'')
     if type(start) is not str:
-        startcell,startorientation=geocontour.contourutil.parsestart(start,buffermask)
+        startcell,startorientation=gccu.parsestart(start,buffermask)
     elif start=='auto':
         for ct,searchdir in enumerate(searchdirstrings):
-            startcell,startorientation=geocontour.contourutil.findstart(buffermask,searchdir=searchdir)
+            startcell,startorientation=gccu.findstart(buffermask,searchdir=searchdir)
             RI=startcell-startorientation+insideturn(startorientation)
             if buffermask[RI[0],RI[1]]==False:
                 break
@@ -504,7 +504,7 @@ def pavlidis_imp(mask,latitudes=None,longitudes=None,direction='cw',start='auto'
         sys.exit('ERROR - start=\''+start+'\' is not a valid selection, valid selections are \'auto\' or a 2x2 array describing start cell index and start orientation')
     if stop=='Elisoff':
         warnings.warn('WARNING - Pavlidis tracing often will not stop on the Elisoff condition, tracing may become stuck in an infinite loop')
-    checkbreak=geocontour.contourutil.setstop(stop,startvisits,startcell,startorientation)
+    checkbreak=gccu.setstop(stop,startvisits,startcell,startorientation)
     searchcells=[]
     contourcells=[]
     searchcells.append(startcell)
@@ -561,7 +561,7 @@ def pavlidis_imp(mask,latitudes=None,longitudes=None,direction='cw',start='auto'
             rotations+=1
         if rotations>3:
             sys.exit('ERROR - Stuck on isolated cell '+str(cell))
-    contour,contoursearch=geocontour.contourutil.clean(contourcells,searchcells,latitudes=latitudes,longitudes=longitudes,closecontour=closecontour,remcontourrepeat=remcontourrepeat,remsearchrepeat=remsearchrepeat)
+    contour,contoursearch=gccu.clean(contourcells,searchcells,latitudes=latitudes,longitudes=longitudes,closecontour=closecontour,remcontourrepeat=remcontourrepeat,remsearchrepeat=remsearchrepeat)
     return contour,contoursearch
 
 def TSR(mask,latitudes=None,longitudes=None,direction='cw',start='auto',stop='either',startvisits=4,remcontourrepeat=True,remsearchrepeat=False,closecontour=True):
@@ -597,32 +597,32 @@ def TSR(mask,latitudes=None,longitudes=None,direction='cw',start='auto',stop='ei
             Note: If latitudes/longitudes not provided, returned contour/contoursearch will be indices of the input mask
     """
     if latitudes is not None and longitudes is not None:
-        geocontour.check.checkmask(mask,latitudes,longitudes)
+        gcc.cmask(mask,latitudes,longitudes)
     else:
-        geocontour.check.checkmask(mask)
-    buffermask=numpy.full((tuple(numpy.array(mask.shape)+2)),False)
+        gcc.cmask(mask)
+    buffermask=np.full((tuple(np.array(mask.shape)+2)),False)
     buffermask[1:-1,1:-1]=mask
     if direction=='cw':
         def outsideturn(orientation):
-            return orientation[::-1]*numpy.array([-1,1])
+            return orientation[::-1]*np.array([-1,1])
         def insideturn(orientation):
-            return orientation[::-1]*numpy.array([1,-1])
+            return orientation[::-1]*np.array([1,-1])
         searchdir='ru'
     elif direction=='ccw':
         def outsideturn(orientation):
-            return orientation[::-1]*numpy.array([1,-1])
+            return orientation[::-1]*np.array([1,-1])
         def insideturn(orientation):
-            return orientation[::-1]*numpy.array([-1,1])
+            return orientation[::-1]*np.array([-1,1])
         searchdir='rd'
     else:
         sys.exit('ERROR - direction=\''+direction+'\' is not a valid selection, valid selections are \'cw\'/\'ccw\'')
     if type(start) is not str:
-        startcell,startorientation=geocontour.contourutil.parsestart(start,buffermask)
+        startcell,startorientation=gccu.parsestart(start,buffermask)
     elif start=='auto':
-        startcell,startorientation=geocontour.contourutil.findstart(buffermask,searchdir=searchdir)
+        startcell,startorientation=gccu.findstart(buffermask,searchdir=searchdir)
     else:
         sys.exit('ERROR - start=\''+start+'\' is not a valid selection, valid selections are \'auto\' or a 2x2 array describing start cell index and start orientation')
-    checkbreak=geocontour.contourutil.setstop(stop,startvisits,startcell,startorientation)
+    checkbreak=gccu.setstop(stop,startvisits,startcell,startorientation)
     orientation=startorientation
     cell=startcell
     searchcells=[]
@@ -678,6 +678,6 @@ def TSR(mask,latitudes=None,longitudes=None,direction='cw',start='auto',stop='ei
         if (cell==startcell).all():
             Nvisits+=1
         breakloop=checkbreak(cell,orientation,Nvisits)
-    contour,contoursearch=geocontour.contourutil.clean(contourcells,searchcells,latitudes=latitudes,longitudes=longitudes,closecontour=closecontour,remcontourrepeat=remcontourrepeat,remsearchrepeat=remsearchrepeat)
+    contour,contoursearch=gccu.clean(contourcells,searchcells,latitudes=latitudes,longitudes=longitudes,closecontour=closecontour,remcontourrepeat=remcontourrepeat,remsearchrepeat=remsearchrepeat)
     return contour,contoursearch
 
