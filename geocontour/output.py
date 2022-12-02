@@ -132,21 +132,21 @@ def plot(latitudes,longitudes,boundary=None,mask=None,contour=None,contoursearch
     4) Plot a geocontour overlaid onto a map projection with natural features
         plot(latitudes,longitudes,geocontour=<geocontour>,cells='geocontour',features='natural')
     """
-    latspc=gcg.gridspacing(latitudes)
-    lonspc=gcg.gridspacing(longitudes)
+    latspc=gcg.spacing(latitudes)
+    lonspc=gcg.spacing(longitudes)
     gridlatmin=latitudes.min()-latspc/2
     gridlatmax=latitudes.max()+latspc/2
     gridlonmin=longitudes.min()-lonspc/2
     gridlonmax=longitudes.max()+lonspc/2
-    latdir=gcg.checklatitudedirection(latitudes)
+    latdir=gcg.clatdir(latitudes)
     boundingarray=np.array([[[gridlatmin,gridlatmax],[gridlonmin,gridlonmax]]])
     if boundary is None:
         if boundingbox=='boundary':
             sys.exit('ERROR - Can not use \'boundary\' for boundingbox if no boundary input provided')
     else:
         gcc.cboundary(boundary)
-        loninput=gcg.checklongituderange(longitudes)
-        boundloninput=gcg.checklongituderange(boundary[:,1])
+        loninput=gcg.clonrng(longitudes)
+        boundloninput=gcg.clonrng(boundary[:,1])
         if (loninput=='neg' and boundloninput=='pos') or (loninput=='pos' and boundloninput=='neg'):
             sys.exit('ERROR - Longitude input range is '+loninput+' and boundary longitude range is '+boundloninput)
         boundlatmin=np.floor((boundary.min(axis=0)[0]-gridlatmin)/latspc)*latspc+gridlatmin
@@ -257,9 +257,9 @@ def plot(latitudes,longitudes,boundary=None,mask=None,contour=None,contoursearch
     elif cells=='mask':
         pltmask=mask.astype('int')
     elif cells=='maskedge-8':
-        pltmask=gcmu.maskedgecells(mask,connectivity=8).astype('int')
+        pltmask=gcmu.edge(mask,connectivity=8).astype('int')
     elif cells=='maskedge-4':
-        pltmask=gcmu.maskedgecells(mask,connectivity=4).astype('int')
+        pltmask=gcmu.edge(mask,connectivity=4).astype('int')
     elif cells=='contour':
          latinds=latitudes.argsort()[np.searchsorted(latitudes,contour[:,0],sorter=latitudes.argsort())]
          loninds=np.searchsorted(longitudes,contour[:,1])

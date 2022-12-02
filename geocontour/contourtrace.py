@@ -46,8 +46,8 @@ def square(mask,latitudes=None,longitudes=None,direction='cw',start='auto',stop=
     buffermask=np.full((tuple(np.array(mask.shape)+2)),False)
     buffermask[1:-1,1:-1]=mask
     if checkconn:
-        fullconnectivity=gcmu.checkconnectivity(buffermask,checkcells='full',connectivity=4)
-        emptyconnectivity=gcmu.checkconnectivity(buffermask,checkcells='empty',connectivity=4)
+        fullconnectivity=gcmu.conn(buffermask,checkcells='full',connectivity=4)
+        emptyconnectivity=gcmu.conn(buffermask,checkcells='empty',connectivity=4)
         if not fullconnectivity or not emptyconnectivity:
             warnings.warn('WARNING - Mask and/or non-mask not 4-connected: square tracing may not extract the full contour')
     if direction=='cw':
@@ -185,7 +185,7 @@ def moore(mask,latitudes=None,longitudes=None,direction='cw',start='auto',stop='
         searchcells.append(cell)
         if buffermask[cell[0],cell[1]]==True:
             contourcells.append(cell)
-            neighbors=gcmu.findneighbors(cell,connectivity=8,direction=direction)
+            neighbors=gcmu.neighbors(cell,connectivity=8,direction=direction)
             nextneighborindex=(np.nonzero(((cell-orientation)==neighbors).all(axis=1))[0][0]+1)%8
         else:
             nextneighborindex=(nextneighborindex+1)%8
@@ -285,7 +285,7 @@ def moore_imp(mask,latitudes=None,longitudes=None,direction='cw',start='auto',st
     contourcells=[]
     searchcells.append(cell)
     contourcells.append(cell)
-    neighbors=gcmu.findneighbors(cell,connectivity=8,direction=direction)
+    neighbors=gcmu.neighbors(cell,connectivity=8,direction=direction)
     nextneighborindex=(np.nonzero(((cell-orientation)==neighbors).all(axis=1))[0][0]+1)%8
     Nvisits=0
     breakloop=False
@@ -301,7 +301,7 @@ def moore_imp(mask,latitudes=None,longitudes=None,direction='cw',start='auto',st
                 searchcells.insert(-1,nextnextneighbor)
                 contourcells.append(nextnextneighbor)
             contourcells.append(cell)
-            neighbors=gcmu.findneighbors(cell,connectivity=8,direction=direction)
+            neighbors=gcmu.neighbors(cell,connectivity=8,direction=direction)
             nextneighborindex=(np.nonzero(((cell-orientation)==neighbors).all(axis=1))[0][0]+1)%8
         else:
             nextneighborindex=(nextneighborindex+1)%8
@@ -566,7 +566,7 @@ def pavlidis_imp(mask,latitudes=None,longitudes=None,direction='cw',start='auto'
 
 def TSR(mask,latitudes=None,longitudes=None,direction='cw',start='auto',stop='either',startvisits=4,remcontourrepeat=True,remsearchrepeat=False,closecontour=True):
     """
-    Returns the contour trace of a mask input using fast representative tracing
+    Returns the contour trace of a mask input using two-step representative tracing
     Source: 10.3390/s16030353
 
     Inputs (Required):

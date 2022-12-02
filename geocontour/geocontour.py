@@ -5,6 +5,8 @@ import geocontour.grid as gcg
 
 def build(contour,latitudes,longitudes,connecttype='cell',simplify=False):
     """
+    Returns a geocontour from a contour input
+
     Inputs (Required):
         contour - A 2-d Nx2 numpy array of ordered latitude/longitude points (degrees) describing the edge of a mask
         latitudes - An evenly spaced numpy array of latitude points (degrees)
@@ -69,8 +71,8 @@ def build(contour,latitudes,longitudes,connecttype='cell',simplify=False):
         sys.exit('ERROR - unrecognized connecttype input '+connecttype+', valid options are \'cell\'/\'center\'')
     gridnorm=np.sqrt(np.sum((geocontour[:,:,2]-geocontour[:,:,1])**2,axis=1))
     geocontour[:,0,3]=gridnorm
-    lonlengths=gcg.longitudelength(geocontour[:,0,0])
-    latlengths=gcg.latitudelength(geocontour[:,0,0])
+    lonlengths=gcg.lonlen(geocontour[:,0,0])
+    latlengths=gcg.latlen(geocontour[:,0,0])
     lengths=np.stack((latlengths,lonlengths),axis=1)
     geocontour[:,1,3]=np.sqrt(np.sum(((geocontour[:,:,2]-geocontour[:,:,1])*lengths)**2,axis=1))
     winding=np.sum((contour[:-1,0]+contour[1:,0])*np.diff(contour[:,1]))

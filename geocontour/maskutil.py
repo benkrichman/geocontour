@@ -5,7 +5,7 @@ from scipy.signal import convolve
 import geocontour.check as gcc
 import geocontour.grid as gcg
 
-def boxset(latitudes,longitudes,boundary):
+def bbox(latitudes,longitudes,boundary):
     """
     Checks input dimensions (lat/lon) against input boundary and returns min/max indicies of bounding box
 
@@ -23,9 +23,9 @@ def boxset(latitudes,longitudes,boundary):
     gcc.cdim(latitudes)
     gcc.cdim(longitudes)
     gcc.cboundary(boundary)
-    latdir=gcg.checklatitudedirection(latitudes)
-    loninput=gcg.checklongituderange(longitudes)
-    boundloninput=gcg.checklongituderange(boundary[:,1])
+    latdir=gcg.clatdir(latitudes)
+    loninput=gcg.clonrng(longitudes)
+    boundloninput=gcg.clonrng(boundary[:,1])
     if (loninput=='neg' and boundloninput=='pos') or (loninput=='pos' and boundloninput=='neg'):
         sys.exit('ERROR - Longitude input range is '+loninput+' and boundary longitude range is '+boundloninput)
     boundlatmin=boundary.min(axis=0)[0]
@@ -66,7 +66,7 @@ def boxset(latitudes,longitudes,boundary):
         boxlonmax=((longitudes-boundlonmax)>0).nonzero()[0][0]
     return boxlatmin, boxlatmax, boxlonmin, boxlonmax
 
-def maskedgecells(mask,latitudes=None,longitudes=None,connectivity=8):
+def edge(mask,latitudes=None,longitudes=None,connectivity=8):
     """
     Returns a mask of only the edge cells, and if latitudes and longitudes are provided also returns an array of the edge cells 
     
@@ -107,7 +107,7 @@ def maskedgecells(mask,latitudes=None,longitudes=None,connectivity=8):
     else:
         return edgemask
 
-def maskvertexpoints(mask,latitudes,longitudes):
+def vertex(mask,latitudes,longitudes):
     """
     Returns the vertex points of all cells in the input mask, and the vertex points of only the mask edge
 
@@ -127,9 +127,9 @@ def maskvertexpoints(mask,latitudes,longitudes):
     vertexmask[:-1,1:]+=maskint
     vertexmask[1:,:-1]+=maskint
     vertexmask[1:,1:]+=maskint
-    latspc=gcg.gridspacing(latitudes)
-    lonspc=gcg.gridspacing(longitudes)
-    latdir=gcg.checklatitudedirection(latitudes)
+    latspc=gcg.spacing(latitudes)
+    lonspc=gcg.spacing(longitudes)
+    latdir=gcg.clatdir(latitudes)
     if latdir=='inc':
         vertexlatitudes=np.append(latitudes-latspc/2,latitudes[-1]+latspc/2)
     elif latdir=='dec':
@@ -140,7 +140,7 @@ def maskvertexpoints(mask,latitudes,longitudes):
     edgevertexpoints=np.vstack((vertexlatitudes[edgevertexmask.nonzero()[0]],vertexlongitudes[edgevertexmask.nonzero()[1]])).T
     return vertexpoints, edgevertexpoints
 
-def findneighbors(cell,connectivity=8,direction='cw'):
+def neighbors(cell,connectivity=8,direction='cw'):
     """
     Returns the neighbors of a cell, with selected connectivity and direction
 
@@ -170,7 +170,7 @@ def findneighbors(cell,connectivity=8,direction='cw'):
     neighbors=cell+neighborrange
     return neighbors
 
-def checkconnectivity(mask,checkcells='full',connectivity=8):
+def conn(mask,checkcells='full',connectivity=8):
     """
     Returns whether a mask or its inverse are connected
 
@@ -198,7 +198,7 @@ def checkconnectivity(mask,checkcells='full',connectivity=8):
     tocheck.append(startcell)
     while len(tocheck)>0:
         checked.append(tocheck[0])
-        cellneighbors=findneighbors(tocheck.pop(0),connectivity=connectivity)
+        cellneighbors=neighbors(tocheck.pop(0),connectivity=connectivity)
         for k in cellneighbors:
             if (k==maskcells).all(axis=1).any() and not any(np.array_equal(k,x) for x in checked) and not any(np.array_equal(k,x) for x in tocheck):
                 tocheck.append(k)

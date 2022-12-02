@@ -148,9 +148,9 @@ def clean(contourcells,searchcells,latitudes=None,longitudes=None,closecontour=T
     if remsearchrepeat:
         contoursearch=contoursearch[(np.diff(contoursearch,axis=0,prepend=np.nan)!=0).any(axis=1)]
     if latitudes is not None and longitudes is not None:
-        latspc=gcg.gridspacing(latitudes)
-        lonspc=gcg.gridspacing(longitudes)
-        latdir=gcg.checklatitudedirection(latitudes)
+        latspc=gcg.spacing(latitudes)
+        lonspc=gcg.spacing(longitudes)
+        latdir=gcg.clatdir(latitudes)
         if latdir=='inc':
             latitudes_ext=np.concatenate(([latitudes[0]-latspc],latitudes,[latitudes[-1]+latspc]))
         elif latdir=='dec':
