@@ -72,18 +72,31 @@ Easy and semi-automated plotting function for visualization of boundaries/masks/
 - display of natural features or political boundaries (optional with cartopy installed)
 - selectable marker/line/arrow/cell size/color/style
 
-##Example Use Case
+## Example Use Case
 
 ### mask search
 
 Given a series of lat/lon points constituting a geographical boundary, and a set of gridded data on a lat/lon grid, find an appropriate mask to select gridded data within the boundary:
 
-Use the 'area' approach to mask calculation, defaulting to selection of all cells for which 50% or greater falls withing the boundary.
+Use the 'area' approach to mask calculation, defaulting to selection of all cells for which 50% or greater falls withing the boundary. Note that boundary falls outside gridded data bounds at some points.
 ```python
-geocontour.masksearch.area(latitudes,longitudes,boundary)
+mask=geocontour.masksearch.area(latitudes,longitudes,boundary)
 ```
 
 ![geocontour.masksearch.area() example](https://github.com/benkrichman/geocontour/raw/main/images/example_small_boundary%2Bmask.png?raw=true)
+
+### contour trace
+
+Given the previously calculated mask, find the outer edge using a contour tracing algorithm:
+
+Use the improved Pavlidis algorithm to trace the contour.
+```python
+contour,contoursearch=geocontour.contourtrace.pavlidis_imp(mask,latitudes,longitudes)
+```
+![geocontour.contourtrace.pavlidis_imp() example contour](https://github.com/benkrichman/geocontour/raw/main/images/example_small_contoursearch.png?raw=true)
+
+![geocontour.contourtrace.pavlidis_imp() example search](https://github.com/benkrichman/geocontour/raw/main/images/example_small_contour.png?raw=true)
+
 
 ##Function Overview
 
