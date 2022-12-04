@@ -5,7 +5,7 @@ Utilities for masking, contour tracing, and geocontour construction for flux cal
 ## Installation
 
 ```bash
-pip install datascale
+pip install geocontour
 ```
 
 or
@@ -31,12 +31,12 @@ Useful mask operators
 ### Contours
 
 Implements 4 existing algorithms for contour tracing, and two improvements on known algorithms
-- square tracing
-- moore neighbor tracing
+- square tracing [^IPP][^Toussaint]
+- moore neighbor tracing [^IPP][^Toussaint]
 - improved moore neighbor tracing (capturing inside corners)
-- pavlidis tracing
+- pavlidis tracing [^IPP][^Pavlidis]
 - improved pavlidis tracing (capturing inside corners)
-- fast representative tracing [^FRT] (see doi:10.3390/s16030353)
+- fast representative tracing [^FRT]
 
 Options for tuning critera of contours created from tracing input masks
 - trace direction
@@ -73,4 +73,8 @@ Easy and semi-automated plotting function for visualization of boundaries/masks/
 - selectable marker/line/arrow/cell size/color/style
 
 
+[^IPP]:Contour Tracing Algorithms, [Pattern Recognition Project](https://www.imageprocessingplace.com/downloads_V3/root_downloads/tutorials/contour_tracing_Abeer_George_Ghuneim/alg.html)
+[^Toussaint]:Grids Connectivity and Contour Tracing, [Lesson Notes](http://www-cgrl.cs.mcgill.ca/~godfried/teaching/mir-reading-assignments/Chapter-2-Grids-Connectivity-Contour-Tracing.pdf)
+[^Pavlidis]:Algorithms for Graphics and Image Processing, [doi:10.1007/978-3-642-93208-3](https://link.springer.com/book/10.1007/978-3-642-93208-3)
 [^FRT]: Fast Contour-Tracing Algorithm Based on a Pixel-Following Method for Image Sensors, [doi:10.3390/s16030353](https://www.mdpi.com/1424-8220/16/3/353)
+Other Source to Note: [Vladimir Kovalevsky](http://www.kovalevsky.de/index.htm)
