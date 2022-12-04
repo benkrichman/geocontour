@@ -217,7 +217,42 @@ Returns a mask over a range of input latitudes and longitudes determined by an i
 
 ### maskutil
 
+#### geocontour.maskutil.bbox()
+Checks input dimensions (lat/lon) against input boundary and returns min/max indicies of bounding box
+
+#### geocontour.maskutil.edge()
+Returns a mask of only the edge cells, and if latitudes and longitudes are provided also returns an array of the edge cells
+
+#### geocontour.maskutil.vertex()
+Returns the vertex points of all cells in the input mask, and the vertex points of only the mask edge
+
+#### geocontour.maskutil.neighbors()
+Returns the neighbors of a cell, with selected connectivity and direction
+
+#### geocontour.maskutil.conn()
+Returns whether a mask or its inverse are connected
+
 ### contourtrace
+
+#### geocontour.contourtrace.square()
+Returns the contour trace of a mask input using the square tracing algorithm [^IPP][^Toussaint]
+
+#### geocontour.contourtrace.moore()
+Returns the contour trace of a mask input using the Moore neighbor tracing algorithm [^IPP][^Toussaint]
+
+#### geocontour.contourtrace.moore_imp()
+Returns the contour trace of a mask input using an improved Moore neighbor tracing algorithm 
+  - Captures inside corners missed by Moore neighbor tracing
+
+#### geocontour.contourtrace.pavlidis()
+Returns the contour trace of a mask input using the Pavlidis tracing algorithm [^IPP][^Pavlidis]
+
+#### geocontour.contourtrace.pavlidis_imp()
+Returns the contour trace of a mask input using an improved Pavlidis tracing algorithm
+  - Captures inside corners missed by Pavlidis tracing
+
+#### geocontour.contourtrace.TSR()
+Returns the contour trace of a mask input using two-step representative tracing [^FRT]
 
 ### contourutil
 
