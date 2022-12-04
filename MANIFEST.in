@@ -1,6 +1,10 @@
 include LICENSE.txt
 include README.md
-include <all packages here!!!>
+include geocontour/*
+include geocontour/data/*
+include geocontour/tests/*
+include geocontour/examples/*
 include images/*
 include requirements.txt
+include requirements+cartopy.txt
 include setup.py
