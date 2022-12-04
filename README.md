@@ -180,7 +180,7 @@ Returns the cell areas of a grid defined by a range of latitudes and longitudes
 
 #### geocontour.grid.clonrng()
 Returns a descriptor for the range of a set of longitude points
-    negative (-180 to 180), positive (0 to 360), or indeterminate (0 to 180) range
+  * negative (-180 to 180), positive (0 to 360), or indeterminate (0 to 180) range
 
 #### geocontour.grid.clatdir()
 Returns a descriptor for the direction of a set of latitude points (increasing or decreasing)
@@ -192,6 +192,28 @@ Returns a set of longitude points switched in place between negative (-180 to 18
 Returns the index where a longitude array either crosses 0 or 180 degrees
 
 ### masksearch
+
+#### geocontour.masksearch.center()
+Returns a mask over a range of input latitudes and longitudes determined by an input boundary
+  - Critera for inclusion of a cell is whether the center of the cell falls within the boundary
+
+#### geocontour.masksearch.center2()
+Returns a mask over a range of input latitudes and longitudes determined by an input boundary
+  - Critera for inclusion of a cell is whether the center of the cell falls within the boundary
+  - Functionally matches geocontour.masksearch.center(), but utilizes matplotlib.path functions, which are probably optimized and thus is roughly 2.5\*sqrt(N) faster for N points, though lacks a "precision" buffer input
+
+#### geocontour.masksearch.nodes()
+Returns a mask over a range of input latitudes and longitudes determined by an input boundary
+  - Critera for inclusion of a cell is whether a given number (default=2) of cell nodes (corners) fall within the boundary
+
+#### geocontour.masksearch.nodes2()
+Returns a mask over a range of input latitudes and longitudes determined by an input boundary
+  - Critera for inclusion of a cell is whether a given number (default=2) of cell nodes (corners) fall within the boundary 
+  - Functionally matches geocontour.masksearch.nodes(), but utilizes matplotlib.path functions, though speed is similar to the shapely implementation
+
+#### geocontour.masksearch.area()
+Returns a mask over a range of input latitudes and longitudes determined by an input boundary
+  - Critera for inclusion of a cell is whether the area of the cell enclosed by the boundary is greater than some fraction (default=0.5) 
 
 ### maskutil
 
