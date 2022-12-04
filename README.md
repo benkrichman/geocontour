@@ -38,14 +38,14 @@ Implements 4 existing algorithms for contour tracing, and two improvements on kn
 - improved pavlidis tracing (capturing inside corners)
 - fast representative tracing [^FRT]
 
-Options for tuning critera of contours created from tracing input masks
+Tuning of contours created from tracing input masks
 - trace direction
-- selectable and tunable stopping conditions
+- selectable and adjustable stopping conditions
 - automatic or manual selection of starting cell
 - selectable connection type (cell to cell or cell edge to cell center)
 - simplification of output contour (removal of repeating cells)
 - selectable contour closure
-- usable for an associated lat/lon grid or on a non- specified grid
+- usable for an associated lat/lon grid or on a non-specified grid
 
 Useful contour operators
 - return full search path for a contour trace
@@ -58,7 +58,7 @@ From an input contour, create a closed geospatial contour with calculated segmen
 
 Options for tuning criteria of geocontours created from input contours
 - selectable connection type (cell to cell or cell edge to cell center)
-- simplify geocontours at the cell level to shorten and improve compute times in practical applications
+- optionally simplify geocontours at the cell level to shorten and improve compute times in practical applications
 
 ### Visualization
 
@@ -68,13 +68,27 @@ Easy and semi-automated plotting function for visualization of boundaries/masks/
 - mask cell visibility
 - directional indicators for contours and contour searches
 - outward unit vector indicators for geocontours
-- automatic calculation of output resolution
+- automatic calculation of feature size and output resolution
 - display of natural features or political boundaries (optional with cartopy installed)
 - selectable marker/line/arrow/cell size/color/style
 
+##Example Use Case
+
+### mask search
+
+Given a series of lat/lon points constituting a geographical boundary, and a set of gridded data on a lat/lon grid, find an appropriate mask to select gridded data within the boundary:
+
+Use the 'area' approach to mask calculation, defaulting to selection of all cells for which 50% or greater falls withing the boundary.
+```python
+geocontour.masksearch.area(latitudes,longitudes,boundary)
+```
+
+![geocontour.masksearch.area() example](https://github.com/benkrichman/geocontour/raw/main/images/example_small_boundary%2Bmask.png?raw=true)
+
+##Function Overview
 
 [^IPP]:Contour Tracing Algorithms, [Pattern Recognition Project](https://www.imageprocessingplace.com/downloads_V3/root_downloads/tutorials/contour_tracing_Abeer_George_Ghuneim/alg.html)
 [^Toussaint]:Grids Connectivity and Contour Tracing, [Lesson Notes](http://www-cgrl.cs.mcgill.ca/~godfried/teaching/mir-reading-assignments/Chapter-2-Grids-Connectivity-Contour-Tracing.pdf)
 [^Pavlidis]:Algorithms for Graphics and Image Processing, [doi:10.1007/978-3-642-93208-3](https://link.springer.com/book/10.1007/978-3-642-93208-3)
 [^FRT]:Fast Contour-Tracing Algorithm Based on a Pixel-Following Method for Image Sensors, [doi:10.3390/s16030353](https://www.mdpi.com/1424-8220/16/3/353)
-[^Misc]:Other Source to Note: [Vladimir Kovalevsky](http://www.kovalevsky.de/index.htm)
+[^Kovalevsky]:Other Source to Note: [Vladimir Kovalevsky](http://www.kovalevsky.de/index.htm)
