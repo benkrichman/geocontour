@@ -2,7 +2,7 @@
 
 Utilities for masking, contour tracing, and geocontour construction for flux calculations from gridded geographic data.
 
-##Installation
+## Installation
 
 ```bash
 pip install datascale
@@ -14,7 +14,7 @@ or
 pip install git+https://github.com/benkrichman/geocontour.git@main
 ```
 
-##Features
+## Features
 
 ### Masks
 
@@ -36,7 +36,7 @@ Implements 4 existing algorithms for contour tracing, and two improvements on kn
 - improved moore neighbor tracing (capturing inside corners)
 - pavlidis tracing
 - improved pavlidis tracing (capturing inside corners)
-- fast representative tracing [^source] (see doi:10.3390/s16030353)
+- fast representative tracing [^FRT] (see doi:10.3390/s16030353)
 
 Options for tuning critera of contours created from tracing input masks
 - trace direction
@@ -73,4 +73,4 @@ Easy and semi-automated plotting function for visualization of boundaries/masks/
 - selectable marker/line/arrow/cell size/color/style
 
 
-[^source]: Fast Contour-Tracing Algorithm Based on a Pixel-Following Method for Image Sensors, [Link](https://www.mdpi.com/1424-8220/16/3/353)
+[^FRT]: Fast Contour-Tracing Algorithm Based on a Pixel-Following Method for Image Sensors, [doi:10.3390/s16030353](https://www.mdpi.com/1424-8220/16/3/353)
