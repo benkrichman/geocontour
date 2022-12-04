@@ -256,13 +256,54 @@ Returns the contour trace of a mask input using two-step representative tracing 
 
 ### contourutil
 
+#### geocontour.contourutil.findstart()
+Returns a starting cell for a contour, given a mask and a search criteria
+
+#### geocontour.contourutil.parsestart()
+Checks start input for contour tracing
+  - Mainly used internally for contour trace functions
+
+#### geocontour.contourutil.setstop()
+Returns a stopping function for use in contour tracing while loop
+  - Mainly used internally for contour trace functions
+
+#### geocontour.contourutil.clean()
+Returns a cleaned contour that will pass checks
+  - Mainly used internally for contour trace functions
+
 ### geocontour
+
+#### geocontour.build()
+Returns a geocontour from a contour input
 
 ### output
 
+#### geocontour.output.plot()
+Plots any/all maskpy-created elements: boundary, mask, contour, contoursearch, geocontour, vertices
+
+#### geocontour.output.save()
+Saves any/all maskpy-created elements: boundary, mask, contour, contoursearch, geocontour, vertices
+
 ### tests
 
+#### geocontour.tests.full()
+Runs all user-facing geocontour functions with test data, printing/saving results
+
 ### examples
+
+#### geocontour.examples.small()
+Runs a small scale example of geocontour processing using mock data, saves resulting plots to run directory
+  - find mask using area criteria (0.5) and plot boundary/mask
+  - trace contour using improved pavlidis algorithm and plot resultant contour and contour search
+  - compute geocontour from contour and plot, using simplify option
+
+#### geocontour.examples.large()
+Runs a large scale example of geocontour processing using the Mississippi River Basin boundary, saves resulting plots to run directory
+  - find mask using area criteria (0.5) and plot boundary/mask
+  - trace contour using improved pavlidis algorithm and plot resultant contour and contour search
+  - compute geocontour from contour and plot, using simplify option
+  - plot geocontour with cartopy background options (borders and physical features) - will error and exit if cartopy not installed
+
 
 [^IPP]:Contour Tracing Algorithms, [Pattern Recognition Project](https://www.imageprocessingplace.com/downloads_V3/root_downloads/tutorials/contour_tracing_Abeer_George_Ghuneim/alg.html)
 [^Toussaint]:Grids Connectivity and Contour Tracing, [Lesson Notes](http://www-cgrl.cs.mcgill.ca/~godfried/teaching/mir-reading-assignments/Chapter-2-Grids-Connectivity-Contour-Tracing.pdf)
