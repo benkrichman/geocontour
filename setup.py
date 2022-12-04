@@ -14,6 +14,8 @@ st.setup(
     author='Benjamin Krichman',
     author_email='benkrichman@gmail.com',
     packages=st.find_packages(),
+    install_package_data=True
+    package_data={'geocontour':['geocontour/data/*']},
     install_requires=[
         'numpy',
         'scipy',
@@ -21,4 +23,12 @@ st.setup(
         'shapely',
         'datascale'
     ],
+    classifiers=[
+        "Programming Language :: Python :: 3",
+        "License :: OSI Approved :: MIT License",
+        "Intended Audience :: Science/Research",
+        "Topic :: Scientific/Engineering",
+        "Topic :: Scientific/Engineering :: Atmospheric Science",
+        "Topic :: Scientific/Engineering :: Hydrology"
+    ]
 )
