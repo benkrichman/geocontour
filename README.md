@@ -1,6 +1,8 @@
-# geocontour
+<h1><img align="left" src="https://github.com/benkrichman/geocontour/raw/main/images/icon_geocontour.png">geocontour</h1>
 
 Utilities for masking, contour tracing, and geocontour construction for flux calculations from gridded geographic data.
+
+# geocontour
 
 ## Masks
 
