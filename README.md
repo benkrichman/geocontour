@@ -146,7 +146,50 @@ help(geocontour.module.function)
 #### geocontour.check.cdim()
 Checks an input dimension array for 1-dimensionality and regular spacing
 
+#### geocontour.check.cboundary()
+Checks a list of boundary points for 2-dimensionality and proper ordering
+
+#### geocontour.check.cmask()
+Checks a mask for correct data type and dimensionality, and size if optional latitudes and longitudes are provided
+
+#### geocontour.check.ccontour()
+Check contour for repeating cells, closure, and connectivity, and latitude/longitude range if optional latitudes and longitudes are provided
+
+#### geocontour.check.cgeocontour()
+Check geocontour for latitude/longitude range and dimension
+
 ### grid
+
+#### geocontour.grid.spacing()
+Returns the grid spacing for a given input dimension
+
+#### geocontour.grid.lonlens()
+Returns the lengths of a degree (default) of longitude over a range of latitudes [^Osborne]
+
+#### geocontour.grid.latlens()
+Returns the grid lengths of a defined range of latitudes [^Osborne]
+
+#### geocontour.grid.lonlen()
+Returns the length of a degree of longitude at the input latitude [^Osborne]
+
+#### geocontour.grid.latlen()
+Returns the length of a degree of latitude at the input latitude [^Osborne]
+
+#### geocontour.grid.areas()
+Returns the cell areas of a grid defined by a range of latitudes and longitudes
+
+#### geocontour.grid.clonrng()
+Returns a descriptor for the range of a set of longitude points
+    negative (-180 to 180), positive (0 to 360), or indeterminate (0 to 180) range
+
+#### geocontour.grid.clatdir()
+Returns a descriptor for the direction of a set of latitude points (increasing or decreasing)
+
+#### geocontour.grid.switchlon()
+Returns a set of longitude points switched in place between negative (-180 to 180) and positive (0 to 360)
+
+#### geocontour.grid.switchind()
+Returns the index where a longitude array either crosses 0 or 180 degrees
 
 ### masksearch
 
@@ -169,3 +212,4 @@ Checks an input dimension array for 1-dimensionality and regular spacing
 [^Pavlidis]:Algorithms for Graphics and Image Processing, [doi:10.1007/978-3-642-93208-3](https://link.springer.com/book/10.1007/978-3-642-93208-3)
 [^FRT]:Fast Contour-Tracing Algorithm Based on a Pixel-Following Method for Image Sensors, [doi:10.3390/s16030353](https://www.mdpi.com/1424-8220/16/3/353)
 [^Kovalevsky]:Other Source to Note: [Vladimir Kovalevsky](http://www.kovalevsky.de/index.htm)
+[^Osborne]:The Mercator Projections [doi:10.5281/ZENODO.35392](https://zenodo.org/record/35392)
