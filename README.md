@@ -2,7 +2,6 @@
 
 Utilities for masking, contour tracing, and geocontour construction for flux calculations from gridded geographic data.
 
-# geocontour
 
 ## Masks
 
