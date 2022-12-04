@@ -3,6 +3,7 @@ import warnings
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.colors as mplc
+import datascale as ds
 import geocontour.grid as gcg
 import geocontour.check as gcc
 import geocontour.maskutil as gcmu
@@ -12,56 +13,7 @@ try:
 except:
     cp_exists='n'
 
-def plotdatasize(axobj=None,mult=1,axis='y',plottype='line'):
-    """ 
-    Returns a value for linewidth/markersize or size that is scaled to plotted data units 
-        Note that this function must be used after any figure/axis alterations (axes limits, aspect ratio, etc.)
-        Note that scaling is to data units and not axis size - if a y axis ranges from 0 to 3 and mult=1, the produced line will be 1 unit thick, or 1/3 the height of the y axis
-
-    Inputs (Required):
-        none
-
-    Inputs (Optional):
-        axobj - axes object to scale to, default=plt.gca() (current pyplot axes object)
-        mult - A float multiplier for output, default=1
-            e.g. to get a linewidth 1/10 the scale of the plotted units, mult=0.1
-        axis ('x','y','xy') - axis to use for data scaling, default='y'
-            Note that if x and y axes do not have an equal aspect ratio (e.g. axobj.set_aspect('equal')), 'xy' will attempt to average the scaling retrieved by 'x' and 'y', and will produce a warning if unequal
-        plottype ('line'/'scatter') - plot type for use with output, default='line'
-            Note that for lines and line markers (pyplot.plot) linewidth and markersize scale linearly, while for s (pyplot.scatter), markers scale with the square of size
-            Note that using output for s will be correct in a scatter only if linewidth=0 (marker edge)
-
-    Outputs:
-        plotdatasize - linewidth/markersize/s to be used as a direct input to pyplot.plot, pyplot.scatter, etc.        
-    """
-    if axobj is None:
-        axobj=plt.gca()
-    fig=axobj.get_figure()
-    pointwidth=72*fig.bbox_inches.width*axobj.get_position().width
-    pointheight=72*fig.bbox_inches.height*axobj.get_position().height
-    widthrange=np.diff(axobj.get_xlim())[0]
-    heightrange=np.diff(axobj.get_ylim())[0]
-    plotdatawidth=pointwidth/widthrange
-    plotdataheight=pointheight/heightrange
-    if axis=='y':
-        plotdatasize=plotdataheight
-    elif axis=='x':
-        plotdatasize=plotdatawidth
-    elif axis=='xy':
-        if plotdataheight!=plotdatawidth:
-            if not np.allclose(plotdataheight,plotdatawidth):
-                warnings.warn('WARNING - x and y axes not scaled equally, output will not be precise')
-        plotdatasize=(plotdataheight+plotdatawidth)/2
-    else:
-        sys.exit('ERROR - \''+axis+'\' is invalid input, select \'x\',\'y\', or \'xy\'')
-    if plottype=='line':
-        return mult*plotdatasize
-    elif plottype=='scatter':
-        return (mult*plotdatasize)**2
-    else:
-        sys.exit('ERROR - \''+plottype+'\' is invalid input, select \'line\' or \'scatter\'')
-
-def plot(latitudes,longitudes,boundary=None,mask=None,contour=None,contoursearch=None,geocontour=None,vertices=None,boundingbox='all',buffer='off',grid='on',cells='default',showcontour='on',startcell='on',contourarrows='on',contoursearcharrows='on',geocontourvectors='on',emptycellcolor='lightgrey',fullcellcolor='sandybrown',boundarycolor='tab:blue',contourcolor='olivedrab',contoursearchcolor='firebrick',geocontourcolor='olivedrab',vertexcolor='tab:cyan',gridcolor='black',lw_boundary='auto',lw_contour='auto',lw_contoursearch='auto',lw_geocontour='auto',mw_contourarrows='auto',mw_contoursearcharrows='auto',mw_vertices='auto',features=None,title=None,outname='plot',outdpi='auto'):
+def plot(latitudes,longitudes,boundary=None,mask=None,contour=None,contoursearch=None,geocontour=None,vertices=None,boundingbox='all',buffer='off',grid='on',cells='default',showcontour='on',startcell='on',contourarrows='on',contoursearcharrows='on',geocontourvectors='on',emptycellcolor='lightgrey',fullcellcolor='sandybrown',boundarycolor='tab:blue',contourcolor='olivedrab',contoursearchcolor='firebrick',geocontourcolor='olivedrab',vertexcolor='tab:cyan',gridcolor='black',lw_boundary='auto',lw_contour='auto',lw_contoursearch='auto',lw_geocontour='auto',mw_contourarrows='auto',mw_contoursearcharrows='auto',mw_vertices='auto',features=None,title=None,outname='plot',outdpi='high'):
     """
     Plots any/all maskpy-created elements: boundary, mask, contour, contoursearch, geocontour, vertices
 
@@ -115,9 +67,12 @@ def plot(latitudes,longitudes,boundary=None,mask=None,contour=None,contoursearch
             'borders' displays national and state/province level boundaries
         title - A string used as the plot title, default=None
         outname - A string used as the filename/path for the saved image, default='plot'
-        outdpi - dpi (resolution) of the saved image, default='auto'
-            'auto' scales dpi high enough to see features when zooming into a single grid cell, floor of 150
-            for very large grids, 'auto' may set dpi high enough that pyplot will hang on some systems - setting dpi manually can avoid this if encountered
+        outdpi - dpi ('high'/'low'/'indep'/resolution) of the saved image, default='high'
+            'high' scales dpi high enough (36 pixels per grid cell) to see features when zooming into a single grid cell, floor of 100
+                for very large grids, 'auto' may set dpi high enough that pyplot will hang on some systems - setting dpi='low' or entering desired dpi manually can avoid this if encountered
+            'low' scales dpi to 5 pixels per grid cell, dpi floor of 100
+            'indep' sets output dpi to 200 regardless of grid size/spacing
+            any other entry must be a numerical value for desired pixels per grid cell
 
     Outputs:
         none
@@ -299,8 +254,8 @@ def plot(latitudes,longitudes,boundary=None,mask=None,contour=None,contoursearch
     ax.set_ylim((ylimmin,ylimmax))
     ax.set_xlim((xlimmin,xlimmax)) 
     ax.imshow(pltmask,aspect='equal',interpolation='none',extent=ext,origin=org,cmap=cmp,zorder=-1)
-    pdw=plotdatasize(ax,axis='xy',mult=(latspc+lonspc)/2,plottype='line')
-    pds=plotdatasize(ax,axis='xy',mult=(latspc+lonspc)/2,plottype='scatter')
+    pdw=ds.plotdatasize(ax,axis='xy',mult=(latspc+lonspc)/2,plottype='line')
+    pds=ds.plotdatasize(ax,axis='xy',mult=(latspc+lonspc)/2,plottype='scatter')
     if features is None:
         ax.set_yticks(ymajor,major=True)
         ax.set_xticks(xmajor,major=True)
@@ -386,10 +341,23 @@ def plot(latitudes,longitudes,boundary=None,mask=None,contour=None,contoursearch
         if geocontourvectors=='on':
             quivlocs=geocontour[:,:,1]+(geocontour[:,:,2]-geocontour[:,:,1])/2
             ax.quiver(quivlocs[:,1],quivlocs[:,0],geocontour[:,1,4],geocontour[:,0,4],facecolor=geocontourcolor,edgecolor='black',scale=3/(latspc+lonspc),scale_units='xy',width=0.15*(latspc+lonspc)/2,headwidth=3,headlength=3,headaxislength=2.75,units='xy',zorder=13,linewidth=pdw/150)
-    if outdpi=='auto':
-        outdpi=36*72/pdw
-        if outdpi<150:
-            outdpi=150
+    if outdpi=='indep':
+        outdpi=200
+    elif outdpi=='high':
+        outdpi=ds.plotdatadpi(ax,mult=72/(latspc+lonspc),axis='xy')
+        if outdpi<100:
+            warnings.warn('WARNING - calculated outdpi too low, geocontour is setting outdpi to 100')
+            outdpi=100
+    elif outdpi=='low':
+        outdpi=ds.plotdatadpi(ax,mult=10/(latspc+lonspc),axis='xy')
+        if outdpi<100:
+            warnings.warn('WARNING - calculated outdpi too low, geocontour is setting outdpi to 100')
+            outdpi=100
+    else:
+        if type(outdpi) is not float and type(outdpi) is not int:
+            sys.exit('ERROR - outdpi input other than \'high\'/\'low\'/\'indep\' must be a numerical value')
+        else:
+            outdpi=ds.plotdatadpi(ax,mult=outdpi*2/(latspc+lonspc),axis='xy')
     fig.savefig(outname,dpi=outdpi,bbox_inches='tight')
     plt.close(fig)
 
