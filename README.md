@@ -74,6 +74,12 @@ Easy and semi-automated plotting function for visualization of boundaries/masks/
 
 ## Example Use Case
 
+\*to reconstruct these examples use (or view)
+```python
+geocontour.examples.small()
+geocontour.examples.large()
+```
+
 ### mask search
 
 Given a series of lat/lon points constituting a geographical boundary, and a set of gridded data on a lat/lon grid, find an appropriate mask to select gridded data within the boundary:
@@ -122,7 +128,7 @@ geocontour.output.plot(latitudes,longitudes,geocontour=geocontour,features='bord
 ```
 ![geocontour.output.plot() bord example](https://github.com/benkrichman/geocontour/raw/main/images/example_large_geocontour%2Bbordfeat.png?raw=true)
 
-##Function Overview
+## Function Overview
 
 [^IPP]:Contour Tracing Algorithms, [Pattern Recognition Project](https://www.imageprocessingplace.com/downloads_V3/root_downloads/tutorials/contour_tracing_Abeer_George_Ghuneim/alg.html)
 [^Toussaint]:Grids Connectivity and Contour Tracing, [Lesson Notes](http://www-cgrl.cs.mcgill.ca/~godfried/teaching/mir-reading-assignments/Chapter-2-Grids-Connectivity-Contour-Tracing.pdf)
