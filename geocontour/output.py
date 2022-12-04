@@ -253,7 +253,7 @@ def plot(latitudes,longitudes,boundary=None,mask=None,contour=None,contoursearch
     ax.set_ylabel('Latitude (deg)')
     ax.set_ylim((ylimmin,ylimmax))
     ax.set_xlim((xlimmin,xlimmax)) 
-    ax.imshow(pltmask,aspect='equal',interpolation='none',extent=ext,origin=org,cmap=cmp,zorder=-1)
+    ax.imshow(pltmask,aspect='equal',interpolation='none',vmin=0,vmax=1,extent=ext,origin=org,cmap=cmp,zorder=-1)
     pdw=ds.plotdatasize(ax,axis='xy',mult=(latspc+lonspc)/2,plottype='line')
     pds=ds.plotdatasize(ax,axis='xy',mult=(latspc+lonspc)/2,plottype='scatter')
     if features is None:
