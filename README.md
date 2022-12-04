@@ -1,4 +1,4 @@
-<h1><img align="left" src="https://github.com/benkrichman/geocontour/raw/main/images/icon_geocontour.png" width="100" height="100">geocontour</h1>
+<h1><img align="left" src="https://github.com/benkrichman/geocontour/raw/main/images/icon_geocontour.png" width="150" height="150">geocontour</h1>
 
 Utilities for masking, contour tracing, and geocontour construction for flux calculations from gridded geographic data.
 
