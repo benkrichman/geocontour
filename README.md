@@ -97,6 +97,30 @@ contour,contoursearch=geocontour.contourtrace.pavlidis_imp(mask,latitudes,longit
 
 ![geocontour.contourtrace.pavlidis_imp() example search](https://github.com/benkrichman/geocontour/raw/main/images/example_small_contour.png?raw=true)
 
+### construct geocontour
+
+Given the previously calculated contour, construct the geocontour to determine contour segment lengths and outward normal vectors:
+
+Use the build function of geocontour to construct the geocontour. Note that the 'simplify' option is used, combining cells with multiple visits into single segments.
+```python
+geocontour=geocontour.build(contour,latitudes,longitudes,simplify=True)
+```
+
+![geocontour.build() example](https://github.com/benkrichman/geocontour/raw/main/images/example_small_geocontour.png?raw=true)
+
+### project geocontour against map features
+
+Given a large geocontour (in this case, the Mississippi River Basin) project against natural features and political borders:
+
+```python
+geocontour.output.plot(latitudes,longitudes,geocontour=geocontour,features='natural')
+```
+![geocontour.output.plot() nat example](https://github.com/benkrichman/geocontour/raw/main/images/example_large_geocontour%2Bnatfeat.png?raw=true)
+
+```python
+geocontour.output.plot(latitudes,longitudes,geocontour=geocontour,features='borders')
+```
+![geocontour.output.plot() bord example](https://github.com/benkrichman/geocontour/raw/main/images/example_large_geocontour%2Bbordfeat.png?raw=true)
 
 ##Function Overview
 
