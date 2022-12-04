@@ -136,6 +136,34 @@ geocontour.output.plot(latitudes,longitudes,geocontour=geocontour,features='bord
 
 ## Function Overview
 
+\*to see full function documentation use
+```python
+help(geocontour.module.function)
+```
+
+### check
+
+#### geocontour.check.cdim()
+Checks an input dimension array for 1-dimensionality and regular spacing
+
+### grid
+
+### masksearch
+
+### maskutil
+
+### contourtrace
+
+### contourutil
+
+### geocontour
+
+### output
+
+### tests
+
+### examples
+
 [^IPP]:Contour Tracing Algorithms, [Pattern Recognition Project](https://www.imageprocessingplace.com/downloads_V3/root_downloads/tutorials/contour_tracing_Abeer_George_Ghuneim/alg.html)
 [^Toussaint]:Grids Connectivity and Contour Tracing, [Lesson Notes](http://www-cgrl.cs.mcgill.ca/~godfried/teaching/mir-reading-assignments/Chapter-2-Grids-Connectivity-Contour-Tracing.pdf)
 [^Pavlidis]:Algorithms for Graphics and Image Processing, [doi:10.1007/978-3-642-93208-3](https://link.springer.com/book/10.1007/978-3-642-93208-3)
