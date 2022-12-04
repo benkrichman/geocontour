@@ -1,6 +1,6 @@
-# maskpy
+# geocontour
 
-Functions for applying contour tracing to gridded data. Geared towards masking and contour tracing with practical applications towards geospatial data. Made to operate mainly on numpy arrays.
+Utilities for masking, contour tracing, and geocontour construction for flux calculations from gridded geographic data.
 
 ## Masks
 
