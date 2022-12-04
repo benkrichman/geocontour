@@ -14,6 +14,12 @@ or
 pip install git+https://github.com/benkrichman/geocontour.git@main
 ```
 
+To run a full test of internal functions (minus cartopy features):
+
+```python
+geocontour.tests.full()
+```
+
 ## Features
 
 ### Masks
