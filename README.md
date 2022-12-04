@@ -2,10 +2,23 @@
 
 Utilities for masking, contour tracing, and geocontour construction for flux calculations from gridded geographic data.
 
+##Installation
 
-## Masks
+```bash
+pip install datascale
+```
 
-Options for tuning criteria of masks created from input boundary coordinates
+or
+
+```bash
+pip install git+https://github.com/benkrichman/geocontour.git@main
+```
+
+##Features
+
+### Masks
+
+Selectable criteria for masks created from input boundary coordinates
 - cell center
 - area ratio
 - node ratio
@@ -15,7 +28,7 @@ Useful mask operators
 - return mask edge cells
 - return mask vertex points
 
-## Contours
+### Contours
 
 Implements 4 existing algorithms for contour tracing, and two improvements on known algorithms
 - square tracing
@@ -23,7 +36,7 @@ Implements 4 existing algorithms for contour tracing, and two improvements on kn
 - improved moore neighbor tracing (capturing inside corners)
 - pavlidis tracing
 - improved pavlidis tracing (capturing inside corners)
-- fast representative tracing (see doi:10.3390/s16030353)
+- fast representative tracing [^source] (see doi:10.3390/s16030353)
 
 Options for tuning critera of contours created from tracing input masks
 - trace direction
@@ -39,7 +52,7 @@ Useful contour operators
 - return cell neighbors with connectivity and directional input
 - return starting cell for contour tracing and check that starting cells work for a given algorithm
 
-## Geocontours
+### Geocontours
 
 From an input contour, create a closed geospatial contour with calculated segment lengths and outward unit vectors (for example: useful in calculating flux across a bounding surface from a geospatial data set)
 
@@ -47,7 +60,7 @@ Options for tuning criteria of geocontours created from input contours
 - selectable connection type (cell to cell or cell edge to cell center)
 - simplify geocontours at the cell level to shorten and improve compute times in practical applications
 
-## Visualization
+### Visualization
 
 Easy and semi-automated plotting function for visualization of boundaries/masks/contours/contour searches/geocontours
 - buffers
@@ -60,4 +73,4 @@ Easy and semi-automated plotting function for visualization of boundaries/masks/
 - selectable marker/line/arrow/cell size/color/style
 
 
-
+[^source]: Fast Contour-Tracing Algorithm Based on a Pixel-Following Method for Image Sensors, [Link](https://www.mdpi.com/1424-8220/16/3/353)
