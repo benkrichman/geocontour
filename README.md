@@ -97,6 +97,8 @@ mask=geocontour.masksearch.area(latitudes,longitudes,boundary)
 
 ![geocontour.masksearch.area() example](https://github.com/benkrichman/geocontour/raw/main/images/example_small_boundary%2Bmask.png?raw=true)
 
+<img src=https://github.com/benkrichman/geocontour/raw/main/images/example_small_boundary%2Bmask.png width="100" height="100">
+
 ### contour trace
 
 Given the previously calculated mask, find the outer edge using a contour tracing algorithm:
