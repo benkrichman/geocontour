@@ -15,7 +15,7 @@ except:
 
 def plot(latitudes,longitudes,boundary=None,mask=None,contour=None,contoursearch=None,geocontour=None,vertices=None,boundingbox='all',buffer='off',grid='on',cells='default',showcontour='on',startcell='on',contourarrows='on',contoursearcharrows='on',geocontourvectors='on',emptycellcolor='lightgrey',fullcellcolor='sandybrown',boundarycolor='tab:blue',contourcolor='olivedrab',contoursearchcolor='firebrick',geocontourcolor='olivedrab',vertexcolor='tab:cyan',gridcolor='black',lw_boundary='auto',lw_contour='auto',lw_contoursearch='auto',lw_geocontour='auto',mw_contourarrows='auto',mw_contoursearcharrows='auto',mw_vertices='auto',features=None,title=None,outname='plot',outdpi='high'):
     """
-    Plots any/all maskpy-created elements: boundary, mask, contour, contoursearch, geocontour, vertices
+    Plots any/all geocontour-created elements: boundary, mask, contour, contoursearch, geocontour, vertices
 
     Inputs (Required):
         latitudes - An evenly spaced numpy array of latitude points (degrees)
@@ -363,7 +363,7 @@ def plot(latitudes,longitudes,boundary=None,mask=None,contour=None,contoursearch
 
 def save(latitudes,longitudes,boundary=None,mask=None,contour=None,contoursearch=None,geocontour=None,vertices=None,outname='save',outtype='np',maskouttxt='off',outformat='%8.3f',outdelim=' '):
     """
-    Saves any/all maskpy-created elements: boundary, mask, contour, contoursearch, geocontour, vertices
+    Saves any/all geocontour-created elements: boundary, mask, contour, contoursearch, geocontour, vertices
 
     Inputs (Required):
         latitudes - An evenly spaced numpy array of latitude points (degrees)
