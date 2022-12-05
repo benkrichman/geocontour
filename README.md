@@ -106,8 +106,8 @@ Use the improved Pavlidis algorithm to trace the contour.
 contour,contoursearch=geocontour.contourtrace.pavlidis_imp(mask,latitudes,longitudes)
 ```
 <p float="middle">
-<img src=https://github.com/benkrichman/geocontour/raw/main/images/example_small_contoursearch.png width="350" height="350"/>
-<img src=https://github.com/benkrichman/geocontour/raw/main/images/example_small_contour.png width="350" height="350"/>
+<img src=https://github.com/benkrichman/geocontour/raw/main/images/example_small_contoursearch.png width="400" height="400"/>
+<img src=https://github.com/benkrichman/geocontour/raw/main/images/example_small_contour.png width="400" height="400"/>
 </p>
 
 ### construct geocontour
