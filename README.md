@@ -35,6 +35,7 @@ Given a series of lat/lon points constituting a geographical boundary, and a set
 Use the 'area' approach to mask calculation, defaulting to selection of all cells for which 50% or greater falls withing the boundary. Note that boundary falls outside gridded data bounds at some points.
 ```python
 mask=geocontour.masksearch.area(latitudes,longitudes,boundary)
+geocontour.output.plot(latitudes,longitudes,boundary=boundary,mask=mask,title='Example Mask and Boundary',outname='example_small_boundary+mask',outdpi='indep')
 ```
 
 <img src=https://github.com/benkrichman/geocontour/raw/main/images/example_small_boundary%2Bmask.png width="450" height="450">
@@ -46,6 +47,8 @@ Given the previously calculated mask, find the outer edge using a contour tracin
 Use the improved Pavlidis algorithm to trace the contour.
 ```python
 contour,contoursearch=geocontour.contourtrace.pavlidis_imp(mask,latitudes,longitudes)
+geocontour.output.plot(latitudes,longitudes,mask=mask,contoursearch=contoursearch,title='Example Contour Search',outname='example_small_contoursearch',outdpi='indep')
+geocontour.output.plot(latitudes,longitudes,contour=contour,cells='contour',title='Example Contour',outname='example_small_contour',outdpi='indep')
 ```
 <p float="middle">
 <img src=https://github.com/benkrichman/geocontour/raw/main/images/example_small_contoursearch.png width="400" height="400"/>
@@ -59,6 +62,7 @@ Given the previously calculated contour, construct the geocontour to determine c
 Use the build function of geocontour to construct the geocontour. Note that the 'simplify' option is used, combining cells with multiple visits into single segments.
 ```python
 geocontour=geocontour.build(contour,latitudes,longitudes,simplify=True)
+geocontour.output.plot(latitudes,longitudes,geocontour=geocontour,buffer='on',title='Example Geocontour',outname='example_small_geocontour',outdpi='indep')
 ```
 
 <img src=https://github.com/benkrichman/geocontour/raw/main/images/example_small_geocontour.png width="450" height="450">
@@ -69,11 +73,13 @@ Given a large geocontour (in this case, the Mississippi River Basin) project aga
 
 ```python
 geocontour.output.plot(latitudes,longitudes,geocontour=geocontour,features='natural')
+geocontour.output.plot(latitudes,longitudes,geocontour=geocontour,title='Example Geocontour\nMississippi River Basin',outname='example_large_geocontour+natfeat',features='natural')
 ```
 <img src=https://github.com/benkrichman/geocontour/raw/main/images/example_large_geocontour%2Bnatfeat.png width="800">
 
 ```python
 geocontour.output.plot(latitudes,longitudes,geocontour=geocontour,features='borders')
+geocontour.output.plot(latitudes,longitudes,geocontour=geocontour,title='Example Geocontour\nMississippi River Basin',outname='example_large_geocontour+bordfeat',features='borders')
 ```
 
 <img src=https://github.com/benkrichman/geocontour/raw/main/images/example_large_geocontour%2Bbordfeat.png width="800">
