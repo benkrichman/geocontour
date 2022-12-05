@@ -95,7 +95,7 @@ Use the 'area' approach to mask calculation, defaulting to selection of all cell
 mask=geocontour.masksearch.area(latitudes,longitudes,boundary)
 ```
 
-<img src=https://github.com/benkrichman/geocontour/raw/main/images/example_small_boundary%2Bmask.png width="600" height="600">
+<img src=https://github.com/benkrichman/geocontour/raw/main/images/example_small_boundary%2Bmask.png width="500" height="500">
 
 ### contour trace
 
@@ -105,9 +105,10 @@ Use the improved Pavlidis algorithm to trace the contour.
 ```python
 contour,contoursearch=geocontour.contourtrace.pavlidis_imp(mask,latitudes,longitudes)
 ```
-<img src=https://github.com/benkrichman/geocontour/raw/main/images/example_small_contoursearch.png width="600" height="600">
-
-<img src=https://github.com/benkrichman/geocontour/raw/main/images/example_small_contour.png width="600" height="600">
+<p float="middle">
+<img src=https://github.com/benkrichman/geocontour/raw/main/images/example_small_contoursearch.png width="300" height="300"/>
+<img src=https://github.com/benkrichman/geocontour/raw/main/images/example_small_contour.png width="300" height="300"/>
+</p>
 
 ### construct geocontour
 
