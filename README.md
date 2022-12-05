@@ -119,7 +119,7 @@ Use the build function of geocontour to construct the geocontour. Note that the 
 geocontour=geocontour.build(contour,latitudes,longitudes,simplify=True)
 ```
 
-![geocontour.build() example](https://github.com/benkrichman/geocontour/raw/main/images/example_small_geocontour.png?raw=true)
+<img src=https://github.com/benkrichman/geocontour/raw/main/images/example_small_geocontour.png width="450" height="450">
 
 ### project geocontour against map features
 
@@ -130,10 +130,14 @@ geocontour.output.plot(latitudes,longitudes,geocontour=geocontour,features='natu
 ```
 ![geocontour.output.plot() nat example](https://github.com/benkrichman/geocontour/raw/main/images/example_large_geocontour%2Bnatfeat.png?raw=true)
 
+<img src=https://github.com/benkrichman/geocontour/raw/main/images/example_large_geocontour%2Bnatfeat.png width="450">
+
 ```python
 geocontour.output.plot(latitudes,longitudes,geocontour=geocontour,features='borders')
 ```
 ![geocontour.output.plot() bord example](https://github.com/benkrichman/geocontour/raw/main/images/example_large_geocontour%2Bbordfeat.png?raw=true)
+
+<img src=https://github.com/benkrichman/geocontour/raw/main/images/example_large_geocontour%2Bbordfeat.png width="450">
 
 ## Function Overview
 
