@@ -130,14 +130,14 @@ geocontour.output.plot(latitudes,longitudes,geocontour=geocontour,features='natu
 ```
 ![geocontour.output.plot() nat example](https://github.com/benkrichman/geocontour/raw/main/images/example_large_geocontour%2Bnatfeat.png?raw=true)
 
-<img src=https://github.com/benkrichman/geocontour/raw/main/images/example_large_geocontour%2Bnatfeat.png width="450">
+<img src=https://github.com/benkrichman/geocontour/raw/main/images/example_large_geocontour%2Bnatfeat.png width="800">
 
 ```python
 geocontour.output.plot(latitudes,longitudes,geocontour=geocontour,features='borders')
 ```
 ![geocontour.output.plot() bord example](https://github.com/benkrichman/geocontour/raw/main/images/example_large_geocontour%2Bbordfeat.png?raw=true)
 
-<img src=https://github.com/benkrichman/geocontour/raw/main/images/example_large_geocontour%2Bbordfeat.png width="450">
+<img src=https://github.com/benkrichman/geocontour/raw/main/images/example_large_geocontour%2Bbordfeat.png width="800">
 
 ## Function Overview
 
