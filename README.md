@@ -69,16 +69,14 @@ geocontour.output.plot(latitudes,longitudes,geocontour=geocontour,buffer='on',ti
 
 ### project geocontour against map features
 
-Given a large geocontour (in this case, the Mississippi River Basin) project against natural features and political borders:
+Given a large geocontour (in this case, the Mississippi River Basin) project against natural features and political borders (requires cartopy):
 
 ```python
-geocontour.output.plot(latitudes,longitudes,geocontour=geocontour,features='natural')
 geocontour.output.plot(latitudes,longitudes,geocontour=geocontour,title='Example Geocontour\nMississippi River Basin',outname='example_large_geocontour+natfeat',features='natural')
 ```
 <img src=https://github.com/benkrichman/geocontour/raw/main/images/example_large_geocontour%2Bnatfeat.png width="800">
 
 ```python
-geocontour.output.plot(latitudes,longitudes,geocontour=geocontour,features='borders')
 geocontour.output.plot(latitudes,longitudes,geocontour=geocontour,title='Example Geocontour\nMississippi River Basin',outname='example_large_geocontour+bordfeat',features='borders')
 ```
 
@@ -287,10 +285,10 @@ Returns a geocontour from a contour input
 ### output
 
 #### geocontour.output.plot()
-Plots any/all maskpy-created elements: boundary, mask, contour, contoursearch, geocontour, vertices
+Plots any/all geocontour-created elements: boundary, mask, contour, contoursearch, geocontour, vertices
 
 #### geocontour.output.save()
-Saves any/all maskpy-created elements: boundary, mask, contour, contoursearch, geocontour, vertices
+Saves any/all geocontour-created elements: boundary, mask, contour, contoursearch, geocontour, vertices
 
 ### tests
 
@@ -311,6 +309,7 @@ Runs a large scale example of geocontour processing using the Mississippi River 
   - trace contour using improved pavlidis algorithm and plot resultant contour and contour search
   - compute geocontour from contour and plot, using simplify option
   - plot geocontour with cartopy background options (borders and physical features) - will error and exit if cartopy not installed
+  - plots will be large (dpi is auto-calculated to create enough resolution to zoom in for diagnostic use - this setting can be changed for quick plotting)
 
 
 [^IPP]:Contour Tracing Algorithms, [Pattern Recognition Project](https://www.imageprocessingplace.com/downloads_V3/root_downloads/tutorials/contour_tracing_Abeer_George_Ghuneim/alg.html)
