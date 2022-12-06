@@ -1,10 +1,10 @@
 include LICENSE.txt
 include README.md
-include geocontour/*
-include geocontour/data/*
-include geocontour/tests/*
-include geocontour/examples/*
-include images/*
+recursive-include geocontour *py
+recursive-include geocontour/data *
+recursive-include geocontour/tests *py
+recursive-include geocontour/examples *py
+recursive-include images *
 include requirements.txt
 include requirements+cartopy.txt
 include setup.py
