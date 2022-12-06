@@ -14,8 +14,8 @@ st.setup(
     author='Benjamin Krichman',
     author_email='benkrichman@gmail.com',
     packages=st.find_packages(),
-    install_package_data=True,
-    zip_safe=False,
+    include_package_data=True,
+    package_data={'geocontour':['geocontour/data/*']},
     install_requires=[
         'numpy',
         'scipy',
@@ -33,5 +33,4 @@ st.setup(
     ]
 )
 
-#package_data={'geocontour':['geocontour/data/*']},
 
