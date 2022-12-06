@@ -15,7 +15,6 @@ st.setup(
     author_email='benkrichman@gmail.com',
     packages=st.find_packages(),
     install_package_data=True,
-    package_data={'geocontour':['geocontour/data/*']},
     install_requires=[
         'numpy',
         'scipy',
@@ -32,3 +31,6 @@ st.setup(
         "Topic :: Scientific/Engineering :: Hydrology"
     ]
 )
+
+#package_data={'geocontour':['geocontour/data/*']},
+
