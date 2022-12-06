@@ -2,6 +2,10 @@
 
 Utilities for masking, contour tracing, and geocontour construction for flux calculations from gridded geographic data.
 
+
+
+[![DOI](https://zenodo.org/badge/550241733.svg)](https://zenodo.org/badge/latestdoi/550241733)
+
 ## Installation
 
 ```bash
