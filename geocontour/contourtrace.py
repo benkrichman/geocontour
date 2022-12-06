@@ -8,9 +8,6 @@ import geocontour.contourutil as gccu
 def square(mask,latitudes=None,longitudes=None,direction='cw',start='auto',stop='either',startvisits=3,checkconn=False,remcontourrepeat=True,remsearchrepeat=False,closecontour=True):
     """
     Returns the contour trace of a mask input using the square tracing algorithm
-    Source:
-        https://www.imageprocessingplace.com/downloads_V3/root_downloads/tutorials/contour_tracing_Abeer_George_Ghuneim/square.html
-        http://www-cgrl.cs.mcgill.ca/~godfried/teaching/mir-reading-assignments/Chapter-2-Grids-Connectivity-Contour-Tracing.pdf
 
     Inputs (Required):
         mask - A 2-d boolean numpy array of dimension MxN where M=len(latitudes) and N=len(longitudes)
@@ -94,9 +91,6 @@ def square(mask,latitudes=None,longitudes=None,direction='cw',start='auto',stop=
 def moore(mask,latitudes=None,longitudes=None,direction='cw',start='auto',stop='either',startvisits=3,remcontourrepeat=True,remsearchrepeat=False,closecontour=True):
     """
     Returns the contour trace of a mask input using the Moore neighbor tracing algorithm
-    Source:
-        https://www.imageprocessingplace.com/downloads_V3/root_downloads/tutorials/contour_tracing_Abeer_George_Ghuneim/square.html
-        http://www-cgrl.cs.mcgill.ca/~godfried/teaching/mir-reading-assignments/Chapter-2-Grids-Connectivity-Contour-Tracing.pdf
 
     Inputs (Required):
         mask - A 2-d boolean numpy array of dimension MxN where M=len(latitudes) and N=len(longitudes)
@@ -314,9 +308,6 @@ def moore_imp(mask,latitudes=None,longitudes=None,direction='cw',start='auto',st
 def pavlidis(mask,latitudes=None,longitudes=None,direction='cw',start='auto',stop='Nvisits',startvisits=1,remcontourrepeat=True,remsearchrepeat=False,closecontour=True):
     """
     Returns the contour trace of a mask input using the Pavlidis tracing algorithm
-    Source:
-        10.1007/978-3-642-93208-3
-        https://www.imageprocessingplace.com/downloads_V3/root_downloads/tutorials/contour_tracing_Abeer_George_Ghuneim/theo.html
 
     Inputs (Required):
         mask - A 2-d boolean numpy array of dimension MxN where M=len(latitudes) and N=len(longitudes)
@@ -567,7 +558,6 @@ def pavlidis_imp(mask,latitudes=None,longitudes=None,direction='cw',start='auto'
 def TSR(mask,latitudes=None,longitudes=None,direction='cw',start='auto',stop='either',startvisits=4,remcontourrepeat=True,remsearchrepeat=False,closecontour=True):
     """
     Returns the contour trace of a mask input using two-step representative tracing
-    Source: 10.3390/s16030353
 
     Inputs (Required):
         mask - A 2-d boolean numpy array of dimension MxN where M=len(latitudes) and N=len(longitudes)
