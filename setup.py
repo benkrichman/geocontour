@@ -15,6 +15,7 @@ st.setup(
     author_email='benkrichman@gmail.com',
     packages=st.find_packages(),
     install_package_data=True,
+    zip_safe=False,
     install_requires=[
         'numpy',
         'scipy',
