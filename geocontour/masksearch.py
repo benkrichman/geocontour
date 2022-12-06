@@ -43,11 +43,6 @@ def center2(latitudes,longitudes,boundary):
     Returns a mask over a range of input latitudes and longitudes determined by an input boundary
         Critera for inclusion of a cell is whether the center of the cell falls within the boundary
         Functionally matches geocontour.masksearch.center(), but utilizes matplotlib.path functions, which are probably optimized and thus is roughly 2.5*sqrt(N) faster for N points, though lacks a "precision" buffer input
-    Source:
-        https://stackoverflow.com/questions/50847827/how-can-i-select-the-pixels-that-fall-within-a-contour-in-an-image-represented-b
-        https://stackoverflow.com/questions/16625507/checking-if-a-point-is-inside-a-polygon/23453678#23453678
-        https://stackoverflow.com/questions/36399381/whats-the-fastest-way-of-checking-if-a-point-is-inside-a-polygon-in-python
-        https://matplotlib.org/stable/api/path_api.html#mplp.Path.contains_point
 
     Inputs (Required):
         latitudes - An evenly spaced numpy array of latitude points (degrees)
