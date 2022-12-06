@@ -19,7 +19,6 @@ def spacing(dimension):
 def lonlens(latitudes,lonspacing=1):
     """
     Returns the lengths of a degree (default) of longitude over a range of latitudes
-    Source: https://doi.org/10.5281/ZENODO.35392
 
     Inputs (Required):
         latitudes - An evenly spaced numpy array of latitude points (degrees)
@@ -42,7 +41,6 @@ def lonlens(latitudes,lonspacing=1):
 def latlens(latitudes):
     """
     Returns the grid lengths of a defined range of latitudes
-    Source: https://doi.org/10.5281/ZENODO.35392
 
     Inputs (Required):
         latitudes - An evenly spaced numpy array of latitude points (degrees)
@@ -62,7 +60,6 @@ def latlens(latitudes):
 def lonlen(latitude):
     """
     Returns the length of a degree of longitude at the input latitude
-    Source: https://doi.org/10.5281/ZENODO.35392
 
     Inputs (Required):
         latitude - A latitude point or array of points (degrees)
@@ -80,7 +77,6 @@ def lonlen(latitude):
 def latlen(latitude):
     """
     Returns the length of a degree of latitude at the input latitude
-    Source: https://doi.org/10.5281/ZENODO.35392
 
     Inputs (Required):
         latitude - A latitude point or array of points (degrees)
