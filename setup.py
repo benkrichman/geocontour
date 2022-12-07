@@ -29,7 +29,8 @@ st.setup(
         "Intended Audience :: Science/Research",
         "Topic :: Scientific/Engineering",
         "Topic :: Scientific/Engineering :: Atmospheric Science",
-        "Topic :: Scientific/Engineering :: Hydrology"
+        "Topic :: Scientific/Engineering :: Hydrology",
+        "Topic :: Scientific/Engineering :: Visualization"
     ]
 )
 
