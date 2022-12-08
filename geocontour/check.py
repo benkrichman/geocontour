@@ -51,7 +51,7 @@ def cboundary(boundary):
     if not (boundary[0,:]==boundary[-1,:]).all():
         sys.exit('ERROR - First and last boundary points are not equal, boundary should close')
     if (np.diff(boundary[:,1]) > 300).any():
-        warnings.warn('WARNING - at least one boundary span over 300 deg in length, boundary may cross meridian/date line')
+        warnings.warn('WARNING - at least one boundary longitude span over 300 deg in length, boundary may cross meridian/date line\n    Suggestion: use geocontour.grid.switchlon() to swap boundary range')
 
 def cmask(mask,latitudes=None,longitudes=None):
     """
