@@ -13,7 +13,7 @@ try:
 except:
     cp_exists='n'
 
-def plot(latitudes,longitudes,boundary=None,mask=None,contour=None,contoursearch=None,geocontour=None,vertices=None,boundingbox='all',buffer='off',grid='on',cells='default',showcontour='on',startcell='on',contourarrows='on',contoursearcharrows='on',geocontourvectors='on',emptycellcolor='lightgrey',fullcellcolor='sandybrown',boundarycolor='tab:blue',contourcolor='olivedrab',contoursearchcolor='firebrick',geocontourcolor='olivedrab',vertexcolor='tab:cyan',gridcolor='black',lw_boundary='auto',lw_contour='auto',lw_contoursearch='auto',lw_geocontour='auto',mw_contourarrows='auto',mw_contoursearcharrows='auto',mw_vertices='auto',features=None,title=None,outname='plot',outdpi='high'):
+def plot(latitudes,longitudes,boundary=None,mask=None,contour=None,contoursearch=None,geocontour=None,vertices=None,boundingbox='all',buffer='off',grid='on',cells='default',showcontour='on',startcell='on',contourarrows='on',contoursearcharrows='on',geocontourvectors='on',emptycellcolor='lightgrey',fullcellcolor='sandybrown',boundarycolor='tab:blue',contourcolor='olivedrab',contoursearchcolor='firebrick',geocontourcolor='olivedrab',vertexcolor='tab:cyan',gridcolor='black',lw_boundary='auto',lw_contour='auto',lw_contoursearch='auto',lw_geocontour='auto',mw_contourarrows='auto',mw_contoursearcharrows='auto',mw_vertices='auto',features=None,title=None,outname='plot',outdpi='high',transp=False):
     """
     Plots any/all geocontour-created elements: boundary, mask, contour, contoursearch, geocontour, vertices
 
@@ -67,12 +67,13 @@ def plot(latitudes,longitudes,boundary=None,mask=None,contour=None,contoursearch
             'borders' displays national and state/province level boundaries
         title - A string used as the plot title, default=None
         outname - A string used as the filename/path for the saved image, default='plot'
-        outdpi - dpi ('high'/'low'/'indep'/resolution) of the saved image, default='high'
+        outdpi ('high'/'low'/'indep'/resolution) - dpi of the saved image, default='high'
             'high' scales dpi high enough (36 pixels per grid cell) to see features when zooming into a single grid cell, floor of 100
                 for very large grids, 'auto' may set dpi high enough that pyplot will hang on some systems - setting dpi='low' or entering desired dpi manually can avoid this if encountered
             'low' scales dpi to 5 pixels per grid cell, dpi floor of 100
             'indep' sets output dpi to 200 regardless of grid size/spacing
             any other entry must be a numerical value for desired pixels per grid cell
+        transp (True/False) - set exterior of plot to transparent with text/labels/ticks/frame set to 'dimgray' for contrast against light and dark backgrounds, default=False
 
     Outputs:
         none
@@ -239,6 +240,15 @@ def plot(latitudes,longitudes,boundary=None,mask=None,contour=None,contoursearch
     ymajor=(yminor[:-1]+latspc/2)[::np.ceil(len(yminor)/7).astype('int')]
     xmajor=(xminor[:-1]+lonspc/2)[::np.ceil(len(xminor)/7).astype('int')]
     fig=plt.figure()
+    if transp==True:
+        plt.rcParams.update({
+            "axes.labelcolor": "dimgray",
+            "axes.edgecolor": "dimgray",
+            "axes.facecolor": "white",
+            "xtick.color": "dimgray",
+            "ytick.color": "dimgray",
+            "text.color": "dimgray",})
+        fig.patch.set_visible(False)
     if features is None:
         ax=fig.add_subplot(111)
     else:
