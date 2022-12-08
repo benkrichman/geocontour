@@ -155,7 +155,7 @@ def full():
     #Test Output Funcs
     print('\n\n***TEST OUTPUT FUNCS***\n')
     print('\n\nTest geocontour.output.plot()\n')
-    gc.output.plot(latitudes,longitudes,boundary=boundary,mask=mask,contour=contour,geocontour=geocontour,title='geocontour_test_plot',outname='geocontour_test_plot')
+    gc.output.plot(latitudes,longitudes,boundary=boundary,mask=mask,contour=contour,geocontour=geocontour,title='geocontour_test_plot',outname='geocontour_test_plot',transp=True)
     print('Plot created and saved to run directory')
     print('\n\nTest geocontour.output.save()\n')
     gc.output.save(latitudes,longitudes,boundary=boundary,mask=mask,contour=contour,contoursearch=contoursearch,geocontour=geocontour,outname='geocontour_test_output')
