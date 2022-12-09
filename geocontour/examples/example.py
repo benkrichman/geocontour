@@ -26,7 +26,8 @@ def small():
     boundary=data['boundary']
     mask=gcms.area(latitudes,longitudes,boundary)
     contour,contoursearch=gcct.pavlidis_imp(mask,latitudes,longitudes)
-    geocontour=build(contour,latitudes,longitudes,simplify=True)
+    geocontour=build(contour,latitudes,longitudes)
+    geocontour_simp=build(contour,latitudes,longitudes,simplify=True)
     print('  Example figure saved as \'example_small_boundary+mask\'')
     gco.plot(latitudes,longitudes,boundary=boundary,mask=mask,title='Example Mask and Boundary',outname='example_small_boundary+mask',outdpi='indep',transp=True)
     print('  Example figure saved as \'example_small_contoursearch\'')
@@ -35,6 +36,8 @@ def small():
     gco.plot(latitudes,longitudes,contour=contour,cells='contour',title='Example Contour',outname='example_small_contour',outdpi='indep',transp=True)
     print('  Example figure saved as \'example_small_geocontour\'')
     gco.plot(latitudes,longitudes,geocontour=geocontour,buffer='on',title='Example Geocontour',outname='example_small_geocontour',outdpi='indep',transp=True)
+    print('  Example figure saved as \'example_small_geocontour_simp\'')
+    gco.plot(latitudes,longitudes,geocontour=geocontour_simp,buffer='on',title='Example Geocontour - Simplified',outname='example_small_geocontour_simp',outdpi='indep',transp=True)
 
 def large():
     """
