@@ -35,7 +35,7 @@ geocontour.examples.large()
 
 Given a series of lat/lon points constituting a geographical boundary, and a set of gridded data on a lat/lon grid, find an appropriate mask to select gridded data within the boundary:
 
-Use the 'area' approach to mask calculation, defaulting to selection of all cells for which 50% or greater falls withing the boundary. Note that boundary falls outside gridded data bounds at some points.
+Use the 'area' approach to mask calculation, defaulting to selection of all cells for which 50% or greater falls withing the boundary. Note that boundary falls outside gridded data bounds at some points and those cells inside the boundary but outside the gridded data bounds are not included in the mask.
 ```python
 mask=geocontour.masksearch.area(latitudes,longitudes,boundary)
 geocontour.output.plot(latitudes,longitudes,boundary=boundary,mask=mask,title='Example Mask and Boundary',outname='example_small_boundary+mask',outdpi='indep')
@@ -47,7 +47,7 @@ geocontour.output.plot(latitudes,longitudes,boundary=boundary,mask=mask,title='E
 
 Given the previously calculated mask, find the outer edge using a contour tracing algorithm:
 
-Use the improved Pavlidis algorithm to trace the contour.
+Use the improved Pavlidis algorithm to trace the contour. Note that the contoursearch plot shows the start cell as a circle, directional arrows for each segment, and diamonds where cells are consecutively and repeatedly searched. In the case of the pavlidis algorithm these diamonds show where the orientation turned 90 degrees. Similarly the contour plot uses a circle to mark the start cell and arrows to signify direction.
 ```python
 contour,contoursearch=geocontour.contourtrace.pavlidis_imp(mask,latitudes,longitudes)
 geocontour.output.plot(latitudes,longitudes,mask=mask,contoursearch=contoursearch,title='Example Contour Search',outname='example_small_contoursearch',outdpi='indep')
@@ -63,7 +63,7 @@ geocontour.output.plot(latitudes,longitudes,contour=contour,cells='contour',titl
 
 Given the previously calculated contour, construct the geocontour to determine contour segment lengths and outward normal vectors:
 
-Use the build function of geocontour to construct the geocontour. Note that in the second plot the 'simplify' option is used, combining cells with multiple visits into single segments.
+Use the build function of geocontour to construct the geocontour. Note that in the second plot the 'simplify' option is used, combining cells with multiple visits into single segments exactly equal to the vector combination of segments in the cell. The directional information contained in the contour has been discarded, and in the case of simplification may not be extractable from the geocontour.
 ```python
 geocontour=geocontour.build(contour,latitudes,longitudes)
 geocontour_simp=geocontour.build(contour,latitudes,longitudes,simplify=True)
