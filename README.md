@@ -65,8 +65,10 @@ Given the previously calculated contour, construct the geocontour to determine c
 
 Use the build function of geocontour to construct the geocontour. Note that in the second plot the 'simplify' option is used, combining cells with multiple visits into single segments.
 ```python
-geocontour=geocontour.build(contour,latitudes,longitudes,simplify=True)
+geocontour=geocontour.build(contour,latitudes,longitudes)
+geocontour_simp=geocontour.build(contour,latitudes,longitudes,simplify=True)
 geocontour.output.plot(latitudes,longitudes,geocontour=geocontour,buffer='on',title='Example Geocontour',outname='example_small_geocontour',outdpi='indep')
+geocontour.output.plot(latitudes,longitudes,geocontour=geocontour_simp,buffer='on',title='Example Geocontour - Simplified',outname='example_small_geocontour_simp',outdpi='indep')
 ```
 
 <p float="middle">
