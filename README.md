@@ -344,8 +344,7 @@ Runs a large scale example of geocontour processing using the Mississippi River 
 
 
 [^IPP]:Ghuneim, A.G. (2000). *Contour Tracing*. McGill University. <https://www.imageprocessingplace.com/downloads_V3/root_downloads/tutorials/contour_tracing_Abeer_George_Ghuneim/alg.html>
-[^Toussaint]:Grids Connectivity and Contour Tracing, [Lesson Notes](http://www-cgrl.cs.mcgill.ca/~godfried/teaching/mir-reading-assignments/Chapter-2-Grids-Connectivity-Contour-Tracing.pdf)
-[^Pavlidis]:Algorithms for Graphics and Image Processing, [doi:10.1007/978-3-642-93208-3](https://link.springer.com/book/10.1007/978-3-642-93208-3)
-[^FRT]:Fast Contour-Tracing Algorithm Based on a Pixel-Following Method for Image Sensors, [doi:10.3390/s16030353](https://www.mdpi.com/1424-8220/16/3/353)
-[^Kovalevsky]:Other Source to Note: [Vladimir Kovalevsky](http://www.kovalevsky.de/index.htm)
-[^Osborne]:The Mercator Projections [doi:10.5281/ZENODO.35392](https://zenodo.org/record/35392)
+[^Toussaint]:Toussaint, G.T. (2010). *Grids Connectivity and Contour Tracing* [Lesson Notes]. McGill University. <http://www-cgrl.cs.mcgill.ca/~godfried/teaching/mir-reading-assignments/Chapter-2-Grids-Connectivity-Contour-Tracing.pdf>
+[^Pavlidis]:Pavlidis, T. (1982) Algorithms for Graphics and Image Processing. Computer Science Press, New York, NY. <https://doi.org/10.1007/978-3-642-93208-3>
+[^FRT]:Seo, J., Chae, S., Shim, J., Kim, D., Cheong, C., & Han, T.-D. (2016). Fast Contour-Tracing Algorithm Based on a Pixel-Following Method for Image Sensors. Sensors, 16(3), 353. <https://doi.org/10.3390/s16030353>
+[^Osborne]:Osborne, P. (2013). The Mercator Projections. Zenodo. <https://doi.org/10.5281/zenodo.35392>
