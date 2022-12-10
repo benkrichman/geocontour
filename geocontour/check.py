@@ -47,7 +47,7 @@ def cboundary(boundary):
     if (boundary[:,1] < -180).any() or (boundary[:,1] > 360).any():
         sys.exit('ERROR - Boundary column 2 has values less than -180 or greater than 360, column 2 should be longitude')
     if (boundary[:,1] < 0).any() and (boundary[:,1] > 180).any():
-        sys.exit('ERROR - Boundary column 2 has values less than 0 and greater than 180, column 2 should be longitude')
+        sys.exit('ERROR - Boundary column 2 has values less than 0 and greater than 180, column 2 should be longitude and range should either be -180 to 180 or 0 to 360')
     if not (boundary[0,:]==boundary[-1,:]).all():
         sys.exit('ERROR - First and last boundary points are not equal, boundary should close')
     if (np.diff(boundary[:,1]) > 300).any():

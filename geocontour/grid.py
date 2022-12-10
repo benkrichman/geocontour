@@ -128,7 +128,7 @@ def clonrng(longitudes):
     if len(longitudes.shape)!=1:
         sys.exit('ERROR - Longitude input is not 1-dimensional')
     if (longitudes < 0).any() and (longitudes > 180).any():
-        sys.exit('ERROR - Longitude input has values less than 0 and greater than 180')
+        sys.exit('ERROR - Longitude input has values less than 0 and greater than 180, range should either be -180 to 180 or 0 to 360')
     elif (longitudes < 0).any():
         longituderange='neg'
     elif (longitudes > 180).any():
