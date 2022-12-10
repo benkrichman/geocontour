@@ -23,6 +23,28 @@ To run a full test of internal functions (minus cartopy features):
 geocontour.tests.full()
 ```
 
+## Citation
+
+If geocontour played a significant role in your work and you would like to cite it, the following is suggested (APA):
+
+Krichman, B. (2022). *geocontour* (Version 1.0.0) [Computer Software]. https: //doi.org/10.5281/zenodo.7402714 
+
+Bibtex:
+
+```latex
+@software{geocontour,
+author={Krichman, Benjamin},
+doi={10.5281/zenodo.7402714},
+license={MIT},
+month={12},
+year={2022},
+title={{geocontour}},
+url={https://github.com/benkrichman/geocontour},
+version={1.0.0},
+note = {Computer Software}
+}
+```
+
 ## Example Use Case
 
 \*to reconstruct these examples use (or view)
