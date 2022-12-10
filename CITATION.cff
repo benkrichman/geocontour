@@ -1,5 +1,6 @@
 cff-version: 1.1.0
 message: "If you use this software, please cite it as below."
+abstract: "Utilities for masking, contour tracing, and geocontour construction for flux calculations from gridded geographic data"
 authors:
   -
     family-names: Krichman
