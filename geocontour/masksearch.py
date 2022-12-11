@@ -42,7 +42,7 @@ def center2(latitudes,longitudes,boundary,precision=1e-5):
     """
     Returns a mask over a range of input latitudes and longitudes determined by an input boundary
         Critera for inclusion of a cell is whether the center of the cell falls within the boundary
-        Functionally matches geocontour.masksearch.center(), but utilizes matplotlib.path functions, which are probably optimized and capable of being vectorized, and thus is roughly <how much??> faster for N cells
+        Functionally matches geocontour.masksearch.center(), but utilizes matplotlib.path functions, which are probably optimized and capable of being vectorized, and thus is significantly faster
 
     Inputs (Required):
         latitudes - An evenly spaced numpy array of latitude points (degrees)
@@ -119,7 +119,7 @@ def nodes2(latitudes,longitudes,boundary,nodes=2,precision=1e-5):
     """
     Returns a mask over a range of input latitudes and longitudes determined by an input boundary
         Critera for inclusion of a cell is whether a given number (default=2) of cell nodes (corners) fall within the boundary 
-        Functionally matches geocontour.masksearch.nodes(), but utilizes matplotlib.path functions, which are probably optimized and capable of being vectorized, and thus is roughly <how much??> faster for N cells
+        Functionally matches geocontour.masksearch.nodes(), but utilizes matplotlib.path functions, which are probably optimized and capable of being vectorized, and thus is significantly faster
 
     Inputs (Required):
         latitudes - An evenly spaced numpy array of latitude points (degrees)
