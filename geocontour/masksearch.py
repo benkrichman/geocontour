@@ -146,15 +146,17 @@ def nodes2(latitudes,longitudes,boundary,nodes=2,precision=1e-5):
     longrdspc=gcg.spacing(longitudes)
     boxmask=np.full((boxlatmax-boxlatmin+1,boxlonmax-boxlonmin+1),False)
     boundpoly=mplp.Path(boundary)
-    for la in np.arange(boxlatmin,boxlatmax+1,1):
-        for lo in np.arange(boxlonmin,boxlonmax+1,1):
-            nodeLL=[latitudes[la]-latgrdspc/2,longitudes[lo]-longrdspc/2]
-            nodeHL=[latitudes[la]+latgrdspc/2,longitudes[lo]-longrdspc/2]
-            nodeLH=[latitudes[la]-latgrdspc/2,longitudes[lo]+longrdspc/2]
-            nodeHH=[latitudes[la]+latgrdspc/2,longitudes[lo]+longrdspc/2]
-            nodesinmask=boundpoly.contains_points(np.array([nodeLL,nodeHL,nodeLH,nodeHH]),radius=2*precision)
-            if nodesinmask.sum()>=nodes:
-                boxmask[la-boxlatmin,lo-boxlonmin]=True
+    yspMM, xspMM = np.meshgrid(latitudes[boxlatmin:boxlatmax+1]-latgrdspc/2,longitudes[boxlonmin:boxlonmax+1]-longrdspc/2, indexing='ij')
+    yspPM, xspPM = np.meshgrid(latitudes[boxlatmin:boxlatmax+1]+latgrdspc/2,longitudes[boxlonmin:boxlonmax+1]-longrdspc/2, indexing='ij')
+    yspMP, xspMP = np.meshgrid(latitudes[boxlatmin:boxlatmax+1]-latgrdspc/2,longitudes[boxlonmin:boxlonmax+1]+longrdspc/2, indexing='ij')
+    yspPP, xspPP = np.meshgrid(latitudes[boxlatmin:boxlatmax+1]+latgrdspc/2,longitudes[boxlonmin:boxlonmax+1]+longrdspc/2, indexing='ij')
+    spMM=np.hstack((yspMM.reshape((-1,1)),xspMM.reshape((-1,1))))
+    spPM=np.hstack((yspPM.reshape((-1,1)),xspPM.reshape((-1,1))))
+    spMP=np.hstack((yspMP.reshape((-1,1)),xspMP.reshape((-1,1))))
+    spPP=np.hstack((yspPP.reshape((-1,1)),xspPP.reshape((-1,1))))
+    searchpoints=np.stack((spMM,spPM,spMP,spPP)).reshape(-1,2)
+    nodesinmask=boundpoly.contains_points(searchpoints,radius=2*precision).reshape(4,-1)
+    boxmask=(nodesinmask.sum(axis=0)>=nodes).reshape(boxmask.shape)
     mask=np.full((len(latitudes),len(longitudes)),False)
     mask[boxlatmin:boxlatmax+1,boxlonmin:boxlonmax+1]=boxmask
     if latdir=='dec':
