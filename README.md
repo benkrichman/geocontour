@@ -5,6 +5,7 @@ Utilities for masking, contour tracing, and geocontour construction for flux cal
 \
 [![DOI](https://zenodo.org/badge/550241733.svg)](https://zenodo.org/badge/latestdoi/550241733)
 [![Downloads](https://pepy.tech/badge/geocontour)](https://pepy.tech/project/geocontour)
+[![PyPI version](https://badge.fury.io/py/geocontour.svg)](https://badge.fury.io/py/geocontour)
 
 ## Installation
 
