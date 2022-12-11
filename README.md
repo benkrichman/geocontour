@@ -239,7 +239,7 @@ Returns a mask over a range of input latitudes and longitudes determined by an i
 #### geocontour.masksearch.center2()
 Returns a mask over a range of input latitudes and longitudes determined by an input boundary
   - Critera for inclusion of a cell is whether the center of the cell falls within the boundary
-  - Functionally matches geocontour.masksearch.center(), but utilizes matplotlib.path functions, which are probably optimized and thus is roughly 2.5\*sqrt(N) faster for N points, though lacks a "precision" buffer input
+  - Functionally matches geocontour.masksearch.center(), but utilizes matplotlib.path functions, which are probably optimized and capable of being vectorized, and thus is significantly faster
 
 #### geocontour.masksearch.nodes()
 Returns a mask over a range of input latitudes and longitudes determined by an input boundary
@@ -248,7 +248,7 @@ Returns a mask over a range of input latitudes and longitudes determined by an i
 #### geocontour.masksearch.nodes2()
 Returns a mask over a range of input latitudes and longitudes determined by an input boundary
   - Critera for inclusion of a cell is whether a given number (default=2) of cell nodes (corners) fall within the boundary 
-  - Functionally matches geocontour.masksearch.nodes(), but utilizes matplotlib.path functions, though speed is similar to the shapely implementation
+  - Functionally matches geocontour.masksearch.nodes(), but utilizes matplotlib.path functions, which are probably optimized and capable of being vectorized, and thus is significantly faster
 
 #### geocontour.masksearch.area()
 Returns a mask over a range of input latitudes and longitudes determined by an input boundary
@@ -325,8 +325,14 @@ Saves any/all geocontour-created elements: boundary, mask, contour, contoursearc
 
 ### tests
 
-#### geocontour.tests.full()
+#### geocontour.tests.test.full()
 Runs all user-facing geocontour functions with test data, printing/saving results
+
+#### geocontour.tests.timing.masksearch()
+Tests the timing of all mask search functions (geocontour.masksearch) using timeit
+
+#### geocontour.tests.timing.contourtrace()
+Tests the timing of all contour trace functions (geocontour.contourtrace) using timeit
 
 ### examples
 
