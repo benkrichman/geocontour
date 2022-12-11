@@ -38,16 +38,20 @@ def center(latitudes,longitudes,boundary,precision=1e-5):
         mask=np.flip(mask,axis=0)
     return mask
 
-def center2(latitudes,longitudes,boundary):
+def center2(latitudes,longitudes,boundary,precision=1e-5):
     """
     Returns a mask over a range of input latitudes and longitudes determined by an input boundary
         Critera for inclusion of a cell is whether the center of the cell falls within the boundary
-        Functionally matches geocontour.masksearch.center(), but utilizes matplotlib.path functions, which are probably optimized and thus is roughly 2.5*sqrt(N) faster for N points, though lacks a "precision" buffer input
+        Functionally matches geocontour.masksearch.center(), but utilizes matplotlib.path functions, which are probably optimized and capable of being vectorized, and thus is roughly <how much??> faster for N cells
 
     Inputs (Required):
         latitudes - An evenly spaced numpy array of latitude points (degrees)
         longitudes - An evenly spaced numpy array of longitude points (degrees)
         boundary - A 2-d Nx2 numpy array of latitude/longitude points (degrees)
+
+    Inputs (Optional):
+        precision - Passed to matplotlib.Path to increase boundary polygon area, default=1e-5
+            Matplotlib.Path can't beat machine precision, and can thus give "incorrect" results for very close points or shapes. This input errs on being more inclusive, in particular to capture points falling directly on a boundary. A decent rule is to set the precision value as high as you can without impeding the accuracy. For instance, the default of 1e-5 (degrees) translates to roughly 1m precision at the equator. The buffer can be negated by setting this input very low (to machine precision).
 
     Outputs:
         mask - A 2-d boolean numpy array of dimension MxN where M=len(latitudes) and N=len(longitudes)
@@ -59,7 +63,7 @@ def center2(latitudes,longitudes,boundary):
     boundpoly=mplp.Path(boundary)
     ysp, xsp = np.meshgrid(latitudes[boxlatmin:boxlatmax+1],longitudes[boxlonmin:boxlonmax+1], indexing='ij')
     searchpoints=np.hstack((ysp.reshape((-1,1)), xsp.reshape((-1,1))))
-    boxmask=boundpoly.contains_points(searchpoints)
+    boxmask=boundpoly.contains_points(searchpoints,radius=2*precision)
     mask=np.full((len(latitudes),len(longitudes)),False)
     mask[boxlatmin:boxlatmax+1,boxlonmin:boxlonmax+1]=boxmask.reshape((boxlatmax-boxlatmin+1,boxlonmax-boxlonmin+1))
     if latdir=='dec':
@@ -115,7 +119,7 @@ def nodes2(latitudes,longitudes,boundary,nodes=2,precision=1e-5):
     """
     Returns a mask over a range of input latitudes and longitudes determined by an input boundary
         Critera for inclusion of a cell is whether a given number (default=2) of cell nodes (corners) fall within the boundary 
-        Functionally matches geocontour.masksearch.nodes(), but utilizes matplotlib.path functions, though speed is similar to the shapely implementation
+        Functionally matches geocontour.masksearch.nodes(), but utilizes matplotlib.path functions, which are probably optimized and capable of being vectorized, and thus is roughly <how much??> faster for N cells
 
     Inputs (Required):
         latitudes - An evenly spaced numpy array of latitude points (degrees)
@@ -124,6 +128,8 @@ def nodes2(latitudes,longitudes,boundary,nodes=2,precision=1e-5):
 
     Inputs (Optional):
         nodes - The number of cell nodes (corners) to use as a criteria for inclusion (1-4)
+        precision - Passed to matplotlib.Path to increase boundary polygon area, default=1e-5
+            Matplotlib.Path can't beat machine precision, and can thus give "incorrect" results for very close points or shapes. This input errs on being more inclusive, in particular to capture points falling directly on a boundary. A decent rule is to set the precision value as high as you can without impeding the accuracy. For instance, the default of 1e-5 (degrees) translates to roughly 1m precision at the equator. The buffer can be negated by setting this input very low (to machine precision).
 
     Outputs:
         mask - A 2-d boolean numpy array of dimension MxN where M=len(latitudes) and N=len(longitudes)
@@ -146,7 +152,7 @@ def nodes2(latitudes,longitudes,boundary,nodes=2,precision=1e-5):
             nodeHL=[latitudes[la]+latgrdspc/2,longitudes[lo]-longrdspc/2]
             nodeLH=[latitudes[la]-latgrdspc/2,longitudes[lo]+longrdspc/2]
             nodeHH=[latitudes[la]+latgrdspc/2,longitudes[lo]+longrdspc/2]
-            nodesinmask=boundpoly.contains_points(np.array([nodeLL,nodeHL,nodeLH,nodeHH]))
+            nodesinmask=boundpoly.contains_points(np.array([nodeLL,nodeHL,nodeLH,nodeHH]),radius=2*precision)
             if nodesinmask.sum()>=nodes:
                 boxmask[la-boxlatmin,lo-boxlonmin]=True
     mask=np.full((len(latitudes),len(longitudes)),False)
