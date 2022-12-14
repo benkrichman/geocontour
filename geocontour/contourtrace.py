@@ -143,18 +143,7 @@ def moore(mask,latitudes=None,longitudes=None,direction='cw',start='auto',stop='
                 I=startcell+insideturn(startorientation)
                 RI=I-startorientation
                 RRI=RI-startorientation
-                if buffermask[I[0],I[1]]==True and buffermask[RI[0],RI[1]]==False:
-                    C1=True
-                else:
-                    C1=False
-                if any(RRI<0) or RRI[0]>=buffermask.shape[0] or RRI[1]>=buffermask.shape[1]:
-                    C2=False
-                else:
-                    if buffermask[RI[0],RI[1]]==True and buffermask[RRI[0],RRI[1]]==False:
-                        C2=True
-                    else:
-                        C2=False
-                if C1 or C2:
+                if buffermask[I[0],I[1]]==True or buffermask[RI[0],RI[1]]==True:
                     break
                 else:
                     if ct<3:
@@ -180,7 +169,7 @@ def moore(mask,latitudes=None,longitudes=None,direction='cw',start='auto',stop='
         if buffermask[cell[0],cell[1]]==True:
             contourcells.append(cell)
             neighbors=gcmu.neighbors(cell,connectivity=8,direction=direction)
-            nextneighborindex=(np.nonzero(((cell-orientation)==neighbors).all(axis=1))[0][0]+1)%8
+            nextneighborindex=(np.nonzero(((cell-orientation)==neighbors).all(axis=1))[0][0])%8
         else:
             nextneighborindex=(nextneighborindex+1)%8
         orientation=neighbors[nextneighborindex]-cell
@@ -247,18 +236,7 @@ def moore_imp(mask,latitudes=None,longitudes=None,direction='cw',start='auto',st
                 I=startcell+insideturn(startorientation)
                 RI=I-startorientation
                 RRI=RI-startorientation
-                if buffermask[I[0],I[1]]==True and buffermask[RI[0],RI[1]]==False:
-                    C1=True
-                else:
-                    C1=False
-                if any(RRI<0) or RRI[0]>=buffermask.shape[0] or RRI[1]>=buffermask.shape[1]:
-                    C2=False
-                else:
-                    if buffermask[RI[0],RI[1]]==True and buffermask[RRI[0],RRI[1]]==False:
-                        C2=True
-                    else:
-                        C2=False
-                if C1 or C2:
+                if buffermask[I[0],I[1]]==True or buffermask[RI[0],RI[1]]==True:
                     break
                 else:
                     if ct<3:
@@ -296,7 +274,7 @@ def moore_imp(mask,latitudes=None,longitudes=None,direction='cw',start='auto',st
                 contourcells.append(nextnextneighbor)
             contourcells.append(cell)
             neighbors=gcmu.neighbors(cell,connectivity=8,direction=direction)
-            nextneighborindex=(np.nonzero(((cell-orientation)==neighbors).all(axis=1))[0][0]+1)%8
+            nextneighborindex=(np.nonzero(((cell-orientation)==neighbors).all(axis=1))[0][0])%8
         else:
             nextneighborindex=(nextneighborindex+1)%8
         if (cell==startcell).all():
