@@ -119,10 +119,10 @@ geocontour.output.plot(latitudes,longitudes,geocontour=geocontour,title='Example
 
 ### Masks
 
-Selectable criteria for masks created from input boundary coordinates
-- cell center
+Selectable/tunable criteria for masks created from input boundary coordinates
+- cell center (multiple methods with variable precision)
+- node ratio (multiple methods with variable precision)
 - area ratio
-- node ratio
 
 Useful mask operators
 - return mask connectivity (and null connectivity)
@@ -161,17 +161,22 @@ Options for tuning criteria of geocontours created from input contours
 - selectable connection type (cell to cell or cell edge to cell center)
 - optionally simplify geocontours at the cell level to shorten and improve compute times in practical applications
 
+### Timing
+
+Timing modules for easy comparison between mask search methods or contour tracing algorithms
+
 ### Visualization
 
 Easy and semi-automated plotting function for visualization of boundaries/masks/contours/contour searches/geocontours
 - buffers
 - grid overlay
-- mask cell visibility
+- mask/contour cell visibility
 - directional indicators for contours and contour searches
 - outward unit vector indicators for geocontours
 - automatic calculation of feature size and output resolution
 - display of natural features or political boundaries (optional with cartopy installed)
 - selectable marker/line/arrow/cell size/color/style
+- optional transparency mode for presentation/publication use
 
 ## Function Overview
 
