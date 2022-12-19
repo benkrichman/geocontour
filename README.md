@@ -152,6 +152,7 @@ Useful contour operators
 - return full search path for a contour trace
 - return cell neighbors with connectivity and directional input
 - return starting cell for contour tracing and check that starting cells work for a given algorithm
+- return visually improved contour search
 
 ### Geocontours
 
@@ -314,6 +315,9 @@ Returns a stopping function for use in contour tracing while loop
 #### geocontour.contourutil.clean()
 Returns a cleaned contour that will pass checks
   - Mainly used internally for contour trace functions
+
+#### geocontour.contourutil.fancysearch()
+Returns a contoursearch that is visually more easy to follow
 
 ### geocontour
 
