@@ -163,3 +163,43 @@ def clean(contourcells,searchcells,latitudes=None,longitudes=None,closecontour=T
         contoursearch-=1
     return contour,contoursearch
 
+def fancysearch(contoursearch,contraction=0.2,shift=0.25):
+    """
+    Returns a contoursearch that is visually more easy to follow
+
+    Inputs (Required):
+        contoursearch - A 2-d Nx2 numpy array of ordered latitude/longitude points (degrees) describing the cells searched during contour tracing
+
+    Inputs (Optional):
+        contraction - A float determining how much contoursearch "shrinks" towards contour cell edges, default=0.2
+            ranges from 0 (no change) to 0.5 (completely flattened to contour cell edges)
+        shift - A float determining how much contoursearch shifts to avoid doubling back on itself, default=0.25
+            ranges from 0 (no change) to 0.5 (half a grid cell)
+
+    Outputs
+        fancycontoursearch - A 2-d Nx2 numpy array of ordered latitude/longitude points describing the cells searched during contour tracing, with contraction and shift applied
+    """
+    fdiff=np.diff(contoursearch,axis=0,prepend=[contoursearch[0,:]])
+    if contraction>0.5:
+        sys.exit('ERROR - contraction cannot be greater than 0.5, valid range is 0 to 0.5')
+    elif contraction<0:
+        sys.exit('ERROR - contraction cannot be less than 0, valid range is 0 to 0.5')
+    else:
+        zrange=np.arange(fdiff.shape[0])
+        lzero=np.stack((zrange,zrange),axis=1)
+        lzero[fdiff==0]=0
+        lzero=np.maximum.accumulate(lzero,axis=0)
+        filldiff=np.stack((fdiff[lzero[:,0],0],fdiff[lzero[:,1],1]),axis=1)
+        fancycontoursearch=contoursearch.astype('float')-filldiff*contraction
+    if shift>0.5:
+        sys.exit('ERROR - shift cannot be greater than 0.5, valid range is 0 to 0.5')
+    elif shift<0:
+        sys.exit('ERROR - shift cannot be less than 0, valid range is 0 to 0.5')
+    elif shift>0:
+        fddby=np.convolve(contoursearch[:,0],[1,0,-1],mode='valid')
+        fddbx=np.convolve(contoursearch[:,1],[1,0,-1],mode='valid')
+        dbINDS=np.where(((fddby==0) & (fddbx==0)))[0]+1
+        dbspans=fdiff[dbINDS+2]*shift
+        fancycontoursearch[dbINDS+1]+=dbspans
+        fancycontoursearch=np.insert(fancycontoursearch,dbINDS+1,fancycontoursearch[dbINDS]+dbspans,axis=0)
+    return fancycontoursearch
