@@ -29,7 +29,7 @@ geocontour.tests.full()
 
 If geocontour played a significant role in your work and you would like to cite it, the following is suggested (APA):
 
-Krichman, B. (2022). *geocontour* (Version 1.0.0) [Computer Software]. https: //doi.org/10.5281/zenodo.7402714 
+Krichman, B. (2022). *geocontour* (Version 1.1.0) [Computer Software]. https: //doi.org/10.5281/zenodo.7402714 
 
 Bibtex:
 
@@ -42,7 +42,7 @@ month={12},
 year={2022},
 title={{geocontour}},
 url={https://github.com/benkrichman/geocontour},
-version={1.0.0},
+version={1.1.0},
 note = {Computer Software}
 }
 ```
