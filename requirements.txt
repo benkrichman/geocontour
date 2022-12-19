@@ -1,14 +1,15 @@
 contourpy==1.0.6
 cycler==0.11.0
-datascale==1.0.0
+datascale==1.1.0
 fonttools==4.38.0
+-e git+https://github.com/benkrichman/geocontour@66a900aa097b3c34da11ab752fb5ab05ca641a6e#egg=geocontour
 kiwisolver==1.4.4
 matplotlib==3.6.2
-numpy==1.23.5
-packaging==21.3
+numpy==1.24.0
+packaging==22.0
 Pillow==9.3.0
 pyparsing==3.0.9
 python-dateutil==2.8.2
 scipy==1.9.3
-Shapely==1.8.5.post1
+shapely==2.0.0
 six==1.16.0
