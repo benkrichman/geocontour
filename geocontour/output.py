@@ -7,13 +7,14 @@ import datascale as ds
 import geocontour.grid as gcg
 import geocontour.check as gcc
 import geocontour.maskutil as gcmu
+import geocontour.contourutil as gccu
 try:
     import cartopy as cp
     cp_exists='y'
 except:
     cp_exists='n'
 
-def plot(latitudes,longitudes,boundary=None,mask=None,contour=None,contoursearch=None,geocontour=None,vertices=None,boundingbox='all',buffer='off',grid='on',cells='default',showcontour='on',startcell='on',contourarrows='on',contoursearcharrows='on',geocontourvectors='on',emptycellcolor='lightgrey',fullcellcolor='sandybrown',boundarycolor='tab:blue',contourcolor='olivedrab',contoursearchcolor='firebrick',geocontourcolor='olivedrab',vertexcolor='tab:cyan',gridcolor='black',lw_boundary='auto',lw_contour='auto',lw_contoursearch='auto',lw_geocontour='auto',mw_contourarrows='auto',mw_contoursearcharrows='auto',mw_vertices='auto',features=None,title=None,outname='plot',outdpi='high',transp=False):
+def plot(latitudes,longitudes,boundary=None,mask=None,contour=None,contoursearch=None,geocontour=None,vertices=None,boundingbox='all',buffer='off',grid='on',cells='default',showcontour='on',startcell='on',contourarrows='on',contoursearcharrows='on',fancycontoursearch=True,contoursearch_contraction=0.2,contoursearch_shift=0.25,geocontourvectors='on',emptycellcolor='lightgrey',fullcellcolor='sandybrown',boundarycolor='tab:blue',contourcolor='olivedrab',contoursearchcolor='firebrick',geocontourcolor='olivedrab',vertexcolor='tab:cyan',gridcolor='black',lw_boundary='auto',lw_contour='auto',lw_contoursearch='auto',lw_geocontour='auto',mw_contourarrows='auto',mw_contoursearcharrows='auto',mw_vertices='auto',features=None,title=None,outname='plot',outdpi='high',transp=False):
     """
     Plots any/all geocontour-created elements: boundary, mask, contour, contoursearch, geocontour, vertices
 
@@ -44,6 +45,9 @@ def plot(latitudes,longitudes,boundary=None,mask=None,contour=None,contoursearch
         startcell ('on'/'off') - A string for showing/hiding the startcell (contour or contoursearch), default='on'
         contourarrows ('on'/'off') - A string for showing/hiding directional arrows on the contour, default='on'
         contoursearcharrows ('on'/'off') - A string for showing/hiding directional arrows on the contoursearch, default='on'
+        fancycontoursearch (True/False) - A boolean to plot the contoursearch (if provided) in a cleaner and more easily followed format, default=True
+        contoursearch_contraction (0 - 0.5) - A float determining how much contoursearch "shrinks" towards contour cell edges (if fancycontoursearch=True), default=0.2 (see geocontour.contourutil.fancycontoursearch)
+        contoursearch_shift (0 - 0.5) - A float determining how much contoursearch shifts to avoid doubling back on itself (if fancycontoursearch=True), default=0.25 (see geocontour.contourutil.fancycontoursearch)
         geocontourvectors ('on'/'off') - A string for showing/hiding outward normal vectors on the geocontour, default='on'
         Colors: all accept any matplotlib predefined, hex, or rgba array
             emptycellcolor - color for unmasked cells, default='lightgray'
@@ -57,10 +61,10 @@ def plot(latitudes,longitudes,boundary=None,mask=None,contour=None,contoursearch
         linewidths/markerwidths: a float setting fraction of cell covered by lines/markers (e.g. lw=0.5 means lines will be half as wide as grid cells, while mw=2 means markers will be as wide as 2 grid cells)
             lw_boundary - boundary linewidth, default='auto' (0.1)
             lw_contour - contour linewidth, default='auto' (0.1)
-            lw_contoursearch - contoursearch linewidth, default='auto' (0.1)
+            lw_contoursearch - contoursearch linewidth, default='auto' (0.075 if fancycontoursearch=True and 0.1 if fancycontoursearch=False)
             lw_geocontour - geocontour linewidth, default='auto' (0.1)
             mw_contourarrows - contour arrow markerwidth, default='auto' (0.5)
-            mw_contoursearcharrows - contoursearch arrow markerwidth, default='auto' (0.5)
+            mw_contoursearcharrows - contoursearch arrow markerwidth, default='auto' (0.35 if fancycontoursearch=True and 0.5 if fancycontoursearch=False)
             mw_vertices - vertex markerwidth, default='auto' (0.4)
         features (None/'natural'/'borders') - display Earth features (if cartopy is installed), default=None
             'natural' displays coastlines, ocean, and lakes/rivers
@@ -73,7 +77,7 @@ def plot(latitudes,longitudes,boundary=None,mask=None,contour=None,contoursearch
             'low' scales dpi to 5 pixels per grid cell, dpi floor of 100
             'indep' sets output dpi to 200 regardless of grid size/spacing
             any other entry must be a numerical value for desired pixels per grid cell
-        transp (True/False) - set exterior of plot to transparent with text/labels/ticks/frame set to 'dimgray' for contrast against light and dark backgrounds, default=False
+        transp (True/False) - A boolean to set exterior of plot to transparent with text/labels/ticks/frame set to 'dimgray' for contrast against light and dark backgrounds, default=False
 
     Outputs:
         none
@@ -302,15 +306,22 @@ def plot(latitudes,longitudes,boundary=None,mask=None,contour=None,contoursearch
             mw_vertices=pds*mw_vertices**2
         ax.scatter(vertices[:,1],vertices[:,0],c=vertexcolor,s=mw_vertices,linewidth=0,zorder=10)
     if contoursearch is not None:
+        if fancycontoursearch==True:
+            autolwcs=0.075
+            automwcs=0.35
+            contoursearch=gccu.fancysearch(contoursearch,contraction=contoursearch_contraction,shift=contoursearch_shift)
+        else:
+            autolwcs=0.1
+            automwcs=0.5
         if lw_contoursearch=='auto':
-            lw_contoursearch=0.1*pdw
+            lw_contoursearch=autolwcs*pdw
         else:
             lw_contoursearch=lw_contoursearch*pdw
-        ax.plot(contoursearch[:,1],contoursearch[:,0],color=contoursearchcolor,linewidth=lw_contoursearch,zorder=11)
         if mw_contoursearcharrows=='auto':
-            mw_contoursearcharrows=pds*0.5**2
+            mw_contoursearcharrows=pds*automwcs**2
         else:
             mw_contoursearcharrows=pds*mw_contoursearcharrows**2
+        ax.plot(contoursearch[:,1],contoursearch[:,0],color=contoursearchcolor,linewidth=lw_contoursearch,zorder=11)
         if startcell=='on':
             ax.scatter(contoursearch[0,1],contoursearch[0,0],marker='o',c=contoursearchcolor,s=mw_contoursearcharrows,linewidth=0,zorder=11)
         if contoursearcharrows=='on':
