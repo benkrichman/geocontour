@@ -1,6 +1,7 @@
 import sys
 import numpy as np
 import geocontour.masksearch as gcms
+import geocontour.maskutil as gcmu
 import geocontour.contourtrace as gcct
 import timeit as tm
 import matplotlib.pyplot as plt
