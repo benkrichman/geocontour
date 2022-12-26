@@ -164,7 +164,9 @@ Options for tuning criteria of geocontours created from input contours
 
 ### Timing
 
-Timing modules for easy comparison between mask search methods or contour tracing algorithms
+Timing modules for easy comparison between mask search methods or contour tracing algorithms using timeit. 
+
+Note that in mask search and contour tracing care has been taken to implement algorithms in a fast and efficient manner through utilization of shapely and matplotlib builtins and through numpy vectorization where possible. However, not everything is speed optimized where optimization would necessitate significantly more complexity or utilization of external low level libraries or custom functions. The timing modules exist for intercomparison amongst methods, but also for giving users a reasonable expectation of performance.
 
 ### Visualization
 
