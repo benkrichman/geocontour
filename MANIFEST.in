@@ -1,7 +1,7 @@
 include LICENSE.txt
 include README.md
 recursive-include geocontour *py
-recursive-include geocontour/data *
+recursive-include geocontour/data *npz
 recursive-include geocontour/tests *py
 recursive-include geocontour/examples *py
 recursive-include images *
