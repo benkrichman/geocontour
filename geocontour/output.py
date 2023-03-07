@@ -410,8 +410,8 @@ def save(latitudes,longitudes,boundary=None,mask=None,contour=None,contoursearch
         none
     """
     if outtype=='xyz':
-        np.savetxt(outname+'_latitudes.xyz',latitudes,fmt=outformat,delimiter=outdelim)
-        np.savetxt(outname+'_longitudes.xyz',longitudes,fmt=outformat,delimiter=outdelim)
+        np.savetxt(outname+'_latitudes.txt',latitudes,fmt=outformat,delimiter=outdelim)
+        np.savetxt(outname+'_longitudes.txt',longitudes,fmt=outformat,delimiter=outdelim)
         if boundary is not None:
             gcc.cboundary(boundary)
             np.savetxt(outname+'_boundary.xyz',boundary,fmt=outformat,delimiter=outdelim)
