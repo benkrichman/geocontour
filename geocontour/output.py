@@ -14,7 +14,7 @@ try:
 except:
     cp_exists='n'
 
-def plot(latitudes,longitudes,boundary=None,mask=None,contour=None,contoursearch=None,geocontour=None,vertices=None,boundingbox='all',buffer='off',grid='on',cells='default',showcontour='on',startcell='on',contourarrows='on',contoursearcharrows='on',fancycontoursearch=True,contoursearch_contraction=0.2,contoursearch_shift=0.25,geocontourvectors='on',emptycellcolor='lightgrey',fullcellcolor='sandybrown',boundarycolor='tab:blue',contourcolor='olivedrab',contoursearchcolor='firebrick',geocontourcolor='olivedrab',vertexcolor='tab:cyan',gridcolor='black',lw_boundary='auto',lw_contour='auto',lw_contoursearch='auto',lw_geocontour='auto',mw_contourarrows='auto',mw_contoursearcharrows='auto',mw_vertices='auto',features=None,title=None,outname='plot',outdpi='high',transp=False):
+def plot(latitudes,longitudes,boundary=None,mask=None,contour=None,contoursearch=None,geocontour=None,vertices=None,boundingbox='all',buffer='off',grid='on',cells='default',showcontour='on',startcell='on',contourarrows='on',contoursearcharrows='on',fancycontoursearch=True,contoursearch_contraction=0.2,contoursearch_shift=0.25,geocontourvectors='on',emptycellcolor='lightgrey',fullcellcolor='sandybrown',boundarycolor='tab:blue',contourcolor='olivedrab',contoursearchcolor='firebrick',geocontourcolor='olivedrab',vertexcolor='tab:cyan',gridcolor='black',lw_boundary='auto',lw_contour='auto',lw_contoursearch='auto',lw_geocontour='auto',mw_contourarrows='auto',mw_contoursearcharrows='auto',mw_vertices='auto',features=None,title=None,labels=True,outname='plot',outdpi='high',transp=False):
     """
     Plots any/all geocontour-created elements: boundary, mask, contour, contoursearch, geocontour, vertices
 
@@ -70,6 +70,7 @@ def plot(latitudes,longitudes,boundary=None,mask=None,contour=None,contoursearch
             'natural' displays coastlines, ocean, and lakes/rivers
             'borders' displays national and state/province level boundaries
         title - A string used as the plot title, default=None
+        labels - A boolean to set x/y plot labels on or off (e.g. off if no associated lat/lon), default=True
         outname - A string used as the filename/path for the saved image, default='plot'
         outdpi ('high'/'low'/'indep'/resolution) - dpi of the saved image, default='high'
             'high' scales dpi high enough (36 pixels per grid cell) to see features when zooming into a single grid cell, floor of 100
@@ -263,8 +264,9 @@ def plot(latitudes,longitudes,boundary=None,mask=None,contour=None,contoursearch
             sys.exit('ERROR - Could not import cartopy, features are only usable with cartopy')
     if title is not None:
         ax.set_title(title)
-    ax.set_xlabel('Longitude (deg)')
-    ax.set_ylabel('Latitude (deg)')
+    if labels==True:
+        ax.set_xlabel('Longitude (deg)')
+        ax.set_ylabel('Latitude (deg)')
     ax.set_ylim((ylimmin,ylimmax))
     ax.set_xlim((xlimmin,xlimmax)) 
     ax.imshow(pltmask,aspect='equal',interpolation='none',vmin=0,vmax=1,extent=ext,origin=org,cmap=cmp,zorder=-1)
