@@ -247,7 +247,7 @@ Returns a mask over a range of input latitudes and longitudes determined by an i
 #### geocontour.masksearch.center2()
 Returns a mask over a range of input latitudes and longitudes determined by an input boundary
   - Critera for inclusion of a cell is whether the center of the cell falls within the boundary
-  - Functionally matches geocontour.masksearch.center(), but utilizes matplotlib.path functions, which are probably optimized and capable of being vectorized, and thus is significantly faster
+  - Functionally matches geocontour.masksearch.center(), but utilizes matplotlib.path functions, which are faster (possibly due to avoidance of overhead in converting to shapely geometries)
 
 #### geocontour.masksearch.nodes()
 Returns a mask over a range of input latitudes and longitudes determined by an input boundary
@@ -256,7 +256,7 @@ Returns a mask over a range of input latitudes and longitudes determined by an i
 #### geocontour.masksearch.nodes2()
 Returns a mask over a range of input latitudes and longitudes determined by an input boundary
   - Critera for inclusion of a cell is whether a given number (default=2) of cell nodes (corners) fall within the boundary 
-  - Functionally matches geocontour.masksearch.nodes(), but utilizes matplotlib.path functions, which are probably optimized and capable of being vectorized, and thus is significantly faster
+  - Functionally matches geocontour.masksearch.nodes(), but utilizes matplotlib.path functions, which are faster (possibly due to avoidance of overhead in converting to shapely geometries)
 
 #### geocontour.masksearch.area()
 Returns a mask over a range of input latitudes and longitudes determined by an input boundary

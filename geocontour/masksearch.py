@@ -1,6 +1,6 @@
 import warnings
 import numpy as np
-import shapely.geometry as shg
+import shapely as sh
 import matplotlib.path as mplp
 import geocontour.grid as gcg
 import geocontour.maskutil as gcmu
@@ -27,13 +27,13 @@ def center(latitudes,longitudes,boundary,precision=1e-5):
         latitudes=np.flip(latitudes)
     boxlatmin, boxlatmax, boxlonmin, boxlonmax = gcmu.bbox(latitudes,longitudes,boundary)
     boxmask=np.full((boxlatmax-boxlatmin+1,boxlonmax-boxlonmin+1),False)
-    boundpoly=shg.Polygon(boundary).buffer(precision)
-    for la in np.arange(boxlatmin,boxlatmax+1,1):
-        for lo in np.arange(boxlonmin,boxlonmax+1,1):
-            center=shg.Point(latitudes[la],longitudes[lo])
-            boxmask[la-boxlatmin,lo-boxlonmin]=boundpoly.contains(center)
+    boundpoly=sh.polygons(boundary).buffer(precision)
+    ysp, xsp = np.meshgrid(latitudes[boxlatmin:boxlatmax+1],longitudes[boxlonmin:boxlonmax+1], indexing='ij')
+    searchpoints=np.hstack((ysp.reshape((-1,1)), xsp.reshape((-1,1))))
+    shsearchpoints=sh.points(searchpoints)
+    boxmask=sh.contains(boundpoly,shsearchpoints)
     mask=np.full((len(latitudes),len(longitudes)),False)
-    mask[boxlatmin:boxlatmax+1,boxlonmin:boxlonmax+1]=boxmask
+    mask[boxlatmin:boxlatmax+1,boxlonmin:boxlonmax+1]=boxmask.reshape((boxlatmax-boxlatmin+1,boxlonmax-boxlonmin+1))
     if latdir=='dec':
         mask=np.flip(mask,axis=0)
     return mask
@@ -42,7 +42,7 @@ def center2(latitudes,longitudes,boundary,precision=1e-5):
     """
     Returns a mask over a range of input latitudes and longitudes determined by an input boundary
         Critera for inclusion of a cell is whether the center of the cell falls within the boundary
-        Functionally matches geocontour.masksearch.center(), but utilizes matplotlib.path functions, which are probably optimized and capable of being vectorized, and thus is significantly faster
+        Functionally matches geocontour.masksearch.center(), but utilizes matplotlib.path functions, which are faster (possibly due to avoidance of overhead in converting to shapely geometries)
 
     Inputs (Required):
         latitudes - An evenly spaced numpy array of latitude points (degrees)
@@ -99,16 +99,19 @@ def nodes(latitudes,longitudes,boundary,nodes=2,precision=1e-5):
     latgrdspc=gcg.spacing(latitudes)
     longrdspc=gcg.spacing(longitudes)
     boxmask=np.full((boxlatmax-boxlatmin+1,boxlonmax-boxlonmin+1),False)
-    boundpoly=shg.Polygon(boundary).buffer(precision)
-    for la in np.arange(boxlatmin,boxlatmax+1,1):
-        for lo in np.arange(boxlonmin,boxlonmax+1,1):
-            nodeLL=shg.Point(latitudes[la]-latgrdspc/2,longitudes[lo]-longrdspc/2)
-            nodeHL=shg.Point(latitudes[la]+latgrdspc/2,longitudes[lo]-longrdspc/2)
-            nodeLH=shg.Point(latitudes[la]-latgrdspc/2,longitudes[lo]+longrdspc/2)
-            nodeHH=shg.Point(latitudes[la]+latgrdspc/2,longitudes[lo]+longrdspc/2)
-            nodesinmask=np.array([boundpoly.contains(nodeLL),boundpoly.contains(nodeHL),boundpoly.contains(nodeLH),boundpoly.contains(nodeHH)])
-            if nodesinmask.sum()>=nodes:
-                boxmask[la-boxlatmin,lo-boxlonmin]=True
+    boundpoly=sh.polygons(boundary).buffer(precision)
+    yspMM, xspMM = np.meshgrid(latitudes[boxlatmin:boxlatmax+1]-latgrdspc/2,longitudes[boxlonmin:boxlonmax+1]-longrdspc/2, indexing='ij')
+    yspPM, xspPM = np.meshgrid(latitudes[boxlatmin:boxlatmax+1]+latgrdspc/2,longitudes[boxlonmin:boxlonmax+1]-longrdspc/2, indexing='ij')
+    yspMP, xspMP = np.meshgrid(latitudes[boxlatmin:boxlatmax+1]-latgrdspc/2,longitudes[boxlonmin:boxlonmax+1]+longrdspc/2, indexing='ij')
+    yspPP, xspPP = np.meshgrid(latitudes[boxlatmin:boxlatmax+1]+latgrdspc/2,longitudes[boxlonmin:boxlonmax+1]+longrdspc/2, indexing='ij')
+    spMM=np.hstack((yspMM.reshape((-1,1)),xspMM.reshape((-1,1))))
+    spPM=np.hstack((yspPM.reshape((-1,1)),xspPM.reshape((-1,1))))
+    spMP=np.hstack((yspMP.reshape((-1,1)),xspMP.reshape((-1,1))))
+    spPP=np.hstack((yspPP.reshape((-1,1)),xspPP.reshape((-1,1))))
+    searchpoints=np.stack((spMM,spPM,spMP,spPP)).reshape(-1,2)
+    shsearchpoints=sh.points(searchpoints)
+    nodesinmask=sh.contains(boundpoly,shsearchpoints).reshape(4,-1)
+    boxmask=(nodesinmask.sum(axis=0)>=nodes).reshape(boxmask.shape)
     mask=np.full((len(latitudes),len(longitudes)),False)
     mask[boxlatmin:boxlatmax+1,boxlonmin:boxlonmax+1]=boxmask
     if latdir=='dec':
@@ -119,7 +122,7 @@ def nodes2(latitudes,longitudes,boundary,nodes=2,precision=1e-5):
     """
     Returns a mask over a range of input latitudes and longitudes determined by an input boundary
         Critera for inclusion of a cell is whether a given number (default=2) of cell nodes (corners) fall within the boundary 
-        Functionally matches geocontour.masksearch.nodes(), but utilizes matplotlib.path functions, which are probably optimized and capable of being vectorized, and thus is significantly faster
+        Functionally matches geocontour.masksearch.nodes(), but utilizes matplotlib.path functions, which are faster (possibly due to avoidance of overhead in converting to shapely geometries)
 
     Inputs (Required):
         latitudes - An evenly spaced numpy array of latitude points (degrees)
@@ -190,14 +193,14 @@ def area(latitudes,longitudes,boundary,area=0.5):
     latgrdspc=gcg.spacing(latitudes)
     longrdspc=gcg.spacing(longitudes)
     boxmask=np.full((boxlatmax-boxlatmin+1,boxlonmax-boxlonmin+1),False)
-    boundpoly=shg.Polygon(boundary)
+    boundpoly=sh.polygons(boundary)
     for la in np.arange(boxlatmin,boxlatmax+1,1):
         for lo in np.arange(boxlonmin,boxlonmax+1,1):
             LL=[latitudes[la]-latgrdspc/2,longitudes[lo]-longrdspc/2]
             HL=[latitudes[la]+latgrdspc/2,longitudes[lo]-longrdspc/2]
             LH=[latitudes[la]-latgrdspc/2,longitudes[lo]+longrdspc/2]
             HH=[latitudes[la]+latgrdspc/2,longitudes[lo]+longrdspc/2]
-            cell=shg.Polygon([LL,HL,HH,LH])
+            cell=sh.polygons([LL,HL,HH,LH])
             if boundpoly.intersection(cell).area>=latgrdspc*longrdspc*area:
                 boxmask[la-boxlatmin,lo-boxlonmin]=True
     mask=np.full((len(latitudes),len(longitudes)),False)
