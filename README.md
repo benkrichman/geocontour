@@ -47,6 +47,72 @@ note = {Computer Software}
 }
 ```
 
+## Features
+
+### Masks
+
+Selectable/tunable criteria for masks created from input boundary coordinates
+- cell center (multiple methods with variable precision)
+- node ratio (multiple methods with variable precision)
+- area ratio
+
+Useful mask operators
+- return mask connectivity (and null connectivity)
+- return mask edge cells
+- return mask vertex points
+
+### Contours
+
+Implements 4 existing algorithms for contour tracing, and two improvements on known algorithms
+- square tracing [^IPP][^Toussaint]
+- moore neighbor tracing [^IPP][^Toussaint]
+- improved moore neighbor tracing (capturing inside corners)
+- pavlidis tracing [^IPP][^Pavlidis]
+- improved pavlidis tracing (capturing inside corners)
+- fast representative tracing [^FRT]
+
+Tuning of contours created from tracing input masks
+- trace direction
+- selectable and adjustable stopping conditions
+- automatic or manual selection of starting cell
+- selectable connection type (cell to cell or cell edge to cell center)
+- simplification of output contour (removal of repeating cells)
+- selectable contour closure
+- usable for an associated lat/lon grid or on a non-specified grid
+
+Useful contour operators
+- return full search path for a contour trace
+- return cell neighbors with connectivity and directional input
+- return starting cell for contour tracing and check that starting cells work for a given algorithm
+- return visually improved contour search
+
+### Geocontours
+
+From an input contour, create a closed geospatial contour with calculated segment lengths and outward unit vectors (for example: useful in calculating flux across a bounding surface from a geospatial data set)
+
+Options for tuning criteria of geocontours created from input contours
+- selectable connection type (cell to cell or cell edge to cell center)
+- optionally simplify geocontours at the cell level to shorten and improve compute times in practical applications
+
+### Timing
+
+Timing modules for easy comparison between mask search methods or contour tracing algorithms using timeit. 
+
+Note that in mask search and contour tracing care has been taken to implement algorithms in a fast and efficient manner through utilization of shapely and matplotlib builtins and through numpy vectorization where possible. However, not everything is speed optimized where optimization would necessitate significantly more complexity or utilization of external low level libraries or custom functions. The timing modules exist for intercomparison amongst methods, but also for giving users a reasonable expectation of performance.
+
+### Visualization
+
+Easy and semi-automated plotting function for visualization of boundaries/masks/contours/contour searches/geocontours
+- buffers
+- grid overlay
+- mask/contour cell visibility
+- directional indicators for contours and contour searches
+- outward unit vector indicators for geocontours
+- automatic calculation of feature size and output resolution
+- display of natural features or political boundaries (optional with cartopy installed)
+- selectable marker/line/arrow/cell size/color/style
+- optional transparency mode for presentation/publication use
+
 ## Example Use Case
 
 \*to reconstruct these examples use (or view)
@@ -114,72 +180,6 @@ geocontour.output.plot(latitudes,longitudes,geocontour=geocontour,title='Example
 ```
 
 <img src=https://github.com/benkrichman/geocontour/raw/main/images/example_large_geocontour%2Bbordfeat.png width="800">
-
-## Features
-
-### Masks
-
-Selectable/tunable criteria for masks created from input boundary coordinates
-- cell center (multiple methods with variable precision)
-- node ratio (multiple methods with variable precision)
-- area ratio
-
-Useful mask operators
-- return mask connectivity (and null connectivity)
-- return mask edge cells
-- return mask vertex points
-
-### Contours
-
-Implements 4 existing algorithms for contour tracing, and two improvements on known algorithms
-- square tracing [^IPP][^Toussaint]
-- moore neighbor tracing [^IPP][^Toussaint]
-- improved moore neighbor tracing (capturing inside corners)
-- pavlidis tracing [^IPP][^Pavlidis]
-- improved pavlidis tracing (capturing inside corners)
-- fast representative tracing [^FRT]
-
-Tuning of contours created from tracing input masks
-- trace direction
-- selectable and adjustable stopping conditions
-- automatic or manual selection of starting cell
-- selectable connection type (cell to cell or cell edge to cell center)
-- simplification of output contour (removal of repeating cells)
-- selectable contour closure
-- usable for an associated lat/lon grid or on a non-specified grid
-
-Useful contour operators
-- return full search path for a contour trace
-- return cell neighbors with connectivity and directional input
-- return starting cell for contour tracing and check that starting cells work for a given algorithm
-- return visually improved contour search
-
-### Geocontours
-
-From an input contour, create a closed geospatial contour with calculated segment lengths and outward unit vectors (for example: useful in calculating flux across a bounding surface from a geospatial data set)
-
-Options for tuning criteria of geocontours created from input contours
-- selectable connection type (cell to cell or cell edge to cell center)
-- optionally simplify geocontours at the cell level to shorten and improve compute times in practical applications
-
-### Timing
-
-Timing modules for easy comparison between mask search methods or contour tracing algorithms using timeit. 
-
-Note that in mask search and contour tracing care has been taken to implement algorithms in a fast and efficient manner through utilization of shapely and matplotlib builtins and through numpy vectorization where possible. However, not everything is speed optimized where optimization would necessitate significantly more complexity or utilization of external low level libraries or custom functions. The timing modules exist for intercomparison amongst methods, but also for giving users a reasonable expectation of performance.
-
-### Visualization
-
-Easy and semi-automated plotting function for visualization of boundaries/masks/contours/contour searches/geocontours
-- buffers
-- grid overlay
-- mask/contour cell visibility
-- directional indicators for contours and contour searches
-- outward unit vector indicators for geocontours
-- automatic calculation of feature size and output resolution
-- display of natural features or political boundaries (optional with cartopy installed)
-- selectable marker/line/arrow/cell size/color/style
-- optional transparency mode for presentation/publication use
 
 ## Function Overview
 
