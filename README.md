@@ -42,7 +42,7 @@ month={12},
 year={2022},
 title={{geocontour}},
 url={https://github.com/benkrichman/geocontour},
-version={1.1.0},
+version={1.2.0},
 note = {Computer Software}
 }
 ```
