@@ -4,16 +4,26 @@ import numpy as np
 
 def cdim(dimension,exit_on_error=True):
     """
-    Checks an input dimension array for 1-dimensionality and regular spacing
+    Check input dimension array for 1-dimensionality and regular
+    spacing
 
-    Inputs (Required):
-        dimension - A numpy array of longitude or latitude points (degrees)
+    Parameters
+    ----------
+    dimension : ndarray
+        1D Nx1 array of longitude or latitude points (degrees)
+    exit_on_error : bool, default=True 
+        flag to exit if an error is encountered
 
-    Inputs (Optional):
-        exit_on_error - Boolean for exiting if an error is encountered, default=True
+    Returns
+    -------
+    None
 
-    Outputs:
-        none
+    See Also
+    --------
+    geocontour.check.cboundary
+    geocontour.check.cmask
+    geocontour.check.ccontour
+    geocontour.check.cgeocontour
     """
     if len(dimension.shape)!=1:
         sys.exit('ERROR - Input dimension (latitude or longitude) is not 1-dimensional')
@@ -27,14 +37,30 @@ def cdim(dimension,exit_on_error=True):
 
 def cboundary(boundary):
     """
-    Checks a list of boundary points for 2-dimensionality and proper ordering
-        Will check whether columns (lat/lon) are ordered correctly but CAN'T GUARANTEE THIS
+    Check array of boundary points for 2-dimensionality and proper
+    ordering
 
-    Inputs(Required):
-        boundary - A 2-d Nx2 numpy array of latitude/longitude points (degrees) with the last point equal to the first
+    Parameters
+    ----------
+    boundary : ndarray 
+        2D Nx2 array of latitude/longitude points (degrees) with the
+        last point equal to the first
 
-    Outputs:
-        none
+    Returns
+    -------
+    None
+
+    See Also
+    --------
+    geocontour.check.cdim
+    geocontour.check.cmask
+    geocontour.check.ccontour
+    geocontour.check.cgeocontour
+
+    Notes
+    -----
+    Will check whether columns (lat/lon) are ordered correctly but CAN'T GUARANTEE THIS
+
     """
     if len(boundary.shape)!=2:
         sys.exit('ERROR - Boundary input is not 2-dimensional')
@@ -55,17 +81,28 @@ def cboundary(boundary):
 
 def cmask(mask,latitudes=None,longitudes=None):
     """
-    Checks a mask for correct data type and dimensionality, and size if optional latitudes and longitudes are provided
+    Check mask array for correct data type and dimensionality, and
+    optionally size
 
-    Inputs (Required):
-        mask - A 2-d boolean numpy array of dimension MxN where M=len(latitudes) and N=len(longitudes)
+    Parameters
+    ----------
+    mask : ndarray
+        2D MxN bool array where M=len(latitudes) and N=len(longitudes)
+    latitudes : ndarray, optional
+        1D Nx1 array of latitude points (degrees)
+    longitudes : ndarray, optional
+        1D Nx1 array of longitude points (degrees)
 
-    Inputs (Optional):
-        latitudes - An evenly spaced numpy array of latitude points (degrees)
-        longitudes - An evenly spaced numpy array of latitude points (degrees)
+    Returns
+    -------
+    None
 
-    Outputs:
-        none
+    See Also
+    --------
+    geocontour.check.cdim
+    geocontour.check.cboundary
+    geocontour.check.ccontour
+    geocontour.check.cgeocontour
     """
     if len(mask.shape)!=2:
         sys.exit('ERROR - Mask input is not 2-dimensional')
@@ -81,15 +118,29 @@ def cmask(mask,latitudes=None,longitudes=None):
 
 def ccontour(contour,latitudes=None,longitudes=None):
     """
-    Check contour for repeating cells, closure, and connectivity, and latitude/longitude range if optional latitudes and longitudes are provided
+    Check contour for repeating cells, closure, and connectivity, and
+    optionally lat/lon range
 
-    Inputs (Required):
-        contour - A 2-d Nx2 numpy array of ordered latitude/longitude points (degrees) describing the edge of a mask
-        latitudes - An evenly spaced numpy array of latitude points (degrees)
-        longitudes - An evenly spaced numpy array of longitude points (degrees)
+    Parameters
+    ----------
+    contour : ndarray
+        2D Nx2 array of ordered latitude/longitude points (degrees)
+        describing the edge of a mask
+    latitudes : ndarray, optional
+        1D Nx1 array of latitude points (degrees)
+    longitudes : ndarray, optional
+        1D Nx1 array of longitude points (degrees)
 
-    Outputs:
-        none
+    Returns
+    -------
+    None
+
+    See Also
+    --------
+    geocontour.check.cdim
+    geocontour.check.cboundary
+    geocontour.check.cmask
+    geocontour.check.cgeocontour
     """
     contourdiff=np.diff(contour,axis=0)
     if latitudes is not None and longitudes is not None:
@@ -117,13 +168,27 @@ def cgeocontour(geocontour,latitudes,longitudes):
     """
     Check geocontour for latitude/longitude range and dimension
 
-    Inputs (Required):
-        geocontour - A 3-d Nx2x5 numpy array defining a list of N contour cells and their edge points, lengths, and outward unit vectors
-        latitudes - An evenly spaced numpy array of latitude points (degrees)
-        longitudes - An evenly spaced numpy array of longitude points (degrees)
+    Parameters
+    ----------
+    geocontour : ndarray
+        3D Nx2x5 array defining a list of N contour cells (column 1),
+        their edge points (columns 2,3), segment lengths (column 4), and
+        outward unit vectors (column 5)
+    latitudes : ndarray
+        1D Nx1 array of latitude points (degrees)
+    longitudes : ndarray
+        1D Nx1 array of longitude points (degrees)
 
-    Outputs:
-        none
+    Returns
+    -------
+    None
+
+    See Also
+    --------
+    geocontour.check.cdim
+    geocontour.check.cboundary
+    geocontour.check.cmask
+    geocontour.check.ccontour
     """
     cdim(longitudes)
     cdim(latitudes)
