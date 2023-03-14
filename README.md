@@ -1,6 +1,6 @@
 <h1><img align="left" src="https://github.com/benkrichman/geocontour/raw/main/images/icon_geocontour.png" width="130" height="130">geocontour</h1>
 
-Utilities for masking, contour tracing, and geocontour construction for flux calculations from gridded geographic data.
+Utilities for masking, contour tracing, and geocontour construction with gridded geographic data.
 
 \
 [![DOI](https://zenodo.org/badge/550241733.svg)](https://zenodo.org/badge/latestdoi/550241733)

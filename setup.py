@@ -8,7 +8,7 @@ st.setup(
     version='1.2.1',
     license='MIT',
     url='https://github.com/benkrichman/geocontour',
-    description='Functions for applying contour tracing to gridded data',
+    description='Utilities for masking, contour tracing, and geocontour construction with gridded geographic data',
     long_description=longdesc,
     long_description_content_type="text/markdown",
     author='Benjamin Krichman',
