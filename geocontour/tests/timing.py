@@ -1,3 +1,7 @@
+"""
+Functions for comparatively testing speed of geocontour implementations
+=======================================================================
+"""
 import sys
 import numpy as np
 import geocontour.masksearch as gcms
@@ -9,31 +13,60 @@ import importlib.resources as ilr
 
 def masksearch(numtests=10,runspertest=1,boundname='generic_boundary',spacing=[1.75,1.5,1.25,1,0.75,0.5,0.25,0.2],stat='min',plot=True,logax=False):
     """
-    Tests the timing of all mask search functions (geocontour.masksearch) using timeit
+    Test the timing of all mask search functions using timeit
 
-    Inputs (Required):
-        none
+    Parameters
+    ----------
+    numtests : int, default=10
+        number of tests to run
+    runspertest : int, default=1
+        number of function calls per test
+    boundname : str, default='generic_boundary'
+        the name of the boundary file to use (see
+        geocontour/geocontour/data/)
+    spacing : array_like, default=[1.75,1.5,1.25,1,0.75,0.5,0.25,0.2]
+        grid spacing value(s) to use for testing
+        [i.e. if a list or numpy array is provided, testing will be run
+        and results will populate for every value]
+    stat : {'mean', 'median', 'min', 'max'}, default='min'
+        select the statistical method for combining results from all
+        tests for a given function
+    plot : bool, default=True
+        select to plot results
+    logax : bool, default=False
+        select to use log axes (if plotting)
 
-    Inputs (Optional):
-        numtests - An integer number of tests to run, default=10
-        runspertest - An integer number of function calls per test, default=1
-            If numtests=10 and runspertest=5, 50 total function calls will be made and result in 10 test results of the total timing of 5 consecutive function calls
-        boundname - A string containing the name of the boundary file to use (see geocontour/geocontour/data/), default='generic_boundary'
-        spacing (float/int/list/numpy array) - numeric grid spacing value(s) to use for testing, default=[1.75,1.5,1.25,1,0.75,0.5,0.25,0.2]
-            if a list or numpy array is provided, testing will be run and results will populate for every value
-        stat ('mean'/'median'/'min'/'max') - A string selecting the statistical method for combining results from all tests for a given function, default='min'
-        plot (True/False) - select whether or not to plot results, default=True
-        logax (True/False) - select whether or not to use log axes, default=False
+    Returns
+    -------
+    results : ndarray
+        2D Nx6 array of timing results in units of seconds where N is
+        equal to len(`spacing`)
+ 
+            column1: number of cells searched
 
-    Outputs:
-        results - A 2-d Nx6 numpy array of timing results in seconds where N is equal to len(spacing)
-            columns are: 
-                cells searched
-                center() timing
-                center2() timing
-                nodes() timing
-                nodes2() timing
-                area() timing
+            column2: center() timing
+
+            column3: center2() timing
+
+            column4: nodes() timing
+
+            column5: nodes2() timing
+
+            column6: area() timing
+
+    See Also
+    --------
+    contourtrace
+    geocontour.masksearch
+
+    Notes
+    -----
+    The `numtests` parameter determines the number of tests that are
+    later combined via the `stat` parameter. The `runspertest` parameter
+    determines the number of times a function will be called in a given
+    test. For example, if `numtests` = 10 and `runspertest` = 5, 50
+    total function calls will be made and result in 10 test results of
+    the total timing of 5 consecutive function calls.
     """
     if type(spacing) is float or type(spacing) is int:
         spacing=[spacing]
@@ -123,32 +156,62 @@ def masksearch(numtests=10,runspertest=1,boundname='generic_boundary',spacing=[1
 
 def contourtrace(numtests=10,runspertest=1,boundname='generic_boundary',spacing=[1.75,1.5,1.25,1,0.75,0.5,0.25,0.2,0.15,0.125,0.1,0.09,0.08,0.07,0.065,0.06],stat='min',plot=True,logax=False):
     """
-    Tests the timing of all contour trace functions (geocontour.contourtrace) using timeit
+    Test the timing of all contour trace functions using timeit
 
-    Inputs (Required):
-        none
+    Parameters
+    ----------
+    numtests : int, default=10
+        number of tests to run
+    runspertest : int, default=1
+        number of function calls per test
+    boundname : str, default='generic_boundary'
+        the name of the boundary file to use (see
+        geocontour/geocontour/data/)
+    spacing : array_like, default=[1.75,1.5,1.25,1,0.75,0.5,0.25,0.2]
+        grid spacing value(s) to use for testing
+        [i.e. if a list or numpy array is provided, testing will be run
+        and results will populate for every value]
+    stat : {'mean', 'median', 'min', 'max'}, default='min'
+        select the statistical method for combining results from all
+        tests for a given function
+    plot : bool, default=True
+        select to plot results
+    logax : bool, default=False
+        select to use log axes (if plotting)
 
-    Inputs (Optional):
-        numtests - An integer number of tests to run, default=10
-        runspertest - An integer number of function calls per test, default=1
-            If numtests=10 and runspertest=5, 50 total function calls will be made and result in 10 test results of the total timing of 5 consecutive function calls
-        boundname - A string containing the name of the boundary file to use (see geocontour/geocontour/data/), default='generic_boundary'
-        spacing (float/int/list/numpy array) - numeric grid spacing value(s) to use for testing, default=[1.75,1.5,1.25,1,0.75,0.5,0.25,0.2]
-            if a list or numpy array is provided, testing will be run and results will populate for every value
-        stat ('mean'/'median'/'min'/'max') - A string selecting the statistical method for combining results from all tests for a given function, default='min'
-        plot (True/False) - select whether or not to plot results, default=True
-        logax (True/False) - select whether or not to use log axes, default=False
+    Returns
+    -------
+    results : ndarray
+        2D Nx7 array of timing results in units of seconds where N is
+        equal to len(`spacing`)
+ 
+            column1: number of cells in mask
 
-    Outputs:
-        results - A 2-d Nx7 numpy array of timing results in seconds where N is equal to len(spacing)
-            columns are: 
-                cells in mask 
-                square() timing
-                moore() timing
-                moore_imp() timing
-                pavlidis() timing
-                pavlidis_imp() timing
-                TSR() timing
+            column2: square() timing
+
+            column3: moore() timing
+
+            column4: moore_imp() timing
+
+            column5: pavlidis() timing
+
+            column6: pavlidis_imp() timing
+
+            column7: TSR() timing
+
+    See Also
+    --------
+    masksearch
+    geocontour.contourtrace
+
+    Notes
+    -----
+    The `numtests` parameter determines the number of tests that are
+    later combined via the `stat` parameter. The `runspertest` parameter
+    determines the number of times a function will be called in a given
+    test. For example, if `numtests` = 10 and `runspertest` = 5, 50
+    total function calls will be made and result in 10 test results of
+    the total timing of 5 consecutive function calls.
     """
     if type(spacing) is float or type(spacing) is int:
         spacing=[spacing]
