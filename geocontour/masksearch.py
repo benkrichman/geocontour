@@ -1,3 +1,7 @@
+"""
+Functions for finding a mask on a lat/lon grid from an input boundary
+=====================================================================
+"""
 import warnings
 import numpy as np
 import shapely as sh
@@ -7,20 +11,47 @@ import geocontour.maskutil as gcmu
 
 def center(latitudes,longitudes,boundary,precision=1e-5):
     """
-    Returns a mask over a range of input latitudes and longitudes determined by an input boundary
-        Critera for inclusion of a cell is whether the center of the cell falls within the boundary
+    Find a mask on a lat/lon grid from an input boundary
+        
+    Criteria for inclusion of a cell is whether the center of the cell
+    falls within the boundary
 
-    Inputs (Required):
-        latitudes - An evenly spaced numpy array of latitude points (degrees)
-        longitudes - An evenly spaced numpy array of longitude points (degrees)
-        boundary - A 2-d Nx2 numpy array of latitude/longitude points (degrees)
+    Parameters
+    ----------
+    latitudes : ndarray
+        1D Nx1 array of latitude points (degrees)
+    longitudes : ndarray
+        1D Nx1 array of longitude points (degrees)
+    boundary : ndarray
+        2D Nx2 array of latitude/longitude points (degrees) with the
+        last point equal to the first
+    precision : float, default=1e-5
+        value by which `boundary` is expanded, capturing indeterminate
+        points that may fall on/near `boundary`
 
-    Inputs (Optional):
-        precision - Passed to shapely to increase boundary polygon area, default=1e-5
-            Shapely can't beat machine precision, and can thus give "incorrect" results for very close points or shapes. This input errs on being more inclusive, in particular to capture points falling directly on a boundary. A decent rule is to set the precision value as high as you can without impeding the accuracy. For instance, the default of 1e-5 (degrees) translates to roughly 1m precision at the equator. The buffer can be negated by setting this input very low (to machine precision).
+    Returns
+    -------
+    mask : ndarray
+        2D MxN bool array where M=len(`latitudes`) and
+        N=len(`longitudes`)
 
-    Outputs:
-        mask - A 2-d boolean numpy array of dimension MxN where M=len(latitudes) and N=len(longitudes)
+    See Also
+    --------
+    center2
+    nodes
+    nodes2
+    area
+
+    Notes
+    -----
+    Regarding `precision`: Shapely can't beat machine precision, and can
+    thus give "incorrect" results for very close points or shapes. The
+    `precision` input errs on being more inclusive, in particular to
+    capture points falling directly on a boundary. A decent rule is to
+    set the `precision` value as high as you can without impeding the
+    accuracy. For instance, the default of 1e-5 (degrees) translates to
+    roughly 1m precision at the equator. The buffer can be negated by
+    setting this input very low (to machine precision).
     """
     latdir=gcg.clatdir(latitudes)
     if latdir=='dec':
@@ -40,21 +71,52 @@ def center(latitudes,longitudes,boundary,precision=1e-5):
 
 def center2(latitudes,longitudes,boundary,precision=1e-5):
     """
-    Returns a mask over a range of input latitudes and longitudes determined by an input boundary
-        Critera for inclusion of a cell is whether the center of the cell falls within the boundary
-        Functionally matches geocontour.masksearch.center(), but utilizes matplotlib.path functions, which are faster (possibly due to avoidance of overhead in converting to shapely geometries)
+    Find a mask on a lat/lon grid from an input boundary
+        
+    Criteria for inclusion of a cell is whether the center of the cell
+    falls within the boundary
 
-    Inputs (Required):
-        latitudes - An evenly spaced numpy array of latitude points (degrees)
-        longitudes - An evenly spaced numpy array of longitude points (degrees)
-        boundary - A 2-d Nx2 numpy array of latitude/longitude points (degrees)
+    Functionally identical to `center()`, but utilizes matplotlib.path
+    functions, which are faster (possibly due to avoidance of overhead
+    in converting to shapely geometries)
 
-    Inputs (Optional):
-        precision - Passed to matplotlib.Path to increase boundary polygon area, default=1e-5
-            Matplotlib.Path can't beat machine precision, and can thus give "incorrect" results for very close points or shapes. This input errs on being more inclusive, in particular to capture points falling directly on a boundary. A decent rule is to set the precision value as high as you can without impeding the accuracy. For instance, the default of 1e-5 (degrees) translates to roughly 1m precision at the equator. The buffer can be negated by setting this input very low (to machine precision).
+    Parameters
+    ----------
+    latitudes : ndarray
+        1D Nx1 array of latitude points (degrees)
+    longitudes : ndarray
+        1D Nx1 array of longitude points (degrees)
+    boundary : ndarray
+        2D Nx2 array of latitude/longitude points (degrees) with the
+        last point equal to the first
+    precision : float, default=1e-5
+        value by which `boundary` is expanded, capturing indeterminate
+        points that may fall on/near `boundary`
 
-    Outputs:
-        mask - A 2-d boolean numpy array of dimension MxN where M=len(latitudes) and N=len(longitudes)
+    Returns
+    -------
+    mask : ndarray
+        2D MxN bool array where M=len(`latitudes`) and
+        N=len(`longitudes`)
+
+    See Also
+    --------
+    center
+    nodes
+    nodes2
+    area
+
+    Notes
+    -----
+    Regarding `precision`: Matplotlib.Path can't beat machine precision,
+    and can thus give "incorrect" results for very close points or
+    shapes. The `precision` input errs on being more inclusive, in
+    particular to capture points falling directly on a boundary. A
+    decent rule is to set the `precision` value as high as you can
+    without impeding the accuracy. For instance, the default of 1e-5
+    (degrees) translates to roughly 1m precision at the equator. The
+    buffer can be negated by setting this input very low (to machine
+    precision).
     """
     latdir=gcg.clatdir(latitudes)
     if latdir=='dec':
@@ -72,21 +134,50 @@ def center2(latitudes,longitudes,boundary,precision=1e-5):
 
 def nodes(latitudes,longitudes,boundary,nodes=2,precision=1e-5):
     """
-    Returns a mask over a range of input latitudes and longitudes determined by an input boundary
-        Critera for inclusion of a cell is whether a given number (default=2) of cell nodes (corners) fall within the boundary 
+    Find a mask on a lat/lon grid from an input boundary
+        
+    Criteria for inclusion of a cell is whether a given number of cell
+    nodes (corners) fall within the boundary 
 
-    Inputs (Required):
-        latitudes - An evenly spaced numpy array of latitude points (degrees)
-        longitudes - An evenly spaced numpy array of longitude points (degrees)
-        boundary - A 2-d Nx2 numpy array of latitude/longitude points (degrees)
+    Parameters
+    ----------
+    latitudes : ndarray
+        1D Nx1 array of latitude points (degrees)
+    longitudes : ndarray
+        1D Nx1 array of longitude points (degrees)
+    boundary : ndarray
+        2D Nx2 array of latitude/longitude points (degrees) with the
+        last point equal to the first
+    nodes : int, default=2
+        number of cell nodes (corners) to use as a criteria for
+        inclusion (1-4)
+    precision : float, default=1e-5
+        value by which `boundary` is expanded, capturing indeterminate
+        points that may fall on/near `boundary`
 
-    Inputs (Optional):
-        nodes - The number of cell nodes (corners) to use as a criteria for inclusion (1-4)
-        precision - Passed to shapely to increase boundary polygon area, default=1e-5
-            Shapely can't beat machine precision, and can thus give "incorrect" results for very close points or shapes. This input errs on being more inclusive, in particular to capture points falling directly on a boundary. A decent rule is to set the precision value as high as you can without impeding the accuracy. For instance, the default of 1e-5 (degrees) translates to roughly 1m precision at the equator. The buffer can be negated by setting this input very low (to machine precision).
+    Returns
+    -------
+    mask : ndarray
+        2D MxN bool array where M=len(`latitudes`) and
+        N=len(`longitudes`)
 
-    Outputs:
-        mask - A 2-d boolean numpy array of dimension MxN where M=len(latitudes) and N=len(longitudes)
+    See Also
+    --------
+    center
+    center2
+    nodes2
+    area
+
+    Notes
+    -----
+    Regarding `precision`: Shapely can't beat machine precision, and can
+    thus give "incorrect" results for very close points or shapes. The
+    `precision` input errs on being more inclusive, in particular to
+    capture points falling directly on a boundary. A decent rule is to
+    set the `precision` value as high as you can without impeding the
+    accuracy. For instance, the default of 1e-5 (degrees) translates to
+    roughly 1m precision at the equator. The buffer can be negated by
+    setting this input very low (to machine precision).
     """
     if nodes<1:
         warnings.warn('WARNING - valid input for nodes is 1-4, nodes<1 will result in all cells being selected')
@@ -120,22 +211,55 @@ def nodes(latitudes,longitudes,boundary,nodes=2,precision=1e-5):
 
 def nodes2(latitudes,longitudes,boundary,nodes=2,precision=1e-5):
     """
-    Returns a mask over a range of input latitudes and longitudes determined by an input boundary
-        Critera for inclusion of a cell is whether a given number (default=2) of cell nodes (corners) fall within the boundary 
-        Functionally matches geocontour.masksearch.nodes(), but utilizes matplotlib.path functions, which are faster (possibly due to avoidance of overhead in converting to shapely geometries)
+    Find a mask on a lat/lon grid from an input boundary
+        
+    Criteria for inclusion of a cell is whether a given number of cell
+    nodes (corners) fall within the boundary 
 
-    Inputs (Required):
-        latitudes - An evenly spaced numpy array of latitude points (degrees)
-        longitudes - An evenly spaced numpy array of longitude points (degrees)
-        boundary - A 2-d Nx2 numpy array of latitude/longitude points (degrees)
+    Functionally identical to `nodes()`, but utilizes matplotlib.path
+    functions, which are faster (possibly due to avoidance of overhead
+    in converting to shapely geometries)
 
-    Inputs (Optional):
-        nodes - The number of cell nodes (corners) to use as a criteria for inclusion (1-4)
-        precision - Passed to matplotlib.Path to increase boundary polygon area, default=1e-5
-            Matplotlib.Path can't beat machine precision, and can thus give "incorrect" results for very close points or shapes. This input errs on being more inclusive, in particular to capture points falling directly on a boundary. A decent rule is to set the precision value as high as you can without impeding the accuracy. For instance, the default of 1e-5 (degrees) translates to roughly 1m precision at the equator. The buffer can be negated by setting this input very low (to machine precision).
+    Parameters
+    ----------
+    latitudes : ndarray
+        1D Nx1 array of latitude points (degrees)
+    longitudes : ndarray
+        1D Nx1 array of longitude points (degrees)
+    boundary : ndarray
+        2D Nx2 array of latitude/longitude points (degrees) with the
+        last point equal to the first
+    nodes : int, default=2
+        number of cell nodes (corners) to use as a criteria for
+        inclusion (1-4)
+    precision : float, default=1e-5
+        value by which `boundary` is expanded, capturing indeterminate
+        points that may fall on/near `boundary`
 
-    Outputs:
-        mask - A 2-d boolean numpy array of dimension MxN where M=len(latitudes) and N=len(longitudes)
+    Returns
+    -------
+    mask : ndarray
+        2D MxN bool array where M=len(`latitudes`) and
+        N=len(`longitudes`)
+
+    See Also
+    --------
+    center
+    center2
+    nodes
+    area
+
+    Notes
+    -----
+    Regarding `precision`: Matplotlib.Path can't beat machine precision,
+    and can thus give "incorrect" results for very close points or
+    shapes. The `precision` input errs on being more inclusive, in
+    particular to capture points falling directly on a boundary. A
+    decent rule is to set the `precision` value as high as you can
+    without impeding the accuracy. For instance, the default of 1e-5
+    (degrees) translates to roughly 1m precision at the equator. The
+    buffer can be negated by setting this input very low (to machine
+    precision).
     """
     if nodes<1:
         warnings.warn('WARNING - valid input for nodes is 1-4, nodes<1 will result in all cells being selected')
@@ -168,19 +292,37 @@ def nodes2(latitudes,longitudes,boundary,nodes=2,precision=1e-5):
 
 def area(latitudes,longitudes,boundary,area=0.5):
     """
-    Returns a mask over a range of input latitudes and longitudes determined by an input boundary
-        Critera for inclusion of a cell is whether the area of the cell enclosed by the boundary is greater than some fraction (default=0.5) 
+    Find a mask on a lat/lon grid from an input boundary
+        
+    Criteria for inclusion of a cell is whether the area of the cell
+    enclosed by the boundary is greater than some fraction between 0 and
+    1
 
-    Inputs (Required):
-        latitudes - An evenly spaced numpy array of latitude points (degrees)
-        longitudes - An evenly spaced numpy array of longitude points (degrees)
-        boundary - A 2-d Nx2 numpy array of latitude/longitude points (degrees)
+    Parameters
+    ----------
+    latitudes : ndarray
+        1D Nx1 array of latitude points (degrees)
+    longitudes : ndarray
+        1D Nx1 array of longitude points (degrees)
+    boundary : ndarray
+        2D Nx2 array of latitude/longitude points (degrees) with the
+        last point equal to the first
+    area : float, default=0.5
+        the fraction of the cell enclosed by the boundary to use as a
+        criteria for inclusion (0-1)
 
-    Inputs (Optional):
-        area - The fraction of cell area enclosed by the boundary to use as a criteria for inclusion (0-1)
+    Returns
+    -------
+    mask : ndarray
+        2D MxN bool array where M=len(`latitudes`) and
+        N=len(`longitudes`)
 
-    Outputs:
-        mask - A 2-d boolean numpy array of dimension MxN where M=len(latitudes) and N=len(longitudes)
+    See Also
+    --------
+    center
+    center2
+    nodes
+    nodes2
     """
     if area>1:
         warnings.warn('WARNING - valid input for area is 0-1, area>1 will result in no cells being selected')

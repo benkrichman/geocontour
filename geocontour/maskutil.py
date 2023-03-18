@@ -1,3 +1,7 @@
+"""
+Utility functions for operations involving masks and mask searches
+==================================================================
+"""
 import sys
 import warnings
 import numpy as np
@@ -7,18 +11,31 @@ import geocontour.grid as gcg
 
 def bbox(latitudes,longitudes,boundary):
     """
-    Checks input dimensions (lat/lon) against input boundary and returns min/max indicies of bounding box
+    Check input dimensions (lat/lon) against input boundary and return
+    min/max indicies of bounding box
 
-    Inputs (Required):
-        latitudes - An evenly spaced numpy array of latitude points (degrees)
-        longitudes - An evenly spaced numpy array of longitude points (degrees)
-        boundary - A 2-d Nx2 numpy array of latitude/longitude points (degrees)
+    Mainly used internally for mask search functions
 
-    Outputs:
-        boxlatmin - The minimum bounding box latitude index
-        boxlatmax - The maximum bounding box latitude index
-        boxlonmin - The minimum bounding box longitude index
-        boxlonmax - The maximum bounding box longitude index
+    Parameters
+    ----------
+    latitudes : ndarray
+        1D Nx1 array of latitude points (degrees)
+    longitudes : ndarray
+        1D Nx1 array of longitude points (degrees)
+    boundary : ndarray
+        2D Nx2 array of latitude/longitude points (degrees) with the
+        last point equal to the first
+
+    Returns
+    -------
+    boxlatmin : int
+        the minimum bounding box latitude index
+    boxlatmax : int
+        the maximum bounding box latitude index
+    boxlonmin : int
+        the minimum bounding box longitude index
+    boxlonmax : int
+        the maximum bounding box longitude index
     """
     gcc.cdim(latitudes)
     gcc.cdim(longitudes)
@@ -68,21 +85,43 @@ def bbox(latitudes,longitudes,boundary):
 
 def edge(mask,latitudes=None,longitudes=None,connectivity=8):
     """
-    Returns a mask of only the edge cells, and if latitudes and longitudes are provided also returns an array of the edge cells 
+    Find a mask's edge cells only, and optionally an array of the edge
+    cells 
     
-    Inputs (Required):
-        mask - A 2-d boolean numpy array of dimension MxN where M=len(latitudes) and N=len(longitudes)
+    Parameters
+    ----------
+    mask : ndarray
+        2D MxN bool array where M=len(`latitudes`) and
+        N=len(`longitudes`) 
+    latitudes : ndarray, optional
+        1D Nx1 array of latitude points (degrees)
+    longitudes : ndarray, optional
+        1D Nx1 array of longitude points (degrees)
+    connectivity : {4, 8}, default=8
+        connectivity parameter for finding edge cells
 
-    Inputs (Optional):
-        latitudes - An evenly spaced numpy array of latitude points (degrees)
-        longitudes - An evenly spaced numpy array of longitude points (degrees)
-        connectivity (4/8) - The connectivity parameter for testing edge cells, default=8
-            4 tests only lateral neighbors while 8 tests lateral and diagonal neighbors
+            ``4``
+                test only lateral neighbors
+            ``8``
+                test lateral and diagonal neighbors
 
-    Outputs:
-        edgemask - A 2-d boolean numpy array of the same dimensions as mask input
-        edgecells - A 2-d Nx2 numpy array of latitude/longitude points (degrees) of edge cells (unordered), where N is number of edge cells 
-            Only output if optional latitude and longitude arguments are provided
+    Returns
+    -------
+    edgemask : ndarray
+        2D bool array of the same dimensions as mask input
+    edgecells : ndarray, optional
+        2D Nx2 bool array of latitude/longitude points (degrees) of edge
+        cells (unordered), where N is number of edge cells 
+
+    See Also
+    --------
+    vertex
+    conn
+
+    Notes
+    -----
+    `edgecells` only returned if optional parameters `latitudes` and
+    `longitudes` are provided
     """
     if latitudes is not None and longitudes is not None:
         gcc.cmask(mask,latitudes,longitudes)
@@ -109,16 +148,32 @@ def edge(mask,latitudes=None,longitudes=None,connectivity=8):
 
 def vertex(mask,latitudes,longitudes):
     """
-    Returns the vertex points of all cells in the input mask, and the vertex points of only the mask edge
+    Find the vertex points of all cells in a mask, and the vertex points
+    of only the mask edge
 
-    Inputs (Required):
-        mask - A 2-d boolean numpy array of dimension MxN where M=len(latitudes) and N=len(longitudes)
-        latitudes - An evenly spaced numpy array of latitude points (degrees)
-        longitudes - An evenly spaced numpy array of longitude points (degrees)
+    Parameters
+    ----------
+    mask : ndarray
+        2D MxN bool array where M=len(`latitudes`) and
+        N=len(`longitudes`) 
+    latitudes : ndarray, optional
+        1D Nx1 array of latitude points (degrees)
+    longitudes : ndarray, optional
+        1D Nx1 array of longitude points (degrees)
 
-    Outputs:
-        vertexpoints - A 2-d Nx2 numpy array of latitude/longitude points (degrees) of all vertices of mask cells
-        edgevertexpoints - A 2-d Nx2 numpy array of latitude/longitude points (degrees) of all vertices of cells at the mask edge (8-connected)
+    Returns
+    -------
+    vertexpoints : ndarray 
+        2D Nx2 array of latitude/longitude points (degrees) of all
+        vertices of mask cells
+    edgevertexpoints : ndarray
+        2D Nx2 array of latitude/longitude points (degrees) of all
+        vertices of cells at the mask edge (8-connected)
+
+    See Also
+    --------
+    edge
+    conn
     """
     gcc.cmask(mask,latitudes,longitudes)
     vertexmask=np.full((tuple(np.array(mask.shape)+1)),0)
@@ -142,18 +197,32 @@ def vertex(mask,latitudes,longitudes):
 
 def neighbors(cell,connectivity=8,direction='cw'):
     """
-    Returns the neighbors of a cell, with selected connectivity and direction
+    Find the neighbors of a cell, with selected connectivity and
+    direction
 
-    Inputs (Required):
-        cell - A 1x2 numpy array describing the index of the cell
+    Parameters
+    ----------
+    cell : ndarray 
+        1x2 numpy array describing the indices of the cell
+    connectivity : {4, 8}, default=8
+        connectivity parameter for finding neighbor cells
 
-    Inputs (Optional):
-        connectivity (4/8) - The connectivity parameter for testing edge cells, default=8
-            4 tests only lateral neighbors while 8 tests lateral and diagonal neighbors
-        direction ('cw'/'ccw') - A string selecting the direction of the returned neighbors, default='cw'
+            ``4``
+                test only lateral neighbors
+            ``8``
+                test lateral and diagonal neighbors
+    direction : {'cw', 'ccw'}, default='cw'
+        select the direction of the returned neighbors
 
-    Outputs:
-        neighbors - An 8x2 or 4x2 numpy array of the neighboring cell indices for the input cell 
+    Returns
+    -------
+    neighbors : ndarray
+        8x2 or 4x2 array of the neighboring cell indices for the input
+        cell 
+
+    See Also
+    --------
+    conn
     """
     if connectivity==8:
         neighborrange=np.array([[-1,0],[-1,1],[0,1],[1,1],[1,0],[1,-1],[0,-1],[-1,-1]])
@@ -172,18 +241,28 @@ def neighbors(cell,connectivity=8,direction='cw'):
 
 def conn(mask,checkcells='full',connectivity=8):
     """
-    Returns whether a mask or its inverse are connected
+    Determine whether a mask or its inverse are connected
 
-    Inputs (Required):
-        mask - A 2-d boolean numpy array of dimension MxN where M=len(latitudes) and N=len(longitudes)
+    Parameters
+    ----------
+    mask : ndarray
+        2D MxN bool array where M=len(`latitudes`) and
+        N=len(`longitudes`) 
+    checkcells : {'full', 'empty'}, default='full'
+        select the mask cells to test ('empty' would select the mask
+        inverse)
+    connectivity : {4, 8}, default=8
+        connectivity parameter for testing connectivity
 
-    Inputs (Optional):
-        checkcells ('full'/'empty') - A string selecting the mask cells to test (True/False), default='full'
-        connectivity (4/8) - The connectivity parameter for testing edge cells, default=8
-            4 tests only lateral neighbors while 8 tests lateral and diagonal neighbors
+            ``4``
+                test only lateral neighbors
+            ``8``
+                test lateral and diagonal neighbors
     
-    Outputs:
-        connected (True/False) - A boolean describing whether the input mask is connected under the input conditions
+    Returns
+    -------
+    connected : bool
+        descriptor for whether the input `mask` is connected under the input conditions
     """
     gcc.cmask(mask)
     if checkcells=='full':

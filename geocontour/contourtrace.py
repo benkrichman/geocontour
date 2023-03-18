@@ -1,3 +1,7 @@
+"""
+Functions for tracing a contour on a lat/lon grid from an input mask
+====================================================================
+"""
 import sys
 import warnings
 import numpy as np
@@ -7,34 +11,90 @@ import geocontour.contourutil as gccu
 
 def square(mask,latitudes=None,longitudes=None,direction='cw',start='auto',stop='either',startvisits=3,checkconn=False,remcontourrepeat=True,remsearchrepeat=False,closecontour=True):
     """
-    Returns the contour trace of a mask input using the square tracing algorithm
+    Find the contour of a mask using the square tracing algorithm
 
-    Inputs (Required):
-        mask - A 2-d boolean numpy array of dimension MxN where M=len(latitudes) and N=len(longitudes)
+    Parameters
+    ----------
+    mask : ndarray
+        2D MxN bool array where M=len(`latitudes`) and
+        N=len(`longitudes`)
+    latitudes : ndarray, optional
+        1D Nx1 array of latitude points (degrees)
+    longitudes : ndarray, optional
+        1D Nx1 array of longitude points (degrees)
+    direction : {'cw', 'ccw'}, default='cw'
+        select the direction of contour tracing
+    start : {'auto', array_like}, default='auto' 
+        either a selection for automatic start cell assignment or a
+        manual assignment via a 2x2 array describing the start cell and
+        orientation
 
-    Inputs (Optional):
-        latitudes - An evenly spaced numpy array of latitude points (degrees)
-        longitudes - An evenly spaced numpy array of longitude points (degrees)
-            Note: if latitudes/longitudes not provided, output will be in indices of input mask
-        direction ('cw'/'ccw') - A string selecting the direction of the returned neighbors, default='cw'
-        start ('auto'/array) - A string or a 2x2 array describind the start cell and orientation, default='auto'
-            'auto' will find a proper starting cell/orientation based on the direction input
-            if not 'auto' input should be a 2x2 numpy array or nested list with row 1 describing the index of the start cell and row 2 describing the start orientation (e.g. [0,1] points right, [1,0] points down)
-        stop ('Elisoff'/'Nvisits'/'either') - A string selecting the stopping criterion, default='either'
-            'Elisoff' stops when the start cell has been re-visited with the same orientation as started with
-            'Nvisits' stops when the start cell has been re-visited N number of times (N set by startvisits)
-            'either' stops when either Elisoff or Nvisits has been satisfied
-        startvisits - An integer condition for the number of times re-visiting the start cell will trigger an end to the search, default=3
-            only applicable when stop='Nvisits' or 'either'
-        checkconn (True/False) - A boolean for selecting whether to check connectivity and warn the user of potential issues, default=False
-        remcontourrepeat (True/False) - A boolean for selecting whether to remove consecutive repeating cells in the output contour, default=True
-        remsearchrepeat (True/False) - A boolean for selecting whether to remove consecutive repeating cells in the output contoursearch, default=False
-        closecontour (True/False) - A boolean for selecting whether to close the contour (first cell = last cell), default=True
+            row 1: indices of the start cell
+                e.g. for start cell [2,3] second row (lat) and third
+                column (lon)
+            row 2: the start orientation
+                e.g. orientation [0,1] points right, [1,0] points down
+    stop : {'Elisoff', 'Nvisits', 'either'}, default='either'
+        selector for the stopping criterion
 
-    Outputs:
-        contour - A 2-d Nx2 numpy array of ordered latitude/longitude points (degrees) describing the contour trace of a mask
-        contoursearch - A 2-d Nx2 numpy array of ordered latitude/longitude points (degrees) describing the cells searched during contour tracing
-            Note: If latitudes/longitudes not provided, returned contour/contoursearch will be indices of the input mask
+            ``Elisoff``
+                stops when the start cell has been re-visited with the
+                same orientation as started with
+            ``Nvisits``
+                stops when the start cell has been re-visited N number
+                of times (N set by `startvisits` parameter)
+            ``either``
+                stops when either Elisoff or Nvisits has been satisfied
+    startvisits : int, default=3
+        the number of times re-visiting the start cell will trigger an
+        end to the search
+    checkconn : bool, default=False
+        select whether to check connectivity and warn the user of
+        potential issues, default=False
+    remcontourrepeat : bool, default=True
+        select whether to remove consecutive repeating cells in the
+        output `contour`
+    remsearchrepeat : bool, default=False
+        select whether to remove consecutive repeating cells in the
+        output `contoursearch`
+    closecontour : bool, default=True
+        select whether to close the output `contour` (first cell = last
+        cell)
+
+    Returns
+    -------
+    contour : ndarray
+        2D Nx2 array of ordered latitude/longitude points (degrees)
+        describing the edge of a mask
+    contoursearch : ndarray
+        2D Nx2 array of ordered latitude/longitude points (degrees)
+        describing the cells searched during contour tracing
+    
+    See Also
+    --------
+    geocontour.contourutil.findstart
+    geocontour.contourutil.setstop
+    moore
+    moore_imp
+    pavlidis
+    pavlidis_imp
+    TSR
+
+    Notes
+    -----
+    - If `latitudes`/`longitudes` not provided, returned
+      `contour`/`contoursearch` will be indices of the input mask
+    - `startvisits` parameter will only be utilized when `stop`
+      parameter is set to 'Nvisits' or 'either'
+
+    References
+    ----------
+    Ghuneim, A.G. (2000). Contour Tracing. McGill University.
+    <https://www.imageprocessingplace.com/downloads_V3/root_downloads/tutorials/contour_tracing_Abeer_George_Ghuneim/alg.html>
+
+    Toussaint, G.T. (2010). Grids Connectivity and Contour Tracing
+    [Lesson Notes]. McGill University.
+    <http://www-cgrl.cs.mcgill.ca/~godfried/teaching/mir-reading-assignments/Chapter-2-Grids-Connectivity-Contour-Tracing.pdf>
     """
     if latitudes is not None and longitudes is not None:
         gcc.cmask(mask,latitudes,longitudes)
@@ -90,33 +150,88 @@ def square(mask,latitudes=None,longitudes=None,direction='cw',start='auto',stop=
 
 def moore(mask,latitudes=None,longitudes=None,direction='cw',start='auto',stop='either',startvisits=3,remcontourrepeat=True,remsearchrepeat=False,closecontour=True):
     """
-    Returns the contour trace of a mask input using the Moore neighbor tracing algorithm
+    Find the contour of a mask using the Moore neighbor tracing
+    algorithm
 
-    Inputs (Required):
-        mask - A 2-d boolean numpy array of dimension MxN where M=len(latitudes) and N=len(longitudes)
+    Parameters
+    ----------
+    mask : ndarray
+        2D MxN bool array where M=len(`latitudes`) and
+        N=len(`longitudes`)
+    latitudes : ndarray, optional
+        1D Nx1 array of latitude points (degrees)
+    longitudes : ndarray, optional
+        1D Nx1 array of longitude points (degrees)
+    direction : {'cw', 'ccw'}, default='cw'
+        select the direction of contour tracing
+    start : {'auto', array_like}, default='auto' 
+        either a selection for automatic start cell assignment or a
+        manual assignment via a 2x2 array describing the start cell and
+        orientation
 
-    Inputs (Optional):
-        latitudes - An evenly spaced numpy array of latitude points (degrees)
-        longitudes - An evenly spaced numpy array of longitude points (degrees)
-            Note: if latitudes/longitudes not provided, output will be in indices of input mask
-        direction ('cw'/'ccw') - A string selecting the direction of the returned neighbors, default='cw'
-        start ('auto'/array) - A string or a 2x2 array describind the start cell and orientation, default='auto'
-            'auto' will find a proper starting cell/orientation based on the direction input, stop input, and mask shape, or return a warning if unable
-            if not 'auto' input should be a 2x2 numpy array or nested list with row 1 describing the index of the start cell and row 2 describing the start orientation (e.g. [0,1] points right, [1,0] points down)
-        stop ('Elisoff'/'Nvisits'/'either') - A string selecting the stopping criterion, default='either'
-            'Elisoff' stops when the start cell has been re-visited with the same orientation as started with
-            'Nvisits' stops when the start cell has been re-visited N number of times (N set by startvisits)
-            'either' stops when either Elisoff or Nvisits has been satisfied
-        startvisits - An integer condition for the number of times re-visiting the start cell will trigger an end to the search, default=3
-            only applicable when stop='Nvisits' or 'either'
-        remcontourrepeat (True/False) - A boolean for selecting whether to remove consecutive repeating cells in the output contour, default=True
-        remsearchrepeat (True/False) - A boolean for selecting whether to remove consecutive repeating cells in the output contoursearch, default=False
-        closecontour (True/False) - A boolean for selecting whether to close the contour (first cell = last cell), default=True
+            row 1: indices of the start cell
+                e.g. for start cell [2,3] second row (lat) and third
+                column (lon)
+            row 2: the start orientation
+                e.g. orientation [0,1] points right, [1,0] points down
+    stop : {'Elisoff', 'Nvisits', 'either'}, default='either'
+        selector for the stopping criterion
 
-    Outputs:
-        contour - A 2-d Nx2 numpy array of ordered latitude/longitude points (degrees) describing the contour trace of a mask
-        contoursearch - A 2-d Nx2 numpy array of ordered latitude/longitude points (degrees) describing the cells searched during contour tracing
-            Note: If latitudes/longitudes not provided, returned contour/contoursearch will be indices of the input mask
+            ``Elisoff``
+                stops when the start cell has been re-visited with the
+                same orientation as started with
+            ``Nvisits``
+                stops when the start cell has been re-visited N number
+                of times (N set by `startvisits` parameter)
+            ``either``
+                stops when either Elisoff or Nvisits has been satisfied
+    startvisits : int, default=3
+        the number of times re-visiting the start cell will trigger an
+        end to the search
+    remcontourrepeat : bool, default=True
+        select whether to remove consecutive repeating cells in the
+        output `contour`
+    remsearchrepeat : bool, default=False
+        select whether to remove consecutive repeating cells in the
+        output `contoursearch`
+    closecontour : bool, default=True
+        select whether to close the output `contour` (first cell = last
+        cell)
+
+    Returns
+    -------
+    contour : ndarray
+        2D Nx2 array of ordered latitude/longitude points (degrees)
+        describing the edge of a mask
+    contoursearch : ndarray
+        2D Nx2 array of ordered latitude/longitude points (degrees)
+        describing the cells searched during contour tracing
+    
+    See Also
+    --------
+    geocontour.contourutil.findstart
+    geocontour.contourutil.setstop
+    square
+    moore_imp
+    pavlidis
+    pavlidis_imp
+    TSR
+
+    Notes
+    -----
+    - If `latitudes`/`longitudes` not provided, returned
+      `contour`/`contoursearch` will be indices of the input mask
+    - `startvisits` parameter will only be utilized when `stop`
+      parameter is set to 'Nvisits' or 'either'
+
+    References
+    ----------
+    Ghuneim, A.G. (2000). Contour Tracing. McGill University.
+    <https://www.imageprocessingplace.com/downloads_V3/root_downloads/tutorials/contour_tracing_Abeer_George_Ghuneim/alg.html>
+
+    Toussaint, G.T. (2010). Grids Connectivity and Contour Tracing
+    [Lesson Notes]. McGill University.
+    <http://www-cgrl.cs.mcgill.ca/~godfried/teaching/mir-reading-assignments/Chapter-2-Grids-Connectivity-Contour-Tracing.pdf>
     """
     if latitudes is not None and longitudes is not None:
         gcc.cmask(mask,latitudes,longitudes)
@@ -182,34 +297,79 @@ def moore(mask,latitudes=None,longitudes=None,direction='cw',start='auto',stop='
 
 def moore_imp(mask,latitudes=None,longitudes=None,direction='cw',start='auto',stop='either',startvisits=3,remcontourrepeat=True,remsearchrepeat=False,closecontour=True):
     """
-    Returns the contour trace of a mask input using an improved Moore neighbor tracing algorithm
-    Captures inside corners missed by Moore neighbor tracing
+    Find the contour of a mask using an improved Moore neighbor tracing
+    algorithm that reliably captures inside corners
 
-    Inputs (Required):
-        mask - A 2-d boolean numpy array of dimension MxN where M=len(latitudes) and N=len(longitudes)
+    Parameters
+    ----------
+    mask : ndarray
+        2D MxN bool array where M=len(`latitudes`) and
+        N=len(`longitudes`)
+    latitudes : ndarray, optional
+        1D Nx1 array of latitude points (degrees)
+    longitudes : ndarray, optional
+        1D Nx1 array of longitude points (degrees)
+    direction : {'cw', 'ccw'}, default='cw'
+        select the direction of contour tracing
+    start : {'auto', array_like}, default='auto' 
+        either a selection for automatic start cell assignment or a
+        manual assignment via a 2x2 array describing the start cell and
+        orientation
 
-    Inputs (Optional):
-        latitudes - An evenly spaced numpy array of latitude points (degrees)
-        longitudes - An evenly spaced numpy array of longitude points (degrees)
-            Note: if latitudes/longitudes not provided, output will be in indices of input mask
-        direction ('cw'/'ccw') - A string selecting the direction of the returned neighbors, default='cw'
-        start ('auto'/array) - A string or a 2x2 array describind the start cell and orientation, default='auto'
-            'auto' will find a proper starting cell/orientation based on the direction input, stop input, and mask shape, or return a warning if unable
-            if not 'auto' input should be a 2x2 numpy array or nested list with row 1 describing the index of the start cell and row 2 describing the start orientation (e.g. [0,1] points right, [1,0] points down)
-        stop ('Elisoff'/'Nvisits'/'either') - A string selecting the stopping criterion, default='either'
-            'Elisoff' stops when the start cell has been re-visited with the same orientation as started with
-            'Nvisits' stops when the start cell has been re-visited N number of times (N set by startvisits)
-            'either' stops when either Elisoff or Nvisits has been satisfied
-        startvisits - An integer condition for the number of times re-visiting the start cell will trigger an end to the search, default=3
-            only applicable when stop='Nvisits' or 'either'
-        remcontourrepeat (True/False) - A boolean for selecting whether to remove consecutive repeating cells in the output contour, default=True
-        remsearchrepeat (True/False) - A boolean for selecting whether to remove consecutive repeating cells in the output contoursearch, default=False
-        closecontour (True/False) - A boolean for selecting whether to close the contour (first cell = last cell), default=True
+            row 1: indices of the start cell
+                e.g. for start cell [2,3] second row (lat) and third
+                column (lon)
+            row 2: the start orientation
+                e.g. orientation [0,1] points right, [1,0] points down
+    stop : {'Elisoff', 'Nvisits', 'either'}, default='either'
+        selector for the stopping criterion
 
-    Outputs:
-        contour - A 2-d Nx2 numpy array of ordered latitude/longitude points (degrees) describing the contour trace of a mask
-        contoursearch - A 2-d Nx2 numpy array of ordered latitude/longitude points (degrees) describing the cells searched during contour tracing
-            Note: If latitudes/longitudes not provided, returned contour/contoursearch will be indices of the input mask
+            ``Elisoff``
+                stops when the start cell has been re-visited with the
+                same orientation as started with
+            ``Nvisits``
+                stops when the start cell has been re-visited N number
+                of times (N set by `startvisits` parameter)
+            ``either``
+                stops when either Elisoff or Nvisits has been satisfied
+    startvisits : int, default=3
+        the number of times re-visiting the start cell will trigger an
+        end to the search
+    remcontourrepeat : bool, default=True
+        select whether to remove consecutive repeating cells in the
+        output `contour`
+    remsearchrepeat : bool, default=False
+        select whether to remove consecutive repeating cells in the
+        output `contoursearch`
+    closecontour : bool, default=True
+        select whether to close the output `contour` (first cell = last
+        cell)
+
+    Returns
+    -------
+    contour : ndarray
+        2D Nx2 array of ordered latitude/longitude points (degrees)
+        describing the edge of a mask
+    contoursearch : ndarray
+        2D Nx2 array of ordered latitude/longitude points (degrees)
+        describing the cells searched during contour tracing
+    
+    See Also
+    --------
+    geocontour.contourutil.findstart
+    geocontour.contourutil.setstop
+    square
+    moore
+    pavlidis
+    pavlidis_imp
+    TSR
+
+    Notes
+    -----
+    - If `latitudes`/`longitudes` not provided, returned
+      `contour`/`contoursearch` will be indices of the input mask
+    - `startvisits` parameter will only be utilized when `stop`
+      parameter is set to 'Nvisits' or 'either'
     """
     if latitudes is not None and longitudes is not None:
         gcc.cmask(mask,latitudes,longitudes)
@@ -285,34 +445,87 @@ def moore_imp(mask,latitudes=None,longitudes=None,direction='cw',start='auto',st
 
 def pavlidis(mask,latitudes=None,longitudes=None,direction='cw',start='auto',stop='Nvisits',startvisits=1,remcontourrepeat=True,remsearchrepeat=False,closecontour=True):
     """
-    Returns the contour trace of a mask input using the Pavlidis tracing algorithm
+    Find the contour of a mask using the Pavlidis algorithm
 
-    Inputs (Required):
-        mask - A 2-d boolean numpy array of dimension MxN where M=len(latitudes) and N=len(longitudes)
+    Parameters
+    ----------
+    mask : ndarray
+        2D MxN bool array where M=len(`latitudes`) and
+        N=len(`longitudes`)
+    latitudes : ndarray, optional
+        1D Nx1 array of latitude points (degrees)
+    longitudes : ndarray, optional
+        1D Nx1 array of longitude points (degrees)
+    direction : {'cw', 'ccw'}, default='cw'
+        select the direction of contour tracing
+    start : {'auto', array_like}, default='auto' 
+        either a selection for automatic start cell assignment or a
+        manual assignment via a 2x2 array describing the start cell and
+        orientation
 
-    Inputs (Optional):
-        latitudes - An evenly spaced numpy array of latitude points (degrees)
-        longitudes - An evenly spaced numpy array of longitude points (degrees)
-            Note: if latitudes/longitudes not provided, output will be in indices of input mask
-        direction ('cw'/'ccw') - A string selecting the direction of the returned neighbors, default='cw'
-        start ('auto'/array) - A string or a 2x2 array describind the start cell and orientation, default='auto'
-            'auto' will find a proper starting cell/orientation based on the direction input, stop input, and mask shape, or return a warning if unable
-            if not 'auto' input should be a 2x2 numpy array or nested list with row 1 describing the index of the start cell and row 2 describing the start orientation (e.g. [0,1] points right, [1,0] points down)
-        stop ('Elisoff'/'Nvisits'/'either') - A string selecting the stopping criterion, default='Nvisits'
-            Note: The Elisoff stopping criterion is usable in this function, but the Pavlidis tracing algorithm is not designed to utilize it and if used it is likely to produce an infinite loop
-            'Elisoff' stops when the start cell has been re-visited with the same orientation as started with
-            'Nvisits' stops when the start cell has been re-visited N number of times (N set by startvisits)
-            'either' stops when either Elisoff or Nvisits has been satisfied
-        startvisits - An integer condition for the number of times re-visiting the start cell will trigger an end to the search, default=1
-            only applicable when stop='Nvisits' or 'either'
-        remcontourrepeat (True/False) - A boolean for selecting whether to remove consecutive repeating cells in the output contour, default=True
-        remsearchrepeat (True/False) - A boolean for selecting whether to remove consecutive repeating cells in the output contoursearch, default=False
-        closecontour (True/False) - A boolean for selecting whether to close the contour (first cell = last cell), default=True
+            row 1: indices of the start cell
+                e.g. for start cell [2,3] second row (lat) and third
+                column (lon)
+            row 2: the start orientation
+                e.g. orientation [0,1] points right, [1,0] points down
+    stop : {'Elisoff', 'Nvisits', 'either'}, default='either'
+        selector for the stopping criterion
 
-    Outputs:
-        contour - A 2-d Nx2 numpy array of ordered latitude/longitude points (degrees) describing the contour trace of a mask
-        contoursearch - A 2-d Nx2 numpy array of ordered latitude/longitude points (degrees) describing the cells searched during contour tracing
-            Note: If latitudes/longitudes not provided, returned contour/contoursearch will be indices of the input mask
+            ``Elisoff``
+                stops when the start cell has been re-visited with the
+                same orientation as started with
+            ``Nvisits``
+                stops when the start cell has been re-visited N number
+                of times (N set by `startvisits` parameter)
+            ``either``
+                stops when either Elisoff or Nvisits has been satisfied
+    startvisits : int, default=3
+        the number of times re-visiting the start cell will trigger an
+        end to the search
+    remcontourrepeat : bool, default=True
+        select whether to remove consecutive repeating cells in the
+        output `contour`
+    remsearchrepeat : bool, default=False
+        select whether to remove consecutive repeating cells in the
+        output `contoursearch`
+    closecontour : bool, default=True
+        select whether to close the output `contour` (first cell = last
+        cell)
+
+    Returns
+    -------
+    contour : ndarray
+        2D Nx2 array of ordered latitude/longitude points (degrees)
+        describing the edge of a mask
+    contoursearch : ndarray
+        2D Nx2 array of ordered latitude/longitude points (degrees)
+        describing the cells searched during contour tracing
+    
+    See Also
+    --------
+    geocontour.contourutil.findstart
+    geocontour.contourutil.setstop
+    square
+    moore
+    moore_imp
+    pavlidis_imp
+    TSR
+
+    Notes
+    -----
+    - If `latitudes`/`longitudes` not provided, returned
+      `contour`/`contoursearch` will be indices of the input mask
+    - `startvisits` parameter will only be utilized when `stop`
+      parameter is set to 'Nvisits' or 'either'
+
+    References
+    ----------
+    Ghuneim, A.G. (2000). Contour Tracing. McGill University.
+    <https://www.imageprocessingplace.com/downloads_V3/root_downloads/tutorials/contour_tracing_Abeer_George_Ghuneim/alg.html>
+
+    Pavlidis, T. (1982) Algorithms for Graphics and Image Processing.
+    Computer Science Press, New York, NY.
+    <https://doi.org/10.1007/978-3-642-93208-3>
     """
     if latitudes is not None and longitudes is not None:
         gcc.cmask(mask,latitudes,longitudes)
@@ -406,35 +619,79 @@ def pavlidis(mask,latitudes=None,longitudes=None,direction='cw',start='auto',sto
 
 def pavlidis_imp(mask,latitudes=None,longitudes=None,direction='cw',start='auto',stop='Nvisits',startvisits=1,remcontourrepeat=True,remsearchrepeat=False,closecontour=True):
     """
-    Returns the contour trace of a mask input using an improved Pavlidis tracing algorithm
-    Captures inside corners missed by Pavlidis tracing
+    Find the contour of a mask using an improved Pavlidis algorithm that
+    reliably captures inside corners
 
-    Inputs (Required):
-        mask - A 2-d boolean numpy array of dimension MxN where M=len(latitudes) and N=len(longitudes)
+    Parameters
+    ----------
+    mask : ndarray
+        2D MxN bool array where M=len(`latitudes`) and
+        N=len(`longitudes`)
+    latitudes : ndarray, optional
+        1D Nx1 array of latitude points (degrees)
+    longitudes : ndarray, optional
+        1D Nx1 array of longitude points (degrees)
+    direction : {'cw', 'ccw'}, default='cw'
+        select the direction of contour tracing
+    start : {'auto', array_like}, default='auto' 
+        either a selection for automatic start cell assignment or a
+        manual assignment via a 2x2 array describing the start cell and
+        orientation
 
-    Inputs (Optional):
-        latitudes - An evenly spaced numpy array of latitude points (degrees)
-        longitudes - An evenly spaced numpy array of longitude points (degrees)
-            Note: if latitudes/longitudes not provided, output will be in indices of input mask
-        direction ('cw'/'ccw') - A string selecting the direction of the returned neighbors, default='cw'
-        start ('auto'/array) - A string or a 2x2 array describind the start cell and orientation, default='auto'
-            'auto' will find a proper starting cell/orientation based on the direction input, stop input, and mask shape, or return a warning if unable
-            if not 'auto' input should be a 2x2 numpy array or nested list with row 1 describing the index of the start cell and row 2 describing the start orientation (e.g. [0,1] points right, [1,0] points down)
-        stop ('Elisoff'/'Nvisits'/'either') - A string selecting the stopping criterion, default='Nvisits'
-            Note: The Elisoff stopping criterion is usable in this function, but the Pavlidis tracing algorithm is not designed to utilize it and if used it is likely to produce an infinite loop
-            'Elisoff' stops when the start cell has been re-visited with the same orientation as started with
-            'Nvisits' stops when the start cell has been re-visited N number of times (N set by startvisits)
-            'either' stops when either Elisoff or Nvisits has been satisfied
-        startvisits - An integer condition for the number of times re-visiting the start cell will trigger an end to the search, default=1
-            only applicable when stop='Nvisits' or 'either'
-        remcontourrepeat (True/False) - A boolean for selecting whether to remove consecutive repeating cells in the output contour, default=True
-        remsearchrepeat (True/False) - A boolean for selecting whether to remove consecutive repeating cells in the output contoursearch, default=False
-        closecontour (True/False) - A boolean for selecting whether to close the contour (first cell = last cell), default=True
+            row 1: indices of the start cell
+                e.g. for start cell [2,3] second row (lat) and third
+                column (lon)
+            row 2: the start orientation
+                e.g. orientation [0,1] points right, [1,0] points down
+    stop : {'Elisoff', 'Nvisits', 'either'}, default='either'
+        selector for the stopping criterion
 
-    Outputs:
-        contour - A 2-d Nx2 numpy array of ordered latitude/longitude points (degrees) describing the contour trace of a mask
-        contoursearch - A 2-d Nx2 numpy array of ordered latitude/longitude points (degrees) describing the cells searched during contour tracing
-            Note: If latitudes/longitudes not provided, returned contour/contoursearch will be indices of the input mask
+            ``Elisoff``
+                stops when the start cell has been re-visited with the
+                same orientation as started with
+            ``Nvisits``
+                stops when the start cell has been re-visited N number
+                of times (N set by `startvisits` parameter)
+            ``either``
+                stops when either Elisoff or Nvisits has been satisfied
+    startvisits : int, default=3
+        the number of times re-visiting the start cell will trigger an
+        end to the search
+    remcontourrepeat : bool, default=True
+        select whether to remove consecutive repeating cells in the
+        output `contour`
+    remsearchrepeat : bool, default=False
+        select whether to remove consecutive repeating cells in the
+        output `contoursearch`
+    closecontour : bool, default=True
+        select whether to close the output `contour` (first cell = last
+        cell)
+
+    Returns
+    -------
+    contour : ndarray
+        2D Nx2 array of ordered latitude/longitude points (degrees)
+        describing the edge of a mask
+    contoursearch : ndarray
+        2D Nx2 array of ordered latitude/longitude points (degrees)
+        describing the cells searched during contour tracing
+    
+    See Also
+    --------
+    geocontour.contourutil.findstart
+    geocontour.contourutil.setstop
+    square
+    moore
+    moore_imp
+    pavlidis
+    TSR
+
+    Notes
+    -----
+    - If `latitudes`/`longitudes` not provided, returned
+      `contour`/`contoursearch` will be indices of the input mask
+    - `startvisits` parameter will only be utilized when `stop`
+      parameter is set to 'Nvisits' or 'either'
     """
     if latitudes is not None and longitudes is not None:
         gcc.cmask(mask,latitudes,longitudes)
@@ -535,34 +792,89 @@ def pavlidis_imp(mask,latitudes=None,longitudes=None,direction='cw',start='auto'
 
 def TSR(mask,latitudes=None,longitudes=None,direction='cw',start='auto',stop='either',startvisits=4,remcontourrepeat=True,remsearchrepeat=False,closecontour=True):
     """
-    Returns the contour trace of a mask input using two-step representative tracing
+    Find the contour of a mask using the two-step representative tracing
+    algorithm
 
-    Inputs (Required):
-        mask - A 2-d boolean numpy array of dimension MxN where M=len(latitudes) and N=len(longitudes)
+    Parameters
+    ----------
+    mask : ndarray
+        2D MxN bool array where M=len(`latitudes`) and
+        N=len(`longitudes`)
+    latitudes : ndarray, optional
+        1D Nx1 array of latitude points (degrees)
+    longitudes : ndarray, optional
+        1D Nx1 array of longitude points (degrees)
+    direction : {'cw', 'ccw'}, default='cw'
+        select the direction of contour tracing
+    start : {'auto', array_like}, default='auto' 
+        either a selection for automatic start cell assignment or a
+        manual assignment via a 2x2 array describing the start cell and
+        orientation
 
-    Inputs (Optional):
-        latitudes - An evenly spaced numpy array of latitude points (degrees)
-        longitudes - An evenly spaced numpy array of longitude points (degrees)
-            Note: if latitudes/longitudes not provided, output will be in indices of input mask
-        direction ('cw'/'ccw') - A string selecting the direction of the returned neighbors, default='cw'
-        start ('auto'/array) - A string or a 2x2 array describind the start cell and orientation, default='auto'
-            'auto' will find a proper starting cell/orientation based on the direction input
-            if not 'auto' input should be a 2x2 numpy array or nested list with row 1 describing the index of the start cell and row 2 describing the start orientation (e.g. [0,1] points right, [1,0] points down)
-        stop ('Elisoff'/'Nvisits'/'either') - A string selecting the stopping criterion, default='either'
-            'Elisoff' stops when the start cell has been re-visited with the same orientation as started with
-            'Nvisits' stops when the start cell has been re-visited N number of times (N set by startvisits)
-            'either' stops when either Elisoff or Nvisits has been satisfied
-        startvisits - An integer condition for the number of times re-visiting the start cell will trigger an end to the search, default=4
-            only applicable when stop='Nvisits' or 'either'
-        checkconn (True/False) - A boolean for selecting whether to check connectivity and warn the user of potential issues, default=False
-        remcontourrepeat (True/False) - A boolean for selecting whether to remove consecutive repeating cells in the output contour, default=True
-        remsearchrepeat (True/False) - A boolean for selecting whether to remove consecutive repeating cells in the output contoursearch, default=False
-        closecontour (True/False) - A boolean for selecting whether to close the contour (first cell = last cell), default=True
+            row 1: indices of the start cell
+                e.g. for start cell [2,3] second row (lat) and third
+                column (lon)
+            row 2: the start orientation
+                e.g. orientation [0,1] points right, [1,0] points down
+    stop : {'Elisoff', 'Nvisits', 'either'}, default='either'
+        selector for the stopping criterion
 
-    Outputs:
-        contour - A 2-d Nx2 numpy array of ordered latitude/longitude points (degrees) describing the contour trace of a mask
-        contoursearch - A 2-d Nx2 numpy array of ordered latitude/longitude points (degrees) describing the cells searched during contour tracing
-            Note: If latitudes/longitudes not provided, returned contour/contoursearch will be indices of the input mask
+            ``Elisoff``
+                stops when the start cell has been re-visited with the
+                same orientation as started with
+            ``Nvisits``
+                stops when the start cell has been re-visited N number
+                of times (N set by `startvisits` parameter)
+            ``either``
+                stops when either Elisoff or Nvisits has been satisfied
+    startvisits : int, default=3
+        the number of times re-visiting the start cell will trigger an
+        end to the search
+    checkconn : bool, default=False
+        select whether to check connectivity and warn the user of
+        potential issues, default=False
+    remcontourrepeat : bool, default=True
+        select whether to remove consecutive repeating cells in the
+        output `contour`
+    remsearchrepeat : bool, default=False
+        select whether to remove consecutive repeating cells in the
+        output `contoursearch`
+    closecontour : bool, default=True
+        select whether to close the output `contour` (first cell = last
+        cell)
+
+    Returns
+    -------
+    contour : ndarray
+        2D Nx2 array of ordered latitude/longitude points (degrees)
+        describing the edge of a mask
+    contoursearch : ndarray
+        2D Nx2 array of ordered latitude/longitude points (degrees)
+        describing the cells searched during contour tracing
+    
+    See Also
+    --------
+    geocontour.contourutil.findstart
+    geocontour.contourutil.setstop
+    square
+    moore
+    moore_imp
+    pavlidis
+    pavlidis_imp
+
+    Notes
+    -----
+    - If `latitudes`/`longitudes` not provided, returned
+      `contour`/`contoursearch` will be indices of the input mask
+    - `startvisits` parameter will only be utilized when `stop`
+      parameter is set to 'Nvisits' or 'either'
+
+    References
+    ----------
+    Seo, J., Chae, S., Shim, J., Kim, D., Cheong, C., & Han, T.-D.
+    (2016). Fast Contour-Tracing Algorithm Based on a Pixel-Following
+    Method for Image Sensors. Sensors, 16(3), 353.
+    <https://doi.org/10.3390/s16030353>
     """
     if latitudes is not None and longitudes is not None:
         gcc.cmask(mask,latitudes,longitudes)

@@ -1,3 +1,7 @@
+"""
+Utilities for masking, contour tracing, and geocontour construction with gridded geographic data
+
+"""
 from .geocontour import build
 import geocontour.check
 import geocontour.contourtrace

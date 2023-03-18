@@ -1,3 +1,7 @@
+"""
+Functions for visualizing and saving output produced by geocontour
+==================================================================
+"""
 import sys
 import warnings
 import numpy as np
@@ -14,84 +18,216 @@ try:
 except:
     cp_exists='n'
 
-def plot(latitudes,longitudes,boundary=None,mask=None,contour=None,contoursearch=None,geocontour=None,vertices=None,boundingbox='all',buffer='off',grid='on',cells='default',showcontour='on',startcell='on',contourarrows='on',contoursearcharrows='on',fancycontoursearch=True,contoursearch_contraction=0.2,contoursearch_shift=0.25,geocontourvectors='on',emptycellcolor='lightgrey',fullcellcolor='sandybrown',boundarycolor='tab:blue',contourcolor='olivedrab',contoursearchcolor='firebrick',geocontourcolor='olivedrab',vertexcolor='tab:cyan',gridcolor='black',lw_boundary='auto',lw_contour='auto',lw_contoursearch='auto',lw_geocontour='auto',mw_contourarrows='auto',mw_contoursearcharrows='auto',mw_vertices='auto',features=None,title=None,labs=True,outname='plot',outdpi='high',transp=False):
+def plot(latitudes,longitudes,boundary=None,mask=None,contour=None,contoursearch=None,geocontour=None,vertices=None,boundingbox='all',buffer=False,grid=True,cells='default',showcontour=True,startcell=True,contourarrows=True,contoursearcharrows=True,fancycontoursearch=True,contoursearch_contraction=0.2,contoursearch_shift=0.25,geocontourvectors=True,emptycellcolor='lightgrey',fullcellcolor='sandybrown',boundarycolor='tab:blue',contourcolor='olivedrab',contoursearchcolor='firebrick',geocontourcolor='olivedrab',vertexcolor='tab:cyan',gridcolor='black',lw_boundary=0.1,lw_contour=0.1,lw_contoursearch='auto',lw_geocontour=0.1,mw_contourarrows=0.5,mw_contoursearcharrows='auto',mw_vertices=0.4,features=None,title=None,labs=True,outname='plot',outdpi='high',transp=False):
     """
-    Plots any/all geocontour-created elements: boundary, mask, contour, contoursearch, geocontour, vertices
+    Plot any/all geocontour-created elements:
 
-    Inputs (Required):
-        latitudes - An evenly spaced numpy array of latitude points (degrees)
-        longitudes - An evenly spaced numpy array of longitude points (degrees)
+    - `boundary`
+    - `mask`
+    - `contour`
+    - `contoursearch`
+    - `geocontour`
+    - `vertices`
 
-    Inputs (Optional):
-        boundary - A 2-d Nx2 numpy array of latitude/longitude points (degrees)
-        mask - A 2-d boolean numpy array of dimension MxN where M=len(latitudes) and N=len(longitudes)
-        contour - A 2-d Nx2 numpy array of ordered latitude/longitude points (degrees) describing the contour trace of a mask
-        contoursearch - A 2-d Nx2 numpy array of ordered latitude/longitude points (degrees) describing the cells searched during contour tracing
-        geocontour - A 3-d Nx2x5 numpy array defining a list of N contour cells and their edge points, lengths, and outward unit vectors
-        vertices - A 2-d Nx2 numpy array of latitude/longitude points (degrees)
-        boundingbox ('all'/'boundary'/'mask'/'contour'/'contoursearch'/'geocontour') - A string denoting the plot element(s) to be used as x and y axis limits, default='all' (uses the largest bounds from all provided elements)
-        buffer ('on'/'off') - A string for creating a 1 cell buffer on the bounding box, default='off'
-        grid ('on'/'off') - A string for showing/hiding the cell grid, default='on'
-        cells ('default'/'none'/'mask'/'maskedge-4'/'maskedge-8'/'contour'/'geocontour') - A string denoting the plot element to be used for filling the cell grid, default='default'
-            'default' uses first provided element, in this order: 'geocontour','contour','mask','none'
-            'none' - no filled grid cells
-            'mask' - all mask cells
-            'maskedge-4' - 4-connected mask edge cells
-            'maskedge-8' - 8-connected mask edge cells
-            'contour' - contour cells
-            'geocontour' - geocontour cells
-        showcontour ('on'/'off') - A string for showing/hiding the contour, default='on'
-            allows showing contour cells without line plot of contour
-        startcell ('on'/'off') - A string for showing/hiding the startcell (contour or contoursearch), default='on'
-        contourarrows ('on'/'off') - A string for showing/hiding directional arrows on the contour, default='on'
-        contoursearcharrows ('on'/'off') - A string for showing/hiding directional arrows on the contoursearch, default='on'
-        fancycontoursearch (True/False) - A boolean to plot the contoursearch (if provided) in a cleaner and more easily followed format, default=True
-        contoursearch_contraction (0 - 0.5) - A float determining how much contoursearch "shrinks" towards contour cell edges (if fancycontoursearch=True), default=0.2 (see geocontour.contourutil.fancycontoursearch)
-        contoursearch_shift (0 - 0.5) - A float determining how much contoursearch shifts to avoid doubling back on itself (if fancycontoursearch=True), default=0.25 (see geocontour.contourutil.fancycontoursearch)
-        geocontourvectors ('on'/'off') - A string for showing/hiding outward normal vectors on the geocontour, default='on'
-        Colors: all accept any matplotlib predefined, hex, or rgba array
-            emptycellcolor - color for unmasked cells, default='lightgray'
-            fullcellcolor - color for masked cells, default='sandybrown'
-            boundarycolor - color for boundary, default='tab:blue'
-            contourcolor - color for contour, default='olivedrab'
-            contoursearchcolor - color for contoursearch, default='firebrickred'
-            geocontourcolor - color for geocontour, default='olivedrab'
-            vertexcolor - color for vertices, default='tab:cyan'
-            gridcolor - color for grid, default='black'
-        linewidths/markerwidths: a float setting fraction of cell covered by lines/markers (e.g. lw=0.5 means lines will be half as wide as grid cells, while mw=2 means markers will be as wide as 2 grid cells)
-            lw_boundary - boundary linewidth, default='auto' (0.1)
-            lw_contour - contour linewidth, default='auto' (0.1)
-            lw_contoursearch - contoursearch linewidth, default='auto' (0.075 if fancycontoursearch=True and 0.1 if fancycontoursearch=False)
-            lw_geocontour - geocontour linewidth, default='auto' (0.1)
-            mw_contourarrows - contour arrow markerwidth, default='auto' (0.5)
-            mw_contoursearcharrows - contoursearch arrow markerwidth, default='auto' (0.35 if fancycontoursearch=True and 0.5 if fancycontoursearch=False)
-            mw_vertices - vertex markerwidth, default='auto' (0.4)
-        features (None/'natural'/'borders') - display Earth features (if cartopy is installed), default=None
-            'natural' displays coastlines, ocean, and lakes/rivers
-            'borders' displays national and state/province level boundaries
-        title - A string used as the plot title, default=None
-        labs - A boolean to set x/y plot labels on or off (e.g. off if no associated lat/lon), default=True
-        outname - A string used as the filename/path for the saved image, default='plot'
-        outdpi ('high'/'low'/'indep'/resolution) - dpi of the saved image, default='high'
-            'high' scales dpi high enough (36 pixels per grid cell) to see features when zooming into a single grid cell, floor of 100
-                for very large grids, 'auto' may set dpi high enough that pyplot will hang on some systems - setting dpi='low' or entering desired dpi manually can avoid this if encountered
-            'low' scales dpi to 5 pixels per grid cell, dpi floor of 100
-            'indep' sets output dpi to 200 regardless of grid size/spacing
-            any other entry must be a numerical value for desired pixels per grid cell
-        transp (True/False) - A boolean to set exterior of plot to transparent with text/labels/ticks/frame set to 'dimgray' for contrast against light and dark backgrounds, default=False
+    Parameters
+    ----------
+    latitudes : ndarray
+        1D Nx1 array of latitude points (degrees)
+    longitudes : ndarray
+        1D Nx1 array of longitude points (degrees)
+    boundary : ndarray, optional 
+        2D Nx2 array of latitude/longitude points (degrees) with the
+        last point equal to the first
+    mask : ndarray, optional
+        2D MxN bool array where M=len(`latitudes`) and
+        N=len(`longitudes`)
+    contour : ndarray, optional
+        2D Nx2 array of ordered latitude/longitude points (degrees)
+        describing the edge of a mask
+    contoursearch : ndarray, optional
+        2D Nx2 array of ordered latitude/longitude points (degrees)
+        describing the cells searched during contour tracing
+    geocontour : ndarray, optional
+        3D Nx2x5 array defining a list of N contour cells (column 1),
+        their edge points (columns 2,3), segment lengths (column 4), and
+        outward unit vectors (column 5)
+    vertices : ndarray, optional
+        2D Nx2 array of latitude/longitude points (degrees)
+    boundingbox : {'all', 'boundary', 'mask', 'contour',\
+                  'contoursearch', 'geocontour'}, default='all' 
+        select the plot element(s) to be used as x and y axis limits
+        [default value 'all' uses the largest bounds from all provided
+        elements]
+    buffer : bool, default=True
+        create a 1 cell buffer on the bounding box
+    grid : bool, default=True
+        show/hide the cell grid
+    cells : {'default', 'none', 'mask', 'maskedge-4', 'maskedge-8',\
+                'contour', 'geocontour'}, default='default'
+        the plot element to be used for filling the cell grid
 
-    Outputs:
-        none
+            ``default``
+                use first provided element, in this order: 'geocontour',
+                'contour', 'mask', 'none'
+            ``none``
+                no filled grid cells
+            ``mask``
+                all `mask` cells
+            ``maskedge-4``
+                4-connected `mask` edge cells
+            ``maskedge-8``
+                8-connected `mask` edge cells
+            ``contour``
+                `contour` cells
+            ``geocontour``
+                `geocontour` cells
+    showcontour : bool, default=True
+        show/hide the `contour` (if provided)
+        [allows showing contour cells without line plot of `contour`]
+    startcell : bool, default=True
+        show/hide the startcell (`contour` or `contoursearch`, if
+        provided)
+    contourarrows : bool, default=True
+        show/hide directional arrows on the `contour` (if provided)
+    contoursearcharrows : bool, default=True
+        show/hide directional arrows on the `contoursearch` (if
+        provided)
+    fancycontoursearch : bool, default=True
+        plot the `contoursearch` (if provided) in a cleaner and more
+        easily followed format
+    contoursearch_contraction : float, default=0.2
+        value determining how much `contoursearch` "shrinks" towards
+        `contour` cell edges (range 0 to 0.5)
+    contoursearch_shift : float, default=0.25
+        value determining how much `contoursearch` shifts to avoid
+        doubling back on itself (range 0 to 0.5)
+    geocontourvectors : bool, default=True
+        show/hide outward normal vectors on the `geocontour` (if
+        provided)
+    emptycellcolor : matplotlib_color, default='lightgray'
+        color for unmasked cells
+    fullcellcolor : matplotlib_color, default='sandybrown'
+        color for masked cells
+    boundarycolor : matplotlib_color, default='tab:blue'
+        color for `boundary` (if provided)
+    contourcolor : matplotlib_color, default='olivedrab'
+        color for `contour` (if provided)
+    contoursearchcolor : matplotlib_color, default='firebrickred'
+        color for `contoursearch` (if provided)
+    geocontourcolor : matplotlib_color, default='olivedrab'
+        color for `geocontour` (if provided)
+    vertexcolor : matplotlib_color, default='tab:cyan'
+        color for `vertices` (if provided)
+    gridcolor : matplotlib_color, default='black'
+        color for grid
+    lw_boundary : float, default=0.1
+        `boundary` linewidth in units of grid cells (see Notes for more
+        detail)
+    lw_contour : float, default=0.1
+        `contour` linewidth in units of grid cells (see Notes for more
+        detail)
+    lw_contoursearch : {'auto', float}, default='auto'
+        `contoursearch` linewidth in units of grid cells (see Notes for
+        more detail)
+        [i.e. 'auto' specifies 0.075 if `fancycontoursearch` = True and
+        0.1 if `fancycontoursearch` = False]
+    lw_geocontour : float, default=0.1
+        `geocontour` linewidth in units of grid cells (see Notes for
+        more detail) 
+    mw_contourarrows : float, default=0.5
+        `contour` arrow markerwidth in units of grid cells (see Notes
+        for more detail)
+    mw_contoursearcharrows : {'auto', float}, default='auto'
+        `contoursearch` arrow markerwidth in units of grid cells (see
+        Notes for more detail)
+        [i.e. 'auto' specifies 0.35 if `fancycontoursearch` = True and
+        0.5 if `fancycontoursearch` = False]
+    mw_vertices : float, default=0.4
+        `vertex` markerwidth in units of grid cells (see Notes for more
+        detail)
+    features : {None, 'natural', 'borders'}, default=None
+        display geographic features (if cartopy is installed)
 
-    Examples of common use cases:
-    1) Plot a mask and the boundary used to create it:
-        plot(latitudes,longitudes,boundary=<boundary>,mask=<mask>,lw_boundary=0.2)
-    2) Plot a contour
-        plot(latitudes,longitudes,countour=<countour>,boundingbox='contour',buffer='on')
-    3) Plot a contoursearch overlaying contour cells
-        plot(latitudes,longitudes,contour=<contour>,contoursearch=<contoursearch>,showcontour='off',cells='contour',boundingbox='contoursearch',buffer='on')
-    4) Plot a geocontour overlaid onto a map projection with natural features
-        plot(latitudes,longitudes,geocontour=<geocontour>,cells='geocontour',features='natural')
+            ``natural``
+                display coastlines, ocean, and lakes/rivers
+            ``borders``
+                display national and state/province level boundaries
+    title : str, default=None
+        the plot title
+    labs : bool, default=True
+        x/y plot labels on or off [e.g. off if no associated lat/lon]
+    outname : str, default='plot'
+        filename/path for the saved image
+    outdpi : {'high', 'low', 'indep', float}, default='high'
+        dpi of the saved image
+
+            ``high``
+                scale dpi high enough (36 pixels per grid cell) to see
+                features when zooming into a single grid cell (dpi floor
+                of 100)
+                [for very large grids, 'auto' may set dpi high enough
+                that pyplot will hang on some systems - setting `outdpi`
+                = 'low' or entering desired dpi manually can avoid this
+                if encountered]
+            ``low``
+                scale dpi to 5 pixels per grid cell (dpi floor of 100)
+            ``indep``
+                set output dpi to 200 regardless of grid size/spacing
+            `float`
+                any other entry must be a numerical value specifying
+                desired pixels per grid cell
+    transp : bool, default=False
+        set exterior of plot to transparent with text/labels/ticks/frame
+        set to 'dimgray' for contrast against light and dark backgrounds
+        (e.g. for environments in which light/dark mode may not be
+        constant)
+
+    Returns
+    -------
+    None
+
+    See Also
+    --------
+    geocontour.contourutil.fancysearch
+    datascale.plotdatasize
+    datascale.plotdatadpi
+
+    Notes
+    -----
+    - Some inputs will only be utilized in the presence of others. For
+      example (not exhaustive), `contourcolor` will have no effect if no
+      `contour` is provided, `mw_contourarrows` will have no effect if
+      `contourarrows` = False, and `contoursearch_contraction` will have
+      no effect if `fancycontoursearch` = False.
+    - All color inputs may be provided as matplotlib pre-defined colors
+      (e.g. 'red' or 'r'), hex RGB(A) strings (e.g. 'ff0000'), or RGB(A)
+      tuples (e.g. (1,0,0)).
+    - Inputs for linewidths and markerwidths are given in units of grid
+      cells. For example, a linewidth of 0.5 means the line will be
+      half as wide as grid cells for the given plot and a markerwidth of
+      0.5 means the same. The `datascale` package is utilized for this
+      functionality and the intent is to have plot features all scale
+      and be interpretable on the plot as a default, since the primary
+      function of plot is diagnostic. Example or publication figures may
+      require user-altered line and marker widths, though adjustment
+      should be simple as the inputs are all in units of the plotted
+      grid cells.
+
+    Examples
+    --------
+    1. Plot a mask and the boundary used to create it
+        plot(latitudes, longitudes, boundary=<boundary>, mask=<mask>,
+        lw_boundary=0.2)
+    2. Plot a contour
+        plot(latitudes, longitudes, countour=<countour>,
+        boundingbox='contour', buffer=True)
+    3. Plot a contoursearch overlaying contour cells
+        plot(latitudes, longitudes, contour=<contour>,
+        contoursearch=<contoursearch>, showcontour=False,
+        cells='contour', boundingbox='contoursearch', buffer=True)
+    4. Plot a geocontour overlaid onto a map projection with natural features
+        plot(latitudes, longitudes, geocontour=<geocontour>,
+        cells='geocontour', features='natural')
     """
     latspc=gcg.spacing(latitudes)
     lonspc=gcg.spacing(longitudes)
@@ -199,7 +335,7 @@ def plot(latitudes,longitudes,boundary=None,mask=None,contour=None,contoursearch
         xlimmax=boundingarray.max(axis=0)[1,1]
     else:
         sys.exit('ERROR - boundingbox=\''+boundingbox+'\' is not a valid selection, valid selections are \'grid\'/\'boundary\'/\'mask\'/\'contour\'/\'contoursearch\'/\'geocontour\'/\'all\'')
-    if buffer=='on':
+    if buffer==True:
         ylimmin-=latspc
         ylimmax+=latspc
         xlimmin-=lonspc
@@ -277,12 +413,12 @@ def plot(latitudes,longitudes,boundary=None,mask=None,contour=None,contoursearch
         ax.set_xticks(xmajor)
         ax.set_yticks(yminor,minor=True)
         ax.set_xticks(xminor,minor=True)
-        if grid=='on':
+        if grid==True:
             ax.grid(which='minor',linestyle=(0,(1,1)),color=gridcolor,linewidth=0.05*pdw,zorder=3)
     else:
         ax.set_yticks(ymajor)
         ax.set_xticks(xmajor)
-        if grid=='on':
+        if grid==True:
             gl=ax.gridlines(xlocs=xminor,ylocs=yminor,linestyle=(0,(1,1)),color=gridcolor,linewidth=0.05*pdw,zorder=5)
         if features=='natural':
             water=np.array([0.7,0.75,0.95])
@@ -296,16 +432,10 @@ def plot(latitudes,longitudes,boundary=None,mask=None,contour=None,contoursearch
         else:
             sys.exit('ERROR - features=\''+features+'\' is not a valid selection, valid selections are \'natural\'/\'borders\'')
     if boundary is not None:
-        if lw_boundary=='auto':
-            lw_boundary=0.1*pdw
-        else:
-            lw_boundary=lw_boundary*pdw
+        lw_boundary=lw_boundary*pdw
         ax.plot(boundary[:,1],boundary[:,0],color=boundarycolor,linewidth=lw_boundary,zorder=10)
     if vertices is not None:
-        if mw_vertices=='auto':
-            mw_vertices=pds*0.4**2
-        else:
-            mw_vertices=pds*mw_vertices**2
+        mw_vertices=pds*mw_vertices**2
         ax.scatter(vertices[:,1],vertices[:,0],c=vertexcolor,s=mw_vertices,linewidth=0,zorder=10)
     if contoursearch is not None:
         if fancycontoursearch==True:
@@ -324,9 +454,9 @@ def plot(latitudes,longitudes,boundary=None,mask=None,contour=None,contoursearch
         else:
             mw_contoursearcharrows=pds*mw_contoursearcharrows**2
         ax.plot(contoursearch[:,1],contoursearch[:,0],color=contoursearchcolor,linewidth=lw_contoursearch,zorder=11)
-        if startcell=='on':
+        if startcell==True:
             ax.scatter(contoursearch[0,1],contoursearch[0,0],marker='o',c=contoursearchcolor,s=mw_contoursearcharrows,linewidth=0,zorder=11)
-        if contoursearcharrows=='on':
+        if contoursearcharrows==True:
             contoursearchdiff=np.diff(contoursearch,axis=0)
             contoursearchpointrotation=-180/np.pi*np.arctan2(contoursearchdiff[:,1],contoursearchdiff[:,0])
             contoursearchpointlocation=contoursearch[:-1]+2*contoursearchdiff/5
@@ -336,32 +466,23 @@ def plot(latitudes,longitudes,boundary=None,mask=None,contour=None,contoursearch
                 else:
                     ax.scatter(k[1],k[0],marker=(3,0,contoursearchpointrotation[ct]),c=contoursearchcolor,s=mw_contoursearcharrows,linewidth=0,zorder=11)
     if contour is not None:
-        if showcontour=='on':
-            if lw_contour=='auto':
-                lw_contour=0.1*pdw
-            else:
-                lw_contour=lw_contour*pdw
+        if showcontour==True:
+            lw_contour=lw_contour*pdw
             ax.plot(contour[:,1],contour[:,0],color=contourcolor,linewidth=lw_contour,zorder=12)
-            if mw_contourarrows=='auto':
-                mw_contourarrows=pds*0.5**2
-            else:
-                mw_contourarrows=pds*mw_contourarrows**2
-            if startcell=='on':
+            mw_contourarrows=pds*mw_contourarrows**2
+            if startcell==True:
                 ax.scatter(contour[0,1],contour[0,0],marker='o',c=contourcolor,s=mw_contourarrows,linewidth=0,zorder=12)
-            if contourarrows=='on':
+            if contourarrows==True:
                 contourdiff=np.diff(contour,axis=0)
                 contourpointrotation=-180/np.pi*np.arctan2(contourdiff[:,1],contourdiff[:,0])
                 contourpointlocation=contour[:-1]+2*contourdiff/5
                 for ct,k in enumerate(contourpointlocation):
                     ax.scatter(k[1],k[0],marker=(3,0,contourpointrotation[ct]),c=contourcolor,s=mw_contourarrows,linewidth=0,zorder=12)
     if geocontour is not None:
-        if lw_geocontour=='auto':
-            lw_geocontour=0.1*pdw
-        else:
-            lw_geocontour=lw_geocontour*pdw
+        lw_geocontour=lw_geocontour*pdw
         for k in geocontour:
             ax.plot(k[1,1:3],k[0,1:3],color=geocontourcolor,linewidth=lw_geocontour,zorder=14)
-        if geocontourvectors=='on':
+        if geocontourvectors==True:
             quivlocs=geocontour[:,:,1]+(geocontour[:,:,2]-geocontour[:,:,1])/2
             ax.quiver(quivlocs[:,1],quivlocs[:,0],geocontour[:,1,4],geocontour[:,0,4],facecolor=geocontourcolor,edgecolor='black',scale=3/(latspc+lonspc),scale_units='xy',width=0.15*(latspc+lonspc)/2,headwidth=3,headlength=3,headaxislength=2.75,units='xy',zorder=13,linewidth=pdw/150)
     if outdpi=='indep':
@@ -384,30 +505,62 @@ def plot(latitudes,longitudes,boundary=None,mask=None,contour=None,contoursearch
     fig.savefig(outname,dpi=outdpi,bbox_inches='tight')
     plt.close(fig)
 
-def save(latitudes,longitudes,boundary=None,mask=None,contour=None,contoursearch=None,geocontour=None,vertices=None,outname='save',outtype='np',maskouttxt='off',outformat='%8.3f',outdelim=' '):
+def save(latitudes,longitudes,boundary=None,mask=None,contour=None,contoursearch=None,geocontour=None,vertices=None,outname='save',outtype='np',maskouttxt=False,outformat='%8.3f',outdelim=' '):
     """
-    Saves any/all geocontour-created elements: boundary, mask, contour, contoursearch, geocontour, vertices
+    Save any/all geocontour-created elements:
 
-    Inputs (Required):
-        latitudes - An evenly spaced numpy array of latitude points (degrees)
-        longitudes - An evenly spaced numpy array of longitude points (degrees)
+    - `boundary`
+    - `mask`
+    - `contour`
+    - `contoursearch`
+    - `geocontour`
+    - `vertices`
 
-    Inputs (Optional):
-        boundary - A 2-d Nx2 numpy array of latitude/longitude points (degrees)
-        mask - A 2-d boolean numpy array of dimension MxN where M=len(latitudes) and N=len(longitudes)
-        contour - A 2-d Nx2 numpy array of ordered latitude/longitude points (degrees) describing the contour trace of a mask
-        contoursearch - A 2-d Nx2 numpy array of ordered latitude/longitude points (degrees) describing the cells searched during contour tracing
-        geocontour - A 3-d Nx2x5 numpy array defining a list of N contour cells and their edge points, lengths, and outward unit vectors
-        outname - A string used as the filename/path for the saved elements, default='save'
-        outtype ('np'/'xyz') - A string for selecting output filetype, default='np'
-            'np': A numpy binary file that stores each element as a separate array/object
-            'xyz': An xyz format text file (lat, lon, [data])
-        maskouttxt ('on'/'off') - A string for choosing to also save a mask as a (1/0) text file, default='off'
-        outformat - Formatting string for latitude and longitude values (in .xyz file), default='%8.3f'
-        outdelim - Delimiter string for columns in output (in .xyz file), default=' '
+    Parameters
+    ----------
+    latitudes : ndarray
+        1D Nx1 array of latitude points (degrees)
+    longitudes : ndarray
+        1D Nx1 array of longitude points (degrees)
+    boundary : ndarray, optional 
+        2D Nx2 array of latitude/longitude points (degrees) with the
+        last point equal to the first
+    mask : ndarray, optional
+        2D MxN bool array where M=len(`latitudes`) and
+        N=len(`longitudes`)
+    contour : ndarray, optional
+        2D Nx2 array of ordered latitude/longitude points (degrees)
+        describing the edge of a mask
+    contoursearch : ndarray, optional
+        2D Nx2 array of ordered latitude/longitude points (degrees)
+        describing the cells searched during contour tracing
+    geocontour : ndarray, optional
+        3D Nx2x5 array defining a list of N contour cells (column 1),
+        their edge points (columns 2,3), segment lengths (column 4), and
+        outward unit vectors (column 5)
+    vertices : ndarray, optional
+        2D Nx2 array of latitude/longitude points (degrees)
+    outname : str, default='save'
+        the filename/path for the saved elements
+    outtype : {'np', 'xyz'}, default='np'
+        select the output filetype
 
-    Outputs:
-        none
+            ``np``
+                A numpy binary file that stores each element as a
+                separate array/object
+            ``xyz``
+                An xyz format text file (lat, lon, [data])
+    maskouttxt : bool, default=False
+        select to also save a mask as a (1/0) text file
+    outformat : format_str, default='%8.3f'
+        formatting string for latitude and longitude values (in .xyz
+        file)
+    outdelim : str, default=' '
+        delimiter string for columns in output (in .xyz file)
+
+    Returns
+    -------
+    None
     """
     if outtype=='xyz':
         np.savetxt(outname+'_latitudes.txt',latitudes,fmt=outformat,delimiter=outdelim)
@@ -420,7 +573,7 @@ def save(latitudes,longitudes,boundary=None,mask=None,contour=None,contoursearch
             ysp, xsp = np.meshgrid(latitudes,longitudes,indexing='ij')
             xyzout=np.hstack((xsp.reshape((-1,1)),ysp.reshape((-1,1)),mask.reshape((-1,1))))
             np.savetxt(outname+'_mask.xyz',xyzout,fmt=[outformat, outformat, '%3d'],delimiter=outdelim)
-            if maskouttxt=='on':
+            if maskouttxt==True:
                 np.savetxt(outname+'_mask.txt',mask.astype('int'),fmt='%1d',delimiter=outdelim)
         if contour is not None:
             gcc.ccontour(contour,latitudes,longitudes)

@@ -1,3 +1,9 @@
+"""
+Functions for checking the properties of various structures utilized by
+=======================================================================
+geocontour
+==========
+"""
 import sys
 import warnings
 import numpy as np
@@ -20,10 +26,10 @@ def cdim(dimension,exit_on_error=True):
 
     See Also
     --------
-    geocontour.check.cboundary
-    geocontour.check.cmask
-    geocontour.check.ccontour
-    geocontour.check.cgeocontour
+    cboundary
+    cmask
+    ccontour
+    cgeocontour
     """
     if len(dimension.shape)!=1:
         sys.exit('ERROR - Input dimension (latitude or longitude) is not 1-dimensional')
@@ -33,7 +39,7 @@ def cdim(dimension,exit_on_error=True):
             if exit_on_error:
                 sys.exit('ERROR - Input dimension (latitude or longitude) has irregular spacing')
             else:
-                warnings.warn('WARNING - Input dimension (latitude or longitude) has irregular spacing. Output may be innacurate')
+                warnings.warn('WARNING - Input dimension (latitude or longitude) has irregular spacing. Output may be inaccurate')
 
 def cboundary(boundary):
     """
@@ -52,14 +58,15 @@ def cboundary(boundary):
 
     See Also
     --------
-    geocontour.check.cdim
-    geocontour.check.cmask
-    geocontour.check.ccontour
-    geocontour.check.cgeocontour
+    cdim
+    cmask
+    ccontour
+    cgeocontour
 
     Notes
     -----
-    Will check whether columns (lat/lon) are ordered correctly but CAN'T GUARANTEE THIS
+    Will check whether columns (lat/lon) are ordered correctly but
+    **CAN'T GUARANTEE THIS**
 
     """
     if len(boundary.shape)!=2:
@@ -87,7 +94,8 @@ def cmask(mask,latitudes=None,longitudes=None):
     Parameters
     ----------
     mask : ndarray
-        2D MxN bool array where M=len(latitudes) and N=len(longitudes)
+        2D MxN bool array where M=len(`latitudes`) and
+        N=len(`longitudes`)
     latitudes : ndarray, optional
         1D Nx1 array of latitude points (degrees)
     longitudes : ndarray, optional
@@ -99,10 +107,10 @@ def cmask(mask,latitudes=None,longitudes=None):
 
     See Also
     --------
-    geocontour.check.cdim
-    geocontour.check.cboundary
-    geocontour.check.ccontour
-    geocontour.check.cgeocontour
+    cdim
+    cboundary
+    ccontour
+    cgeocontour
     """
     if len(mask.shape)!=2:
         sys.exit('ERROR - Mask input is not 2-dimensional')
@@ -137,10 +145,10 @@ def ccontour(contour,latitudes=None,longitudes=None):
 
     See Also
     --------
-    geocontour.check.cdim
-    geocontour.check.cboundary
-    geocontour.check.cmask
-    geocontour.check.cgeocontour
+    cdim
+    cboundary
+    cmask
+    cgeocontour
     """
     contourdiff=np.diff(contour,axis=0)
     if latitudes is not None and longitudes is not None:
@@ -185,10 +193,10 @@ def cgeocontour(geocontour,latitudes,longitudes):
 
     See Also
     --------
-    geocontour.check.cdim
-    geocontour.check.cboundary
-    geocontour.check.cmask
-    geocontour.check.ccontour
+    cdim
+    cboundary
+    cmask
+    ccontour
     """
     cdim(longitudes)
     cdim(latitudes)

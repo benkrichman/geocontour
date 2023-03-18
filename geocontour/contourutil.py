@@ -1,3 +1,7 @@
+"""
+Utility functions for operations involving contours and contour searches
+========================================================================
+"""
 import sys
 import numpy as np
 import geocontour.check as gcc
@@ -5,17 +9,34 @@ import geocontour.grid as gcg
 
 def findstart(mask,searchdir='ru'):
     """
-    Returns a starting cell for a contour, given a mask and a search criteria
+    Find starting cell for contour, given a mask and a search criteria
 
-    Inputs (Required):
-        mask - A 2-d boolean numpy array of dimension MxN where M=len(latitudes) and N=len(longitudes)
-        searchdir - A 2 character string describing the search directions
-            e.g. 'dr' will search rows moving downward and columns moving rightward, in that order
-            appropriate searches for cw contours: 'dr','ul','ru','ld' and ccw contours: 'dl','ur','rd','lu'
+    Parameters
+    ----------
+    mask : ndarray
+        2D MxN bool array where M=len(`latitudes`) and
+        N=len(`longitudes`)
+    searchdir : {'dr', 'ul', 'ru', 'ld', 'dl', 'ur', 'rd', 'lu'}
+        2 char string describing the search directions
+        [e.g. 'dr' will search rows moving downward and columns moving
+        rightward, in that order]
 
-    Outputs:
-        startcell - A 1x2 numpy array describing the index of the start cell
-        startorientation - A 1x2 numpy array describing the orientation (entry direction) of the start cell
+            for a desired clockwise search:
+                {'dr', 'ul', 'ru', 'ld'}
+            for a desired counterclockwise search:
+                {'dl', 'ur', 'rd', 'lu'}
+
+    Returns
+    -------
+    startcell : ndarray 
+        1x2 array containing the indices of the start cell
+    startorientation : ndarray
+        1x2 array describing the orientation (entry direction) of the
+        start cell
+
+    See Also
+    --------
+    parsestart
     """
     gcc.cmask(mask)
     if mask.sum()==0:
@@ -48,22 +69,39 @@ def findstart(mask,searchdir='ru'):
 
 def parsestart(start,buffermask):
     """
-    Checks start input for contour tracing
+    Check start input for contour tracing
+    
     Mainly used internally for contour trace functions
 
-    Inputs (Required):
-        start ('auto'/array) - A string or a 2x2 array describind the start cell and orientation, default='auto'
-            'auto' will find a proper starting cell/orientation based on the direction input
-            if not 'auto' input should be a 2x2 numpy array or nested list with row 1 describing the index of the start cell and row 2 describing the start orientation (e.g. [0,1] points right, [1,0] points down)
-        buffermask - A 2-d boolean numpy array of dimension M+1xN+1 where M=len(latitudes) and N=len(longitudes)
+    Parameters
+    ----------
+    start : array_like 
+        2x2 array describing the start cell and orientation
+            
+            row 1: indices of the start cell
+                e.g. for start cell [2,3] second row (lat) and third
+                column (lon)
+            row 2: the start orientation
+                e.g. orientation [0,1] points right, [1,0] points down
+    buffermask : ndarray 
+        2D M+1xN+1 bool array where M=len(`latitudes`) and
+        N=len(`longitudes`)
         
-    Outputs:
-        startcell - A 1x2 numpy array describing the index of the start cell
-        startorientation - A 1x2 numpy array describing the orientation (entry direction) of the start cell
+    Returns
+    -------
+    startcell : ndarray 
+        1x2 array containing the indices of the start cell
+    startorientation : ndarray
+        1x2 array describing the orientation (entry direction) of the
+        start cell
+
+    See Also
+    --------
+    findstart
     """
     start=np.array(start)
     if start.dtype!='int':
-        sys.exit('ERROR - Start input is wrong datatype, provide start input as int only')
+        sys.exit('ERROR - Start input is wrong datatype, provide start input as ints only')
     if start.shape!=(2,2):
         sys.exit('ERROR - Start input in wrong format, provide a numpy array of shape (2,2) (or a 2x2 nested list), with row 1 containing start cell indices/coordinates and row 2 containing start orientation unit vector')
     startcell=start[0,:]+1
@@ -76,21 +114,46 @@ def parsestart(start,buffermask):
 
 def setstop(stop,startvisits,startcell,startorientation):
     """
-    Returns a stopping function for use in contour tracing while loop
+    Create a stopping function for use in contour tracing while loop
+    
     Mainly used internally for contour trace functions
 
-    Inputs (Required):
-        stop ('Elisoff'/'Nvisits'/'either') - A string selecting the stopping criterion, default='either'
-            'Elisoff' stops when the start cell has been re-visited with the same orientation as started with
-            'Nvisits' stops when the start cell has been re-visited N number of times (N set by startvisits)
-            'either' stops when either Elisoff or Nvisits has been satisfied
-        startvisits - An integer condition for the number of times re-visiting the start cell will trigger an end to the search, default=3
-            only applicable when stop='Nvisits' or 'either'
-        startcell - A 1x2 numpy array describing the index of the start cell
-        startorientation - A 1x2 numpy array describing the orientation (entry direction) of the start cell
+    Parameters
+    ----------
+    stop : {'Elisoff', 'Nvisits', 'either'}, default='either'
+        selector for the stopping criterion
 
-    Outputs:
-        checkbreak - A stopping function that takes a cell, orientation, and start visit counter as input
+            ``Elisoff``
+                stops when the start cell has been re-visited with the
+                same orientation as started with
+            ``Nvisits``
+                stops when the start cell has been re-visited N number
+                of times (N set by `startvisits` parameter)
+            ``either``
+                stops when either Elisoff or Nvisits has been satisfied
+    startvisits : int, default=3
+        the number of times re-visiting the start cell will trigger an
+        end to the search
+    startcell : ndarray 
+        1x2 array containing the indices of the start cell
+    startorientation : ndarray
+        1x2 array describing the orientation (entry direction) of the
+        start cell
+
+    Returns
+    -------
+    checkbreak : function
+        stopping function that takes a cell, orientation, and start
+        visit counter as input
+
+    See Also
+    --------
+    parsestart
+
+    Notes
+    -----
+    `startvisits` parameter will only be utilized when `stop` parameter
+    is set to 'Nvisits' or 'either'
     """
     if type(startvisits) is not int:
         sys.exit('ERROR - startvisits is not an integer, must be an integer')
@@ -119,24 +182,42 @@ def setstop(stop,startvisits,startcell,startorientation):
 def clean(contourcells,searchcells,latitudes=None,longitudes=None,closecontour=True,remcontourrepeat=True,remsearchrepeat=False):
     """
     Returns a cleaned contour that will pass checks
+    
     Mainly used internally for contour trace functions
 
-    Inputs (Required):
-        contourcells - A python list of 1x2 numpy arrays containing contour indices
-        searchcells - A python list of 1x2 numpy arrays containing contour search indices
+    Parameters
+    ----------
+    contourcells : array_like
+        list of 1x2 numpy arrays containing contour indices
+    searchcells : array_like
+        list of 1x2 numpy arrays containing contour search indices
+    latitudes : ndarray, optional
+        1D Nx1 array of latitude points (degrees)
+    longitudes : ndarray, optional
+        1D Nx1 array of longitude points (degrees)
+    remcontourrepeat : bool, default=True
+        select whether to remove consecutive repeating cells in the
+        output `contour`
+    remsearchrepeat : bool, default=False
+        select whether to remove consecutive repeating cells in the
+        output `contoursearch`
+    closecontour : bool, default=True
+        select whether to close the output `contour` (first cell = last
+        cell)
 
-    Inputs (Optional):
-        latitudes - An evenly spaced numpy array of latitude points (degrees)
-        longitudes - An evenly spaced numpy array of longitude points (degrees)
-            Note: if latitudes/longitudes not provided, output will be in indices of input mask
-        remcontourrepeat (True/False) - A boolean for selecting whether to remove consecutive repeating cells in the output contour, default=True
-        remsearchrepeat (True/False) - A boolean for selecting whether to remove consecutive repeating cells in the output contoursearch, default=False
-        closecontour (True/False) - A boolean for selecting whether to close the contour (first cell = last cell), default=True
+    Returns
+    -------
+    contour : ndarray
+        2D Nx2 array of ordered latitude/longitude points (degrees)
+        describing the edge of a mask
+    contoursearch : ndarray
+        2D Nx2 array of ordered latitude/longitude points (degrees)
+        describing the cells searched during contour tracing
 
-    Outputs:
-        contour - A 2-d Nx2 numpy array of ordered latitude/longitude points (degrees) describing the contour trace of a mask
-        contoursearch - A 2-d Nx2 numpy array of ordered latitude/longitude points (degrees) describing the cells searched during contour tracing
-            Note: If latitudes/longitudes not provided, returned contour/contoursearch will be indices of the input mask
+    Notes
+    -----
+    If `latitudes`/`longitudes` not provided, returned
+    `contour`/`contoursearch` will be indices of the input mask
     """
     if closecontour:
         contourcells.append(contourcells[0])
@@ -165,19 +246,35 @@ def clean(contourcells,searchcells,latitudes=None,longitudes=None,closecontour=T
 
 def fancysearch(contoursearch,contraction=0.2,shift=0.25):
     """
-    Returns a contoursearch that is visually more easy to follow
+    Create a contour search that is visually more easy to follow via:
 
-    Inputs (Required):
-        contoursearch - A 2-d Nx2 numpy array of ordered latitude/longitude points (degrees) describing the cells searched during contour tracing
+        - contraction, which ranges from 0 (no change) to 0.5
+          (completely flattened to contour cell edges)
+        - shift, which ranges from 0 (no change) to 0.5 (half a grid
+          cell)
 
-    Inputs (Optional):
-        contraction - A float determining how much contoursearch "shrinks" towards contour cell edges, default=0.2
-            ranges from 0 (no change) to 0.5 (completely flattened to contour cell edges)
-        shift - A float determining how much contoursearch shifts to avoid doubling back on itself, default=0.25
-            ranges from 0 (no change) to 0.5 (half a grid cell)
+    Parameters
+    ----------
+    contoursearch : ndarray
+        2D Nx2 array of ordered latitude/longitude points (degrees)
+        describing the cells searched during contour tracing
+    contraction : float, default=0.2 
+        value determining how much `contoursearch` "shrinks" towards
+        `contour` cell edges
+    shift : float, default=0.25 
+        value determining how much `contoursearch` "shifts" to avoid
+        doubling back on itself
 
-    Outputs
-        fancycontoursearch - A 2-d Nx2 numpy array of ordered latitude/longitude points describing the cells searched during contour tracing, with contraction and shift applied
+    Returns
+    -------
+    fancycontoursearch : ndarray 
+        2D Nx2 array of ordered latitude/longitude points describing the
+        cells searched during contour tracing, with `contraction` and
+        `shift` applied
+
+    See Also
+    --------
+    geocontour.output.plot
     """
     fdiff=np.diff(contoursearch,axis=0,prepend=[contoursearch[0,:]])
     if contraction>0.5:

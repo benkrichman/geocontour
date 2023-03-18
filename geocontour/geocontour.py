@@ -1,3 +1,14 @@
+"""
+Functions for construction of geocontours from contours
+=======================================================
+
+Notes
+-----
+Is it nonsensical that a package named geocontour contains a module
+named geocontour which is used to build something referred to as a
+geocontour? Yes. Is the developer sorry they chose to do it this way?
+Also yes.
+"""
 import sys
 import numpy as np
 import geocontour.check as gcc
@@ -5,22 +16,46 @@ import geocontour.grid as gcg
 
 def build(contour,latitudes,longitudes,connecttype='cell',simplify=False):
     """
-    Returns a geocontour from a contour input
+    Construct a geocontour from a contour input
 
-    Inputs (Required):
-        contour - A 2-d Nx2 numpy array of ordered latitude/longitude points (degrees) describing the edge of a mask
-        latitudes - An evenly spaced numpy array of latitude points (degrees)
-        longitudes - An evenly spaced numpy array of longitude points (degrees)
+    Parameters
+    ----------
+    contour : ndarray
+        2D Nx2 array of ordered latitude/longitude points (degrees)
+        describing the edge of a mask
+    latitudes : ndarray, optional
+        1D Nx1 array of latitude points (degrees)
+    longitudes : ndarray, optional
+        1D Nx1 array of longitude points (degrees)
+    connecttype : {'cell', 'center'}, default='cell'
+        method of linking contour cells
+        
+            ``cell``
+                implies drawing a single connection through a cell from
+                the preceding to the following cell, resulting in a
+                geocontour the same length as the input contour
+            ``center``
+                implies drawing two lines through a cell, intersecting
+                the center of the cell, resulting in a geocontour double
+                the length of the input contour
+    simplify : bool, default=False
+        select whether to remove cells for which outward vectors sum to
+        0, and merge cells containing multiple contour segments
 
-    Inputs (Optional):
-        connecttype ('cell'/'center') - method of linking contour cells, default='cell'
-            'cell' implies drawing a single connection through a cell from the preceeding to the following cell, resulting in a geocontour the same length as the input contour
-            'center' implies drawing two lines through a cell, intersecting the center of the cell, resulting in a geocontour double the length of the input contour
-            Both methods functionally provide the same output when using the geocontour with data
-        simplify (True/False) - remove cells for which outward vectors sum to 0 and merge cells containing multiple contour segments, default=False
+    Returns
+    -------
+    geocontour : ndarray
+        3D Nx2x5 array defining a list of N contour cells (column 1),
+        their edge points (columns 2,3), segment lengths (column 4), and
+        outward unit vectors (column 5)
 
-    Outputs:
-        geocontour - A 3-d Nx2x5 numpy array defining a list of N contour cells and their edge points, lengths, and outward unit vectors
+    Notes
+    -----
+    - Both `connecttype` methods functionally provide the same output when
+      using the geocontour with data
+    - Simplification will functionally reduce size and provide the same
+      output when using the geocontour with data, but the directional
+      information contained in the contour may not be preserved
     """
     gcc.ccontour(contour,latitudes,longitudes)
     contourdiff=np.diff(contour,axis=0)
