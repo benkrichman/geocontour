@@ -1,6 +1,7 @@
 """
 Functions serving as example use cases for geocontour
 =====================================================
+
 """
 import numpy as np
 import geocontour.masksearch as gcms
@@ -124,6 +125,10 @@ def large():
     -------
     None
 
+    See Also
+    --------
+    small
+
     Examples
     --------
     >>> import numpy as np
@@ -143,25 +148,25 @@ def large():
     ... longitudes, direction='ccw')
     >>> geocontour=build(contour, latitudes, longitudes, simplify=True)
     >>> gco.plot(latitudes, longitudes, boundary=boundary, mask=mask,
-    ... title='Example Mask and Boundary\nMississippi River Basin',
+    ... title='Example Mask and Boundary\\nMississippi River Basin',
     ... outname='example_large_boundary+mask', transp=True)
     >>> gco.plot(latitudes, longitudes, mask=mask,
     ... contoursearch=contoursearch, 
-    ... title='Example Contour Search\nMississippi River Basin',
+    ... title='Example Contour Search\\nMississippi River Basin',
     ... outname='example_large_contoursearch', transp=True)
     >>> gco.plot(latitudes, longitudes, contour=contour,
     ... cells='contour',
-    ... title='Example Contour\nMississippi River Basin',
+    ... title='Example Contour\\nMississippi River Basin',
     ... outname='example_large_contour', transp=True)
     >>> gco.plot(latitudes, longitudes, geocontour=geocontour,
-    ... title='Example Geocontour\nMississippi River Basin',
+    ... title='Example Geocontour\\nMississippi River Basin',
     ... outname='example_large_geocontour', transp=True)
     >>> gco.plot(latitudes, longitudes, geocontour=geocontour,
-    ... title='Example Geocontour\nMississippi River Basin',
+    ... title='Example Geocontour\\nMississippi River Basin',
     ... outname='example_large_geocontour+natfeat', features='natural',
     ... transp=True)
     >>> gco.plot(latitudes, longitudes, geocontour=geocontour,
-    ... title='Example Geocontour\nMississippi River Basin',
+    ... title='Example Geocontour\\nMississippi River Basin',
     ... outname='example_large_geocontour+bordfeat', features='borders',
     ... transp=True)
     """
