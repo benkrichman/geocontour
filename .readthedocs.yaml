@@ -19,4 +19,5 @@ sphinx:
 #build
 build:
   jobs:
-    - sphinx-apidoc -Mfe -o source/ ../geocontour
+    pre_build:
+      - sphinx-apidoc -Mfe -o source/ ../geocontour
