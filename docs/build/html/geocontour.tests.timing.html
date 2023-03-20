@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>geocontour.tests.timing module &mdash; geocontour 1.2.1 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="geocontour.check module" href="geocontour.check.html" />
+    <link rel="prev" title="geocontour.tests package" href="geocontour.tests.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            geocontour
+              <img src="_static/icon_geocontour.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                1.2.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="readme_link.html">Introduction</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="geocontour.html">geocontour package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="geocontour.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="geocontour.examples.html">geocontour.examples package</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="geocontour.tests.html">geocontour.tests package</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="geocontour.tests.html#functions-for-testing-of-the-geocontour-package">Functions for testing of the geocontour package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="geocontour.tests.html#geocontour.tests.full"><code class="docutils literal notranslate"><span class="pre">full()</span></code></a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="geocontour.tests.html#submodules">Submodules</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="geocontour.html#submodules">Submodules</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">geocontour</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="geocontour.html">geocontour package</a></li>
+          <li class="breadcrumb-item"><a href="geocontour.tests.html">geocontour.tests package</a></li>
+      <li class="breadcrumb-item active">geocontour.tests.timing module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/geocontour.tests.timing.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-geocontour.tests.timing">
+<span id="geocontour-tests-timing-module"></span><h1>geocontour.tests.timing module<a class="headerlink" href="#module-geocontour.tests.timing" title="Permalink to this heading"></a></h1>
+<section id="functions-for-comparatively-testing-speed-of-geocontour-implementations">
+<h2>Functions for comparatively testing speed of geocontour implementations<a class="headerlink" href="#functions-for-comparatively-testing-speed-of-geocontour-implementations" title="Permalink to this heading"></a></h2>
+</section>
+<dl class="py function">
+<dt class="sig sig-object py" id="geocontour.tests.timing.masksearch">
+<span class="sig-prename descclassname"><span class="pre">geocontour.tests.timing.</span></span><span class="sig-name descname"><span class="pre">masksearch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">numtests</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">runspertest</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'generic_boundary'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spacing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[1.75,</span> <span class="pre">1.5,</span> <span class="pre">1.25,</span> <span class="pre">1,</span> <span class="pre">0.75,</span> <span class="pre">0.5,</span> <span class="pre">0.25,</span> <span class="pre">0.2]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'min'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geocontour.tests.timing.masksearch" title="Permalink to this definition"></a></dt>
+<dd><p>Test the timing of all mask search functions using timeit</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>numtests</strong> (<em>int</em><em>, </em><em>default=10</em>) – number of tests to run</p></li>
+<li><p><strong>runspertest</strong> (<em>int</em><em>, </em><em>default=1</em>) – number of function calls per test</p></li>
+<li><p><strong>boundname</strong> (<em>str</em><em>, </em><em>default='generic_boundary'</em>) – the name of the boundary file to use (see
+geocontour/geocontour/data/)</p></li>
+<li><p><strong>spacing</strong> (<em>array_like</em><em>, </em><em>default=</em><em>[</em><em>1.75</em><em>,</em><em>1.5</em><em>,</em><em>1.25</em><em>,</em><em>1</em><em>,</em><em>0.75</em><em>,</em><em>0.5</em><em>,</em><em>0.25</em><em>,</em><em>0.2</em><em>]</em>) – grid spacing value(s) to use for testing
+[i.e. if a list or numpy array is provided, testing will be run
+and results will populate for every value]</p></li>
+<li><p><strong>stat</strong> (<em>{'mean'</em><em>, </em><em>'median'</em><em>, </em><em>'min'</em><em>, </em><em>'max'}</em><em>, </em><em>default='min'</em>) – select the statistical method for combining results from all
+tests for a given function</p></li>
+<li><p><strong>plot</strong> (<em>bool</em><em>, </em><em>default=True</em>) – select to plot results</p></li>
+<li><p><strong>logax</strong> (<em>bool</em><em>, </em><em>default=False</em>) – select to use log axes (if plotting)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p><strong>results</strong> – 2D Nx6 array of timing results in units of seconds where N is
+equal to len(<cite>spacing</cite>)</p>
+<blockquote>
+<div><p>column1: number of cells searched</p>
+<p>column2: center() timing</p>
+<p>column3: center2() timing</p>
+<p>column4: nodes() timing</p>
+<p>column5: nodes2() timing</p>
+<p>column6: area() timing</p>
+</div></blockquote>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>ndarray</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#geocontour.tests.timing.contourtrace" title="geocontour.tests.timing.contourtrace"><code class="xref py py-obj docutils literal notranslate"><span class="pre">contourtrace</span></code></a>, <a class="reference internal" href="geocontour.masksearch.html#module-geocontour.masksearch" title="geocontour.masksearch"><code class="xref py py-obj docutils literal notranslate"><span class="pre">geocontour.masksearch</span></code></a></p>
+</div>
+<p class="rubric">Notes</p>
+<p>The <cite>numtests</cite> parameter determines the number of tests that are
+later combined via the <cite>stat</cite> parameter. The <cite>runspertest</cite> parameter
+determines the number of times a function will be called in a given
+test. For example, if <cite>numtests</cite> = 10 and <cite>runspertest</cite> = 5, 50
+total function calls will be made and result in 10 test results of
+the total timing of 5 consecutive function calls.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="geocontour.tests.timing.contourtrace">
+<span class="sig-prename descclassname"><span class="pre">geocontour.tests.timing.</span></span><span class="sig-name descname"><span class="pre">contourtrace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">numtests</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">runspertest</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'generic_boundary'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spacing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[1.75,</span> <span class="pre">1.5,</span> <span class="pre">1.25,</span> <span class="pre">1,</span> <span class="pre">0.75,</span> <span class="pre">0.5,</span> <span class="pre">0.25,</span> <span class="pre">0.2,</span> <span class="pre">0.15,</span> <span class="pre">0.125,</span> <span class="pre">0.1,</span> <span class="pre">0.09,</span> <span class="pre">0.08,</span> <span class="pre">0.07,</span> <span class="pre">0.065,</span> <span class="pre">0.06]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'min'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geocontour.tests.timing.contourtrace" title="Permalink to this definition"></a></dt>
+<dd><p>Test the timing of all contour trace functions using timeit</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>numtests</strong> (<em>int</em><em>, </em><em>default=10</em>) – number of tests to run</p></li>
+<li><p><strong>runspertest</strong> (<em>int</em><em>, </em><em>default=1</em>) – number of function calls per test</p></li>
+<li><p><strong>boundname</strong> (<em>str</em><em>, </em><em>default='generic_boundary'</em>) – the name of the boundary file to use (see
+geocontour/geocontour/data/)</p></li>
+<li><p><strong>spacing</strong> (<em>array_like</em><em>, </em><em>default=</em><em>[</em><em>1.75</em><em>,</em><em>1.5</em><em>,</em><em>1.25</em><em>,</em><em>1</em><em>,</em><em>0.75</em><em>,</em><em>0.5</em><em>,</em><em>0.25</em><em>,</em><em>0.2</em><em>]</em>) – grid spacing value(s) to use for testing
+[i.e. if a list or numpy array is provided, testing will be run
+and results will populate for every value]</p></li>
+<li><p><strong>stat</strong> (<em>{'mean'</em><em>, </em><em>'median'</em><em>, </em><em>'min'</em><em>, </em><em>'max'}</em><em>, </em><em>default='min'</em>) – select the statistical method for combining results from all
+tests for a given function</p></li>
+<li><p><strong>plot</strong> (<em>bool</em><em>, </em><em>default=True</em>) – select to plot results</p></li>
+<li><p><strong>logax</strong> (<em>bool</em><em>, </em><em>default=False</em>) – select to use log axes (if plotting)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p><strong>results</strong> – 2D Nx7 array of timing results in units of seconds where N is
+equal to len(<cite>spacing</cite>)</p>
+<blockquote>
+<div><p>column1: number of cells in mask</p>
+<p>column2: square() timing</p>
+<p>column3: moore() timing</p>
+<p>column4: moore_imp() timing</p>
+<p>column5: pavlidis() timing</p>
+<p>column6: pavlidis_imp() timing</p>
+<p>column7: TSR() timing</p>
+</div></blockquote>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>ndarray</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#geocontour.tests.timing.masksearch" title="geocontour.tests.timing.masksearch"><code class="xref py py-obj docutils literal notranslate"><span class="pre">masksearch</span></code></a>, <a class="reference internal" href="geocontour.contourtrace.html#module-geocontour.contourtrace" title="geocontour.contourtrace"><code class="xref py py-obj docutils literal notranslate"><span class="pre">geocontour.contourtrace</span></code></a></p>
+</div>
+<p class="rubric">Notes</p>
+<p>The <cite>numtests</cite> parameter determines the number of tests that are
+later combined via the <cite>stat</cite> parameter. The <cite>runspertest</cite> parameter
+determines the number of times a function will be called in a given
+test. For example, if <cite>numtests</cite> = 10 and <cite>runspertest</cite> = 5, 50
+total function calls will be made and result in 10 test results of
+the total timing of 5 consecutive function calls.</p>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="geocontour.tests.html" class="btn btn-neutral float-left" title="geocontour.tests package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="geocontour.check.html" class="btn btn-neutral float-right" title="geocontour.check module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Benjamin Krichman.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

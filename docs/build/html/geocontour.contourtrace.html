@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>geocontour.contourtrace module &mdash; geocontour 1.2.1 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="geocontour.contourutil module" href="geocontour.contourutil.html" />
+    <link rel="prev" title="geocontour.check module" href="geocontour.check.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            geocontour
+              <img src="_static/icon_geocontour.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                1.2.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="readme_link.html">Introduction</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="geocontour.html">geocontour package</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="geocontour.html#subpackages">Subpackages</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="geocontour.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="geocontour.check.html">geocontour.check module</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">geocontour.contourtrace module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#functions-for-tracing-a-contour-on-a-lat-lon-grid-from-an-input-mask">Functions for tracing a contour on a lat/lon grid from an input mask</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#geocontour.contourtrace.square"><code class="docutils literal notranslate"><span class="pre">square()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#geocontour.contourtrace.moore"><code class="docutils literal notranslate"><span class="pre">moore()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#geocontour.contourtrace.moore_imp"><code class="docutils literal notranslate"><span class="pre">moore_imp()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#geocontour.contourtrace.pavlidis"><code class="docutils literal notranslate"><span class="pre">pavlidis()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#geocontour.contourtrace.pavlidis_imp"><code class="docutils literal notranslate"><span class="pre">pavlidis_imp()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#geocontour.contourtrace.TSR"><code class="docutils literal notranslate"><span class="pre">TSR()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="geocontour.contourutil.html">geocontour.contourutil module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geocontour.geocontour.html">geocontour.geocontour module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geocontour.grid.html">geocontour.grid module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geocontour.masksearch.html">geocontour.masksearch module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geocontour.maskutil.html">geocontour.maskutil module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geocontour.output.html">geocontour.output module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">geocontour</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="geocontour.html">geocontour package</a></li>
+      <li class="breadcrumb-item active">geocontour.contourtrace module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/geocontour.contourtrace.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-geocontour.contourtrace">
+<span id="geocontour-contourtrace-module"></span><h1>geocontour.contourtrace module<a class="headerlink" href="#module-geocontour.contourtrace" title="Permalink to this heading"></a></h1>
+<section id="functions-for-tracing-a-contour-on-a-lat-lon-grid-from-an-input-mask">
+<h2>Functions for tracing a contour on a lat/lon grid from an input mask<a class="headerlink" href="#functions-for-tracing-a-contour-on-a-lat-lon-grid-from-an-input-mask" title="Permalink to this heading"></a></h2>
+</section>
+<dl class="py function">
+<dt class="sig sig-object py" id="geocontour.contourtrace.square">
+<span class="sig-prename descclassname"><span class="pre">geocontour.contourtrace.</span></span><span class="sig-name descname"><span class="pre">square</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mask</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">latitudes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">longitudes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">direction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cw'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stop</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'either'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">startvisits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">checkconn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remcontourrepeat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remsearchrepeat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">closecontour</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geocontour.contourtrace.square" title="Permalink to this definition"></a></dt>
+<dd><p>Find the contour of a mask using the square tracing algorithm</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mask</strong> (<em>ndarray</em>) – 2D MxN bool array where M=len(<cite>latitudes</cite>) and
+N=len(<cite>longitudes</cite>)</p></li>
+<li><p><strong>latitudes</strong> (<em>ndarray</em><em>, </em><em>optional</em>) – 1D Nx1 array of latitude points (degrees)</p></li>
+<li><p><strong>longitudes</strong> (<em>ndarray</em><em>, </em><em>optional</em>) – 1D Nx1 array of longitude points (degrees)</p></li>
+<li><p><strong>direction</strong> (<em>{'cw'</em><em>, </em><em>'ccw'}</em><em>, </em><em>default='cw'</em>) – select the direction of contour tracing</p></li>
+<li><p><strong>start</strong> (<em>{'auto'</em><em>, </em><em>array_like}</em><em>, </em><em>default='auto'</em>) – <p>either a selection for automatic start cell assignment or a
+manual assignment via a 2x2 array describing the start cell and
+orientation</p>
+<blockquote>
+<div><dl class="simple">
+<dt>row 1: indices of the start cell</dt><dd><p>e.g. for start cell [2,3] second row (lat) and third
+column (lon)</p>
+</dd>
+<dt>row 2: the start orientation</dt><dd><p>e.g. orientation [0,1] points right, [1,0] points down</p>
+</dd>
+</dl>
+</div></blockquote>
+</p></li>
+<li><p><strong>stop</strong> (<em>{'Elisoff'</em><em>, </em><em>'Nvisits'</em><em>, </em><em>'either'}</em><em>, </em><em>default='either'</em>) – <p>selector for the stopping criterion</p>
+<blockquote>
+<div><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">Elisoff</span></code></dt><dd><p>stops when the start cell has been re-visited with the
+same orientation as started with</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Nvisits</span></code></dt><dd><p>stops when the start cell has been re-visited N number
+of times (N set by <cite>startvisits</cite> parameter)</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">either</span></code></dt><dd><p>stops when either Elisoff or Nvisits has been satisfied</p>
+</dd>
+</dl>
+</div></blockquote>
+</p></li>
+<li><p><strong>startvisits</strong> (<em>int</em><em>, </em><em>default=3</em>) – the number of times re-visiting the start cell will trigger an
+end to the search</p></li>
+<li><p><strong>checkconn</strong> (<em>bool</em><em>, </em><em>default=False</em>) – select whether to check connectivity and warn the user of
+potential issues, default=False</p></li>
+<li><p><strong>remcontourrepeat</strong> (<em>bool</em><em>, </em><em>default=True</em>) – select whether to remove consecutive repeating cells in the
+output <cite>contour</cite></p></li>
+<li><p><strong>remsearchrepeat</strong> (<em>bool</em><em>, </em><em>default=False</em>) – select whether to remove consecutive repeating cells in the
+output <cite>contoursearch</cite></p></li>
+<li><p><strong>closecontour</strong> (<em>bool</em><em>, </em><em>default=True</em>) – select whether to close the output <cite>contour</cite> (first cell = last
+cell)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>contour</strong> (<em>ndarray</em>) – 2D Nx2 array of ordered latitude/longitude points (degrees)
+describing the edge of a mask</p></li>
+<li><p><strong>contoursearch</strong> (<em>ndarray</em>) – 2D Nx2 array of ordered latitude/longitude points (degrees)
+describing the cells searched during contour tracing</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="geocontour.contourutil.html#geocontour.contourutil.findstart" title="geocontour.contourutil.findstart"><code class="xref py py-obj docutils literal notranslate"><span class="pre">geocontour.contourutil.findstart</span></code></a>, <a class="reference internal" href="geocontour.contourutil.html#geocontour.contourutil.setstop" title="geocontour.contourutil.setstop"><code class="xref py py-obj docutils literal notranslate"><span class="pre">geocontour.contourutil.setstop</span></code></a>, <a class="reference internal" href="#geocontour.contourtrace.moore" title="geocontour.contourtrace.moore"><code class="xref py py-obj docutils literal notranslate"><span class="pre">moore</span></code></a>, <a class="reference internal" href="#geocontour.contourtrace.moore_imp" title="geocontour.contourtrace.moore_imp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">moore_imp</span></code></a>, <a class="reference internal" href="#geocontour.contourtrace.pavlidis" title="geocontour.contourtrace.pavlidis"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pavlidis</span></code></a>, <a class="reference internal" href="#geocontour.contourtrace.pavlidis_imp" title="geocontour.contourtrace.pavlidis_imp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pavlidis_imp</span></code></a>, <a class="reference internal" href="#geocontour.contourtrace.TSR" title="geocontour.contourtrace.TSR"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TSR</span></code></a></p>
+</div>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>If <cite>latitudes</cite>/<cite>longitudes</cite> not provided, returned
+<cite>contour</cite>/<cite>contoursearch</cite> will be indices of the input mask</p></li>
+<li><p><cite>startvisits</cite> parameter will only be utilized when <cite>stop</cite>
+parameter is set to ‘Nvisits’ or ‘either’</p></li>
+</ul>
+<p class="rubric">References</p>
+<p>Ghuneim, A.G. (2000). Contour Tracing. McGill University.
+&lt;<a class="reference external" href="https://www.imageprocessingplace.com/downloads_V3/root_downloads/tutorials/contour_tracing_Abeer_George_Ghuneim/alg.html">https://www.imageprocessingplace.com/downloads_V3/root_downloads/tutorials/contour_tracing_Abeer_George_Ghuneim/alg.html</a>&gt;</p>
+<p>Toussaint, G.T. (2010). Grids Connectivity and Contour Tracing
+[Lesson Notes]. McGill University.
+&lt;<a class="reference external" href="http://www-cgrl.cs.mcgill.ca/~godfried/teaching/mir-reading-assignments/Chapter-2-Grids-Connectivity-Contour-Tracing.pdf">http://www-cgrl.cs.mcgill.ca/~godfried/teaching/mir-reading-assignments/Chapter-2-Grids-Connectivity-Contour-Tracing.pdf</a>&gt;</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="geocontour.contourtrace.moore">
+<span class="sig-prename descclassname"><span class="pre">geocontour.contourtrace.</span></span><span class="sig-name descname"><span class="pre">moore</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mask</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">latitudes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">longitudes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">direction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cw'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stop</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'either'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">startvisits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remcontourrepeat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remsearchrepeat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">closecontour</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geocontour.contourtrace.moore" title="Permalink to this definition"></a></dt>
+<dd><p>Find the contour of a mask using the Moore neighbor tracing
+algorithm</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mask</strong> (<em>ndarray</em>) – 2D MxN bool array where M=len(<cite>latitudes</cite>) and
+N=len(<cite>longitudes</cite>)</p></li>
+<li><p><strong>latitudes</strong> (<em>ndarray</em><em>, </em><em>optional</em>) – 1D Nx1 array of latitude points (degrees)</p></li>
+<li><p><strong>longitudes</strong> (<em>ndarray</em><em>, </em><em>optional</em>) – 1D Nx1 array of longitude points (degrees)</p></li>
+<li><p><strong>direction</strong> (<em>{'cw'</em><em>, </em><em>'ccw'}</em><em>, </em><em>default='cw'</em>) – select the direction of contour tracing</p></li>
+<li><p><strong>start</strong> (<em>{'auto'</em><em>, </em><em>array_like}</em><em>, </em><em>default='auto'</em>) – <p>either a selection for automatic start cell assignment or a
+manual assignment via a 2x2 array describing the start cell and
+orientation</p>
+<blockquote>
+<div><dl class="simple">
+<dt>row 1: indices of the start cell</dt><dd><p>e.g. for start cell [2,3] second row (lat) and third
+column (lon)</p>
+</dd>
+<dt>row 2: the start orientation</dt><dd><p>e.g. orientation [0,1] points right, [1,0] points down</p>
+</dd>
+</dl>
+</div></blockquote>
+</p></li>
+<li><p><strong>stop</strong> (<em>{'Elisoff'</em><em>, </em><em>'Nvisits'</em><em>, </em><em>'either'}</em><em>, </em><em>default='either'</em>) – <p>selector for the stopping criterion</p>
+<blockquote>
+<div><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">Elisoff</span></code></dt><dd><p>stops when the start cell has been re-visited with the
+same orientation as started with</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Nvisits</span></code></dt><dd><p>stops when the start cell has been re-visited N number
+of times (N set by <cite>startvisits</cite> parameter)</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">either</span></code></dt><dd><p>stops when either Elisoff or Nvisits has been satisfied</p>
+</dd>
+</dl>
+</div></blockquote>
+</p></li>
+<li><p><strong>startvisits</strong> (<em>int</em><em>, </em><em>default=3</em>) – the number of times re-visiting the start cell will trigger an
+end to the search</p></li>
+<li><p><strong>remcontourrepeat</strong> (<em>bool</em><em>, </em><em>default=True</em>) – select whether to remove consecutive repeating cells in the
+output <cite>contour</cite></p></li>
+<li><p><strong>remsearchrepeat</strong> (<em>bool</em><em>, </em><em>default=False</em>) – select whether to remove consecutive repeating cells in the
+output <cite>contoursearch</cite></p></li>
+<li><p><strong>closecontour</strong> (<em>bool</em><em>, </em><em>default=True</em>) – select whether to close the output <cite>contour</cite> (first cell = last
+cell)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>contour</strong> (<em>ndarray</em>) – 2D Nx2 array of ordered latitude/longitude points (degrees)
+describing the edge of a mask</p></li>
+<li><p><strong>contoursearch</strong> (<em>ndarray</em>) – 2D Nx2 array of ordered latitude/longitude points (degrees)
+describing the cells searched during contour tracing</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="geocontour.contourutil.html#geocontour.contourutil.findstart" title="geocontour.contourutil.findstart"><code class="xref py py-obj docutils literal notranslate"><span class="pre">geocontour.contourutil.findstart</span></code></a>, <a class="reference internal" href="geocontour.contourutil.html#geocontour.contourutil.setstop" title="geocontour.contourutil.setstop"><code class="xref py py-obj docutils literal notranslate"><span class="pre">geocontour.contourutil.setstop</span></code></a>, <a class="reference internal" href="#geocontour.contourtrace.square" title="geocontour.contourtrace.square"><code class="xref py py-obj docutils literal notranslate"><span class="pre">square</span></code></a>, <a class="reference internal" href="#geocontour.contourtrace.moore_imp" title="geocontour.contourtrace.moore_imp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">moore_imp</span></code></a>, <a class="reference internal" href="#geocontour.contourtrace.pavlidis" title="geocontour.contourtrace.pavlidis"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pavlidis</span></code></a>, <a class="reference internal" href="#geocontour.contourtrace.pavlidis_imp" title="geocontour.contourtrace.pavlidis_imp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pavlidis_imp</span></code></a>, <a class="reference internal" href="#geocontour.contourtrace.TSR" title="geocontour.contourtrace.TSR"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TSR</span></code></a></p>
+</div>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>If <cite>latitudes</cite>/<cite>longitudes</cite> not provided, returned
+<cite>contour</cite>/<cite>contoursearch</cite> will be indices of the input mask</p></li>
+<li><p><cite>startvisits</cite> parameter will only be utilized when <cite>stop</cite>
+parameter is set to ‘Nvisits’ or ‘either’</p></li>
+</ul>
+<p class="rubric">References</p>
+<p>Ghuneim, A.G. (2000). Contour Tracing. McGill University.
+&lt;<a class="reference external" href="https://www.imageprocessingplace.com/downloads_V3/root_downloads/tutorials/contour_tracing_Abeer_George_Ghuneim/alg.html">https://www.imageprocessingplace.com/downloads_V3/root_downloads/tutorials/contour_tracing_Abeer_George_Ghuneim/alg.html</a>&gt;</p>
+<p>Toussaint, G.T. (2010). Grids Connectivity and Contour Tracing
+[Lesson Notes]. McGill University.
+&lt;<a class="reference external" href="http://www-cgrl.cs.mcgill.ca/~godfried/teaching/mir-reading-assignments/Chapter-2-Grids-Connectivity-Contour-Tracing.pdf">http://www-cgrl.cs.mcgill.ca/~godfried/teaching/mir-reading-assignments/Chapter-2-Grids-Connectivity-Contour-Tracing.pdf</a>&gt;</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="geocontour.contourtrace.moore_imp">
+<span class="sig-prename descclassname"><span class="pre">geocontour.contourtrace.</span></span><span class="sig-name descname"><span class="pre">moore_imp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mask</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">latitudes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">longitudes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">direction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cw'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stop</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'either'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">startvisits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remcontourrepeat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remsearchrepeat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">closecontour</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geocontour.contourtrace.moore_imp" title="Permalink to this definition"></a></dt>
+<dd><p>Find the contour of a mask using an improved Moore neighbor tracing
+algorithm that reliably captures inside corners</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mask</strong> (<em>ndarray</em>) – 2D MxN bool array where M=len(<cite>latitudes</cite>) and
+N=len(<cite>longitudes</cite>)</p></li>
+<li><p><strong>latitudes</strong> (<em>ndarray</em><em>, </em><em>optional</em>) – 1D Nx1 array of latitude points (degrees)</p></li>
+<li><p><strong>longitudes</strong> (<em>ndarray</em><em>, </em><em>optional</em>) – 1D Nx1 array of longitude points (degrees)</p></li>
+<li><p><strong>direction</strong> (<em>{'cw'</em><em>, </em><em>'ccw'}</em><em>, </em><em>default='cw'</em>) – select the direction of contour tracing</p></li>
+<li><p><strong>start</strong> (<em>{'auto'</em><em>, </em><em>array_like}</em><em>, </em><em>default='auto'</em>) – <p>either a selection for automatic start cell assignment or a
+manual assignment via a 2x2 array describing the start cell and
+orientation</p>
+<blockquote>
+<div><dl class="simple">
+<dt>row 1: indices of the start cell</dt><dd><p>e.g. for start cell [2,3] second row (lat) and third
+column (lon)</p>
+</dd>
+<dt>row 2: the start orientation</dt><dd><p>e.g. orientation [0,1] points right, [1,0] points down</p>
+</dd>
+</dl>
+</div></blockquote>
+</p></li>
+<li><p><strong>stop</strong> (<em>{'Elisoff'</em><em>, </em><em>'Nvisits'</em><em>, </em><em>'either'}</em><em>, </em><em>default='either'</em>) – <p>selector for the stopping criterion</p>
+<blockquote>
+<div><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">Elisoff</span></code></dt><dd><p>stops when the start cell has been re-visited with the
+same orientation as started with</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Nvisits</span></code></dt><dd><p>stops when the start cell has been re-visited N number
+of times (N set by <cite>startvisits</cite> parameter)</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">either</span></code></dt><dd><p>stops when either Elisoff or Nvisits has been satisfied</p>
+</dd>
+</dl>
+</div></blockquote>
+</p></li>
+<li><p><strong>startvisits</strong> (<em>int</em><em>, </em><em>default=3</em>) – the number of times re-visiting the start cell will trigger an
+end to the search</p></li>
+<li><p><strong>remcontourrepeat</strong> (<em>bool</em><em>, </em><em>default=True</em>) – select whether to remove consecutive repeating cells in the
+output <cite>contour</cite></p></li>
+<li><p><strong>remsearchrepeat</strong> (<em>bool</em><em>, </em><em>default=False</em>) – select whether to remove consecutive repeating cells in the
+output <cite>contoursearch</cite></p></li>
+<li><p><strong>closecontour</strong> (<em>bool</em><em>, </em><em>default=True</em>) – select whether to close the output <cite>contour</cite> (first cell = last
+cell)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>contour</strong> (<em>ndarray</em>) – 2D Nx2 array of ordered latitude/longitude points (degrees)
+describing the edge of a mask</p></li>
+<li><p><strong>contoursearch</strong> (<em>ndarray</em>) – 2D Nx2 array of ordered latitude/longitude points (degrees)
+describing the cells searched during contour tracing</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="geocontour.contourutil.html#geocontour.contourutil.findstart" title="geocontour.contourutil.findstart"><code class="xref py py-obj docutils literal notranslate"><span class="pre">geocontour.contourutil.findstart</span></code></a>, <a class="reference internal" href="geocontour.contourutil.html#geocontour.contourutil.setstop" title="geocontour.contourutil.setstop"><code class="xref py py-obj docutils literal notranslate"><span class="pre">geocontour.contourutil.setstop</span></code></a>, <a class="reference internal" href="#geocontour.contourtrace.square" title="geocontour.contourtrace.square"><code class="xref py py-obj docutils literal notranslate"><span class="pre">square</span></code></a>, <a class="reference internal" href="#geocontour.contourtrace.moore" title="geocontour.contourtrace.moore"><code class="xref py py-obj docutils literal notranslate"><span class="pre">moore</span></code></a>, <a class="reference internal" href="#geocontour.contourtrace.pavlidis" title="geocontour.contourtrace.pavlidis"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pavlidis</span></code></a>, <a class="reference internal" href="#geocontour.contourtrace.pavlidis_imp" title="geocontour.contourtrace.pavlidis_imp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pavlidis_imp</span></code></a>, <a class="reference internal" href="#geocontour.contourtrace.TSR" title="geocontour.contourtrace.TSR"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TSR</span></code></a></p>
+</div>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>If <cite>latitudes</cite>/<cite>longitudes</cite> not provided, returned
+<cite>contour</cite>/<cite>contoursearch</cite> will be indices of the input mask</p></li>
+<li><p><cite>startvisits</cite> parameter will only be utilized when <cite>stop</cite>
+parameter is set to ‘Nvisits’ or ‘either’</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="geocontour.contourtrace.pavlidis">
+<span class="sig-prename descclassname"><span class="pre">geocontour.contourtrace.</span></span><span class="sig-name descname"><span class="pre">pavlidis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mask</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">latitudes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">longitudes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">direction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cw'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stop</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Nvisits'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">startvisits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remcontourrepeat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remsearchrepeat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">closecontour</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geocontour.contourtrace.pavlidis" title="Permalink to this definition"></a></dt>
+<dd><p>Find the contour of a mask using the Pavlidis algorithm</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mask</strong> (<em>ndarray</em>) – 2D MxN bool array where M=len(<cite>latitudes</cite>) and
+N=len(<cite>longitudes</cite>)</p></li>
+<li><p><strong>latitudes</strong> (<em>ndarray</em><em>, </em><em>optional</em>) – 1D Nx1 array of latitude points (degrees)</p></li>
+<li><p><strong>longitudes</strong> (<em>ndarray</em><em>, </em><em>optional</em>) – 1D Nx1 array of longitude points (degrees)</p></li>
+<li><p><strong>direction</strong> (<em>{'cw'</em><em>, </em><em>'ccw'}</em><em>, </em><em>default='cw'</em>) – select the direction of contour tracing</p></li>
+<li><p><strong>start</strong> (<em>{'auto'</em><em>, </em><em>array_like}</em><em>, </em><em>default='auto'</em>) – <p>either a selection for automatic start cell assignment or a
+manual assignment via a 2x2 array describing the start cell and
+orientation</p>
+<blockquote>
+<div><dl class="simple">
+<dt>row 1: indices of the start cell</dt><dd><p>e.g. for start cell [2,3] second row (lat) and third
+column (lon)</p>
+</dd>
+<dt>row 2: the start orientation</dt><dd><p>e.g. orientation [0,1] points right, [1,0] points down</p>
+</dd>
+</dl>
+</div></blockquote>
+</p></li>
+<li><p><strong>stop</strong> (<em>{'Elisoff'</em><em>, </em><em>'Nvisits'</em><em>, </em><em>'either'}</em><em>, </em><em>default='either'</em>) – <p>selector for the stopping criterion</p>
+<blockquote>
+<div><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">Elisoff</span></code></dt><dd><p>stops when the start cell has been re-visited with the
+same orientation as started with</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Nvisits</span></code></dt><dd><p>stops when the start cell has been re-visited N number
+of times (N set by <cite>startvisits</cite> parameter)</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">either</span></code></dt><dd><p>stops when either Elisoff or Nvisits has been satisfied</p>
+</dd>
+</dl>
+</div></blockquote>
+</p></li>
+<li><p><strong>startvisits</strong> (<em>int</em><em>, </em><em>default=3</em>) – the number of times re-visiting the start cell will trigger an
+end to the search</p></li>
+<li><p><strong>remcontourrepeat</strong> (<em>bool</em><em>, </em><em>default=True</em>) – select whether to remove consecutive repeating cells in the
+output <cite>contour</cite></p></li>
+<li><p><strong>remsearchrepeat</strong> (<em>bool</em><em>, </em><em>default=False</em>) – select whether to remove consecutive repeating cells in the
+output <cite>contoursearch</cite></p></li>
+<li><p><strong>closecontour</strong> (<em>bool</em><em>, </em><em>default=True</em>) – select whether to close the output <cite>contour</cite> (first cell = last
+cell)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>contour</strong> (<em>ndarray</em>) – 2D Nx2 array of ordered latitude/longitude points (degrees)
+describing the edge of a mask</p></li>
+<li><p><strong>contoursearch</strong> (<em>ndarray</em>) – 2D Nx2 array of ordered latitude/longitude points (degrees)
+describing the cells searched during contour tracing</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="geocontour.contourutil.html#geocontour.contourutil.findstart" title="geocontour.contourutil.findstart"><code class="xref py py-obj docutils literal notranslate"><span class="pre">geocontour.contourutil.findstart</span></code></a>, <a class="reference internal" href="geocontour.contourutil.html#geocontour.contourutil.setstop" title="geocontour.contourutil.setstop"><code class="xref py py-obj docutils literal notranslate"><span class="pre">geocontour.contourutil.setstop</span></code></a>, <a class="reference internal" href="#geocontour.contourtrace.square" title="geocontour.contourtrace.square"><code class="xref py py-obj docutils literal notranslate"><span class="pre">square</span></code></a>, <a class="reference internal" href="#geocontour.contourtrace.moore" title="geocontour.contourtrace.moore"><code class="xref py py-obj docutils literal notranslate"><span class="pre">moore</span></code></a>, <a class="reference internal" href="#geocontour.contourtrace.moore_imp" title="geocontour.contourtrace.moore_imp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">moore_imp</span></code></a>, <a class="reference internal" href="#geocontour.contourtrace.pavlidis_imp" title="geocontour.contourtrace.pavlidis_imp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pavlidis_imp</span></code></a>, <a class="reference internal" href="#geocontour.contourtrace.TSR" title="geocontour.contourtrace.TSR"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TSR</span></code></a></p>
+</div>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>If <cite>latitudes</cite>/<cite>longitudes</cite> not provided, returned
+<cite>contour</cite>/<cite>contoursearch</cite> will be indices of the input mask</p></li>
+<li><p><cite>startvisits</cite> parameter will only be utilized when <cite>stop</cite>
+parameter is set to ‘Nvisits’ or ‘either’</p></li>
+</ul>
+<p class="rubric">References</p>
+<p>Ghuneim, A.G. (2000). Contour Tracing. McGill University.
+&lt;<a class="reference external" href="https://www.imageprocessingplace.com/downloads_V3/root_downloads/tutorials/contour_tracing_Abeer_George_Ghuneim/alg.html">https://www.imageprocessingplace.com/downloads_V3/root_downloads/tutorials/contour_tracing_Abeer_George_Ghuneim/alg.html</a>&gt;</p>
+<p>Pavlidis, T. (1982) Algorithms for Graphics and Image Processing.
+Computer Science Press, New York, NY.
+&lt;<a class="reference external" href="https://doi.org/10.1007/978-3-642-93208-3">https://doi.org/10.1007/978-3-642-93208-3</a>&gt;</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="geocontour.contourtrace.pavlidis_imp">
+<span class="sig-prename descclassname"><span class="pre">geocontour.contourtrace.</span></span><span class="sig-name descname"><span class="pre">pavlidis_imp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mask</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">latitudes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">longitudes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">direction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cw'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stop</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Nvisits'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">startvisits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remcontourrepeat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remsearchrepeat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">closecontour</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geocontour.contourtrace.pavlidis_imp" title="Permalink to this definition"></a></dt>
+<dd><p>Find the contour of a mask using an improved Pavlidis algorithm that
+reliably captures inside corners</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mask</strong> (<em>ndarray</em>) – 2D MxN bool array where M=len(<cite>latitudes</cite>) and
+N=len(<cite>longitudes</cite>)</p></li>
+<li><p><strong>latitudes</strong> (<em>ndarray</em><em>, </em><em>optional</em>) – 1D Nx1 array of latitude points (degrees)</p></li>
+<li><p><strong>longitudes</strong> (<em>ndarray</em><em>, </em><em>optional</em>) – 1D Nx1 array of longitude points (degrees)</p></li>
+<li><p><strong>direction</strong> (<em>{'cw'</em><em>, </em><em>'ccw'}</em><em>, </em><em>default='cw'</em>) – select the direction of contour tracing</p></li>
+<li><p><strong>start</strong> (<em>{'auto'</em><em>, </em><em>array_like}</em><em>, </em><em>default='auto'</em>) – <p>either a selection for automatic start cell assignment or a
+manual assignment via a 2x2 array describing the start cell and
+orientation</p>
+<blockquote>
+<div><dl class="simple">
+<dt>row 1: indices of the start cell</dt><dd><p>e.g. for start cell [2,3] second row (lat) and third
+column (lon)</p>
+</dd>
+<dt>row 2: the start orientation</dt><dd><p>e.g. orientation [0,1] points right, [1,0] points down</p>
+</dd>
+</dl>
+</div></blockquote>
+</p></li>
+<li><p><strong>stop</strong> (<em>{'Elisoff'</em><em>, </em><em>'Nvisits'</em><em>, </em><em>'either'}</em><em>, </em><em>default='either'</em>) – <p>selector for the stopping criterion</p>
+<blockquote>
+<div><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">Elisoff</span></code></dt><dd><p>stops when the start cell has been re-visited with the
+same orientation as started with</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Nvisits</span></code></dt><dd><p>stops when the start cell has been re-visited N number
+of times (N set by <cite>startvisits</cite> parameter)</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">either</span></code></dt><dd><p>stops when either Elisoff or Nvisits has been satisfied</p>
+</dd>
+</dl>
+</div></blockquote>
+</p></li>
+<li><p><strong>startvisits</strong> (<em>int</em><em>, </em><em>default=3</em>) – the number of times re-visiting the start cell will trigger an
+end to the search</p></li>
+<li><p><strong>remcontourrepeat</strong> (<em>bool</em><em>, </em><em>default=True</em>) – select whether to remove consecutive repeating cells in the
+output <cite>contour</cite></p></li>
+<li><p><strong>remsearchrepeat</strong> (<em>bool</em><em>, </em><em>default=False</em>) – select whether to remove consecutive repeating cells in the
+output <cite>contoursearch</cite></p></li>
+<li><p><strong>closecontour</strong> (<em>bool</em><em>, </em><em>default=True</em>) – select whether to close the output <cite>contour</cite> (first cell = last
+cell)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>contour</strong> (<em>ndarray</em>) – 2D Nx2 array of ordered latitude/longitude points (degrees)
+describing the edge of a mask</p></li>
+<li><p><strong>contoursearch</strong> (<em>ndarray</em>) – 2D Nx2 array of ordered latitude/longitude points (degrees)
+describing the cells searched during contour tracing</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="geocontour.contourutil.html#geocontour.contourutil.findstart" title="geocontour.contourutil.findstart"><code class="xref py py-obj docutils literal notranslate"><span class="pre">geocontour.contourutil.findstart</span></code></a>, <a class="reference internal" href="geocontour.contourutil.html#geocontour.contourutil.setstop" title="geocontour.contourutil.setstop"><code class="xref py py-obj docutils literal notranslate"><span class="pre">geocontour.contourutil.setstop</span></code></a>, <a class="reference internal" href="#geocontour.contourtrace.square" title="geocontour.contourtrace.square"><code class="xref py py-obj docutils literal notranslate"><span class="pre">square</span></code></a>, <a class="reference internal" href="#geocontour.contourtrace.moore" title="geocontour.contourtrace.moore"><code class="xref py py-obj docutils literal notranslate"><span class="pre">moore</span></code></a>, <a class="reference internal" href="#geocontour.contourtrace.moore_imp" title="geocontour.contourtrace.moore_imp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">moore_imp</span></code></a>, <a class="reference internal" href="#geocontour.contourtrace.pavlidis" title="geocontour.contourtrace.pavlidis"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pavlidis</span></code></a>, <a class="reference internal" href="#geocontour.contourtrace.TSR" title="geocontour.contourtrace.TSR"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TSR</span></code></a></p>
+</div>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>If <cite>latitudes</cite>/<cite>longitudes</cite> not provided, returned
+<cite>contour</cite>/<cite>contoursearch</cite> will be indices of the input mask</p></li>
+<li><p><cite>startvisits</cite> parameter will only be utilized when <cite>stop</cite>
+parameter is set to ‘Nvisits’ or ‘either’</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="geocontour.contourtrace.TSR">
+<span class="sig-prename descclassname"><span class="pre">geocontour.contourtrace.</span></span><span class="sig-name descname"><span class="pre">TSR</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mask</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">latitudes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">longitudes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">direction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cw'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stop</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'either'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">startvisits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remcontourrepeat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remsearchrepeat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">closecontour</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geocontour.contourtrace.TSR" title="Permalink to this definition"></a></dt>
+<dd><p>Find the contour of a mask using the two-step representative tracing
+algorithm</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mask</strong> (<em>ndarray</em>) – 2D MxN bool array where M=len(<cite>latitudes</cite>) and
+N=len(<cite>longitudes</cite>)</p></li>
+<li><p><strong>latitudes</strong> (<em>ndarray</em><em>, </em><em>optional</em>) – 1D Nx1 array of latitude points (degrees)</p></li>
+<li><p><strong>longitudes</strong> (<em>ndarray</em><em>, </em><em>optional</em>) – 1D Nx1 array of longitude points (degrees)</p></li>
+<li><p><strong>direction</strong> (<em>{'cw'</em><em>, </em><em>'ccw'}</em><em>, </em><em>default='cw'</em>) – select the direction of contour tracing</p></li>
+<li><p><strong>start</strong> (<em>{'auto'</em><em>, </em><em>array_like}</em><em>, </em><em>default='auto'</em>) – <p>either a selection for automatic start cell assignment or a
+manual assignment via a 2x2 array describing the start cell and
+orientation</p>
+<blockquote>
+<div><dl class="simple">
+<dt>row 1: indices of the start cell</dt><dd><p>e.g. for start cell [2,3] second row (lat) and third
+column (lon)</p>
+</dd>
+<dt>row 2: the start orientation</dt><dd><p>e.g. orientation [0,1] points right, [1,0] points down</p>
+</dd>
+</dl>
+</div></blockquote>
+</p></li>
+<li><p><strong>stop</strong> (<em>{'Elisoff'</em><em>, </em><em>'Nvisits'</em><em>, </em><em>'either'}</em><em>, </em><em>default='either'</em>) – <p>selector for the stopping criterion</p>
+<blockquote>
+<div><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">Elisoff</span></code></dt><dd><p>stops when the start cell has been re-visited with the
+same orientation as started with</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Nvisits</span></code></dt><dd><p>stops when the start cell has been re-visited N number
+of times (N set by <cite>startvisits</cite> parameter)</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">either</span></code></dt><dd><p>stops when either Elisoff or Nvisits has been satisfied</p>
+</dd>
+</dl>
+</div></blockquote>
+</p></li>
+<li><p><strong>startvisits</strong> (<em>int</em><em>, </em><em>default=3</em>) – the number of times re-visiting the start cell will trigger an
+end to the search</p></li>
+<li><p><strong>checkconn</strong> (<em>bool</em><em>, </em><em>default=False</em>) – select whether to check connectivity and warn the user of
+potential issues, default=False</p></li>
+<li><p><strong>remcontourrepeat</strong> (<em>bool</em><em>, </em><em>default=True</em>) – select whether to remove consecutive repeating cells in the
+output <cite>contour</cite></p></li>
+<li><p><strong>remsearchrepeat</strong> (<em>bool</em><em>, </em><em>default=False</em>) – select whether to remove consecutive repeating cells in the
+output <cite>contoursearch</cite></p></li>
+<li><p><strong>closecontour</strong> (<em>bool</em><em>, </em><em>default=True</em>) – select whether to close the output <cite>contour</cite> (first cell = last
+cell)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>contour</strong> (<em>ndarray</em>) – 2D Nx2 array of ordered latitude/longitude points (degrees)
+describing the edge of a mask</p></li>
+<li><p><strong>contoursearch</strong> (<em>ndarray</em>) – 2D Nx2 array of ordered latitude/longitude points (degrees)
+describing the cells searched during contour tracing</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="geocontour.contourutil.html#geocontour.contourutil.findstart" title="geocontour.contourutil.findstart"><code class="xref py py-obj docutils literal notranslate"><span class="pre">geocontour.contourutil.findstart</span></code></a>, <a class="reference internal" href="geocontour.contourutil.html#geocontour.contourutil.setstop" title="geocontour.contourutil.setstop"><code class="xref py py-obj docutils literal notranslate"><span class="pre">geocontour.contourutil.setstop</span></code></a>, <a class="reference internal" href="#geocontour.contourtrace.square" title="geocontour.contourtrace.square"><code class="xref py py-obj docutils literal notranslate"><span class="pre">square</span></code></a>, <a class="reference internal" href="#geocontour.contourtrace.moore" title="geocontour.contourtrace.moore"><code class="xref py py-obj docutils literal notranslate"><span class="pre">moore</span></code></a>, <a class="reference internal" href="#geocontour.contourtrace.moore_imp" title="geocontour.contourtrace.moore_imp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">moore_imp</span></code></a>, <a class="reference internal" href="#geocontour.contourtrace.pavlidis" title="geocontour.contourtrace.pavlidis"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pavlidis</span></code></a>, <a class="reference internal" href="#geocontour.contourtrace.pavlidis_imp" title="geocontour.contourtrace.pavlidis_imp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pavlidis_imp</span></code></a></p>
+</div>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>If <cite>latitudes</cite>/<cite>longitudes</cite> not provided, returned
+<cite>contour</cite>/<cite>contoursearch</cite> will be indices of the input mask</p></li>
+<li><p><cite>startvisits</cite> parameter will only be utilized when <cite>stop</cite>
+parameter is set to ‘Nvisits’ or ‘either’</p></li>
+</ul>
+<p class="rubric">References</p>
+<p>Seo, J., Chae, S., Shim, J., Kim, D., Cheong, C., &amp; Han, T.-D.
+(2016). Fast Contour-Tracing Algorithm Based on a Pixel-Following
+Method for Image Sensors. Sensors, 16(3), 353.
+&lt;<a class="reference external" href="https://doi.org/10.3390/s16030353">https://doi.org/10.3390/s16030353</a>&gt;</p>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="geocontour.check.html" class="btn btn-neutral float-left" title="geocontour.check module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="geocontour.contourutil.html" class="btn btn-neutral float-right" title="geocontour.contourutil module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Benjamin Krichman.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

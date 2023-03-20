@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>geocontour.output module &mdash; geocontour 1.2.1 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="geocontour.maskutil module" href="geocontour.maskutil.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            geocontour
+              <img src="_static/icon_geocontour.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                1.2.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="readme_link.html">Introduction</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="geocontour.html">geocontour package</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="geocontour.html#subpackages">Subpackages</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="geocontour.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="geocontour.check.html">geocontour.check module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geocontour.contourtrace.html">geocontour.contourtrace module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geocontour.contourutil.html">geocontour.contourutil module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geocontour.geocontour.html">geocontour.geocontour module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geocontour.grid.html">geocontour.grid module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geocontour.masksearch.html">geocontour.masksearch module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geocontour.maskutil.html">geocontour.maskutil module</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">geocontour.output module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#functions-for-visualizing-and-saving-output-produced-by-geocontour">Functions for visualizing and saving output produced by geocontour</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#geocontour.output.plot"><code class="docutils literal notranslate"><span class="pre">plot()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#geocontour.output.save"><code class="docutils literal notranslate"><span class="pre">save()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">geocontour</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="geocontour.html">geocontour package</a></li>
+      <li class="breadcrumb-item active">geocontour.output module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/geocontour.output.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-geocontour.output">
+<span id="geocontour-output-module"></span><h1>geocontour.output module<a class="headerlink" href="#module-geocontour.output" title="Permalink to this heading"></a></h1>
+<section id="functions-for-visualizing-and-saving-output-produced-by-geocontour">
+<h2>Functions for visualizing and saving output produced by geocontour<a class="headerlink" href="#functions-for-visualizing-and-saving-output-produced-by-geocontour" title="Permalink to this heading"></a></h2>
+</section>
+<dl class="py function">
+<dt class="sig sig-object py" id="geocontour.output.plot">
+<span class="sig-prename descclassname"><span class="pre">geocontour.output.</span></span><span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">latitudes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">longitudes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contour</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contoursearch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">geocontour</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vertices</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundingbox</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'all'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">buffer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cells</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'default'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">showcontour</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">startcell</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contourarrows</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contoursearcharrows</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fancycontoursearch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contoursearch_contraction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contoursearch_shift</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">geocontourvectors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">emptycellcolor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'lightgrey'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fullcellcolor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sandybrown'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundarycolor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'tab:blue'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contourcolor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'olivedrab'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contoursearchcolor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'firebrick'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">geocontourcolor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'olivedrab'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vertexcolor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'tab:cyan'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gridcolor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'black'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lw_boundary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lw_contour</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lw_contoursearch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lw_geocontour</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mw_contourarrows</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mw_contoursearcharrows</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mw_vertices</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">features</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'plot'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outdpi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'high'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geocontour.output.plot" title="Permalink to this definition"></a></dt>
+<dd><p>Plot any/all geocontour-created elements:</p>
+<ul class="simple">
+<li><p><cite>boundary</cite></p></li>
+<li><p><cite>mask</cite></p></li>
+<li><p><cite>contour</cite></p></li>
+<li><p><cite>contoursearch</cite></p></li>
+<li><p><cite>geocontour</cite></p></li>
+<li><p><cite>vertices</cite></p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>latitudes</strong> (<em>ndarray</em>) – 1D Nx1 array of latitude points (degrees)</p></li>
+<li><p><strong>longitudes</strong> (<em>ndarray</em>) – 1D Nx1 array of longitude points (degrees)</p></li>
+<li><p><strong>boundary</strong> (<em>ndarray</em><em>, </em><em>optional</em>) – 2D Nx2 array of latitude/longitude points (degrees) with the
+last point equal to the first</p></li>
+<li><p><strong>mask</strong> (<em>ndarray</em><em>, </em><em>optional</em>) – 2D MxN bool array where M=len(<cite>latitudes</cite>) and
+N=len(<cite>longitudes</cite>)</p></li>
+<li><p><strong>contour</strong> (<em>ndarray</em><em>, </em><em>optional</em>) – 2D Nx2 array of ordered latitude/longitude points (degrees)
+describing the edge of a mask</p></li>
+<li><p><strong>contoursearch</strong> (<em>ndarray</em><em>, </em><em>optional</em>) – 2D Nx2 array of ordered latitude/longitude points (degrees)
+describing the cells searched during contour tracing</p></li>
+<li><p><strong>geocontour</strong> (<em>ndarray</em><em>, </em><em>optional</em>) – 3D Nx2x5 array defining a list of N contour cells (column 1),
+their edge points (columns 2,3), segment lengths (column 4), and
+outward unit vectors (column 5)</p></li>
+<li><p><strong>vertices</strong> (<em>ndarray</em><em>, </em><em>optional</em>) – 2D Nx2 array of latitude/longitude points (degrees)</p></li>
+<li><p><strong>boundingbox</strong> (<em>{'all'</em><em>, </em><em>'boundary'</em><em>, </em><em>'mask'</em><em>, </em><em>'contour'</em><em>,                  </em><em>'contoursearch'</em><em>, </em><em>'geocontour'}</em><em>, </em><em>default='all'</em>) – select the plot element(s) to be used as x and y axis limits
+[default value ‘all’ uses the largest bounds from all provided
+elements]</p></li>
+<li><p><strong>buffer</strong> (<em>bool</em><em>, </em><em>default=True</em>) – create a 1 cell buffer on the bounding box</p></li>
+<li><p><strong>grid</strong> (<em>bool</em><em>, </em><em>default=True</em>) – show/hide the cell grid</p></li>
+<li><p><strong>cells</strong> (<em>{'default'</em><em>, </em><em>'none'</em><em>, </em><em>'mask'</em><em>, </em><em>'maskedge-4'</em><em>, </em><em>'maskedge-8'</em><em>,                </em><em>'contour'</em><em>, </em><em>'geocontour'}</em><em>, </em><em>default='default'</em>) – <p>the plot element to be used for filling the cell grid</p>
+<blockquote>
+<div><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">default</span></code></dt><dd><p>use first provided element, in this order: ‘geocontour’,
+‘contour’, ‘mask’, ‘none’</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">none</span></code></dt><dd><p>no filled grid cells</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">mask</span></code></dt><dd><p>all <cite>mask</cite> cells</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">maskedge-4</span></code></dt><dd><p>4-connected <cite>mask</cite> edge cells</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">maskedge-8</span></code></dt><dd><p>8-connected <cite>mask</cite> edge cells</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">contour</span></code></dt><dd><p><cite>contour</cite> cells</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">geocontour</span></code></dt><dd><p><cite>geocontour</cite> cells</p>
+</dd>
+</dl>
+</div></blockquote>
+</p></li>
+<li><p><strong>showcontour</strong> (<em>bool</em><em>, </em><em>default=True</em>) – show/hide the <cite>contour</cite> (if provided)
+[allows showing contour cells without line plot of <cite>contour</cite>]</p></li>
+<li><p><strong>startcell</strong> (<em>bool</em><em>, </em><em>default=True</em>) – show/hide the startcell (<cite>contour</cite> or <cite>contoursearch</cite>, if
+provided)</p></li>
+<li><p><strong>contourarrows</strong> (<em>bool</em><em>, </em><em>default=True</em>) – show/hide directional arrows on the <cite>contour</cite> (if provided)</p></li>
+<li><p><strong>contoursearcharrows</strong> (<em>bool</em><em>, </em><em>default=True</em>) – show/hide directional arrows on the <cite>contoursearch</cite> (if
+provided)</p></li>
+<li><p><strong>fancycontoursearch</strong> (<em>bool</em><em>, </em><em>default=True</em>) – plot the <cite>contoursearch</cite> (if provided) in a cleaner and more
+easily followed format</p></li>
+<li><p><strong>contoursearch_contraction</strong> (<em>float</em><em>, </em><em>default=0.2</em>) – value determining how much <cite>contoursearch</cite> “shrinks” towards
+<cite>contour</cite> cell edges (range 0 to 0.5)</p></li>
+<li><p><strong>contoursearch_shift</strong> (<em>float</em><em>, </em><em>default=0.25</em>) – value determining how much <cite>contoursearch</cite> shifts to avoid
+doubling back on itself (range 0 to 0.5)</p></li>
+<li><p><strong>geocontourvectors</strong> (<em>bool</em><em>, </em><em>default=True</em>) – show/hide outward normal vectors on the <cite>geocontour</cite> (if
+provided)</p></li>
+<li><p><strong>emptycellcolor</strong> (<em>matplotlib_color</em><em>, </em><em>default='lightgray'</em>) – color for unmasked cells</p></li>
+<li><p><strong>fullcellcolor</strong> (<em>matplotlib_color</em><em>, </em><em>default='sandybrown'</em>) – color for masked cells</p></li>
+<li><p><strong>boundarycolor</strong> (<em>matplotlib_color</em><em>, </em><em>default='tab:blue'</em>) – color for <cite>boundary</cite> (if provided)</p></li>
+<li><p><strong>contourcolor</strong> (<em>matplotlib_color</em><em>, </em><em>default='olivedrab'</em>) – color for <cite>contour</cite> (if provided)</p></li>
+<li><p><strong>contoursearchcolor</strong> (<em>matplotlib_color</em><em>, </em><em>default='firebrickred'</em>) – color for <cite>contoursearch</cite> (if provided)</p></li>
+<li><p><strong>geocontourcolor</strong> (<em>matplotlib_color</em><em>, </em><em>default='olivedrab'</em>) – color for <cite>geocontour</cite> (if provided)</p></li>
+<li><p><strong>vertexcolor</strong> (<em>matplotlib_color</em><em>, </em><em>default='tab:cyan'</em>) – color for <cite>vertices</cite> (if provided)</p></li>
+<li><p><strong>gridcolor</strong> (<em>matplotlib_color</em><em>, </em><em>default='black'</em>) – color for grid</p></li>
+<li><p><strong>lw_boundary</strong> (<em>float</em><em>, </em><em>default=0.1</em>) – <cite>boundary</cite> linewidth in units of grid cells (see Notes for more
+detail)</p></li>
+<li><p><strong>lw_contour</strong> (<em>float</em><em>, </em><em>default=0.1</em>) – <cite>contour</cite> linewidth in units of grid cells (see Notes for more
+detail)</p></li>
+<li><p><strong>lw_contoursearch</strong> (<em>{'auto'</em><em>, </em><em>float}</em><em>, </em><em>default='auto'</em>) – <cite>contoursearch</cite> linewidth in units of grid cells (see Notes for
+more detail)
+[i.e. ‘auto’ specifies 0.075 if <cite>fancycontoursearch</cite> = True and
+0.1 if <cite>fancycontoursearch</cite> = False]</p></li>
+<li><p><strong>lw_geocontour</strong> (<em>float</em><em>, </em><em>default=0.1</em>) – <cite>geocontour</cite> linewidth in units of grid cells (see Notes for
+more detail)</p></li>
+<li><p><strong>mw_contourarrows</strong> (<em>float</em><em>, </em><em>default=0.5</em>) – <cite>contour</cite> arrow markerwidth in units of grid cells (see Notes
+for more detail)</p></li>
+<li><p><strong>mw_contoursearcharrows</strong> (<em>{'auto'</em><em>, </em><em>float}</em><em>, </em><em>default='auto'</em>) – <cite>contoursearch</cite> arrow markerwidth in units of grid cells (see
+Notes for more detail)
+[i.e. ‘auto’ specifies 0.35 if <cite>fancycontoursearch</cite> = True and
+0.5 if <cite>fancycontoursearch</cite> = False]</p></li>
+<li><p><strong>mw_vertices</strong> (<em>float</em><em>, </em><em>default=0.4</em>) – <cite>vertex</cite> markerwidth in units of grid cells (see Notes for more
+detail)</p></li>
+<li><p><strong>features</strong> (<em>{None</em><em>, </em><em>'natural'</em><em>, </em><em>'borders'}</em><em>, </em><em>default=None</em>) – <p>display geographic features (if cartopy is installed)</p>
+<blockquote>
+<div><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">natural</span></code></dt><dd><p>display coastlines, ocean, and lakes/rivers</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">borders</span></code></dt><dd><p>display national and state/province level boundaries</p>
+</dd>
+</dl>
+</div></blockquote>
+</p></li>
+<li><p><strong>title</strong> (<em>str</em><em>, </em><em>default=None</em>) – the plot title</p></li>
+<li><p><strong>labs</strong> (<em>bool</em><em>, </em><em>default=True</em>) – x/y plot labels on or off [e.g. off if no associated lat/lon]</p></li>
+<li><p><strong>outname</strong> (<em>str</em><em>, </em><em>default='plot'</em>) – filename/path for the saved image</p></li>
+<li><p><strong>outdpi</strong> (<em>{'high'</em><em>, </em><em>'low'</em><em>, </em><em>'indep'</em><em>, </em><em>float}</em><em>, </em><em>default='high'</em>) – <p>dpi of the saved image</p>
+<blockquote>
+<div><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">high</span></code></dt><dd><p>scale dpi high enough (36 pixels per grid cell) to see
+features when zooming into a single grid cell (dpi floor
+of 100)
+[for very large grids, ‘auto’ may set dpi high enough
+that pyplot will hang on some systems - setting <cite>outdpi</cite>
+= ‘low’ or entering desired dpi manually can avoid this
+if encountered]</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">low</span></code></dt><dd><p>scale dpi to 5 pixels per grid cell (dpi floor of 100)</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">indep</span></code></dt><dd><p>set output dpi to 200 regardless of grid size/spacing</p>
+</dd>
+<dt><cite>float</cite></dt><dd><p>any other entry must be a numerical value specifying
+desired pixels per grid cell</p>
+</dd>
+</dl>
+</div></blockquote>
+</p></li>
+<li><p><strong>transp</strong> (<em>bool</em><em>, </em><em>default=False</em>) – set exterior of plot to transparent with text/labels/ticks/frame
+set to ‘dimgray’ for contrast against light and dark backgrounds
+(e.g. for environments in which light/dark mode may not be
+constant)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="geocontour.contourutil.html#geocontour.contourutil.fancysearch" title="geocontour.contourutil.fancysearch"><code class="xref py py-obj docutils literal notranslate"><span class="pre">geocontour.contourutil.fancysearch</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">datascale.plotdatasize</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">datascale.plotdatadpi</span></code></p>
+</div>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>Some inputs will only be utilized in the presence of others. For
+example (not exhaustive), <cite>contourcolor</cite> will have no effect if no
+<cite>contour</cite> is provided, <cite>mw_contourarrows</cite> will have no effect if
+<cite>contourarrows</cite> = False, and <cite>contoursearch_contraction</cite> will have
+no effect if <cite>fancycontoursearch</cite> = False.</p></li>
+<li><p>All color inputs may be provided as matplotlib pre-defined colors
+(e.g. ‘red’ or ‘r’), hex RGB(A) strings (e.g. ‘ff0000’), or RGB(A)
+tuples (e.g. (1,0,0)).</p></li>
+<li><p>Inputs for linewidths and markerwidths are given in units of grid
+cells. For example, a linewidth of 0.5 means the line will be
+half as wide as grid cells for the given plot and a markerwidth of
+0.5 means the same. The <cite>datascale</cite> package is utilized for this
+functionality and the intent is to have plot features all scale
+and be interpretable on the plot as a default, since the primary
+function of plot is diagnostic. Example or publication figures may
+require user-altered line and marker widths, though adjustment
+should be simple as the inputs are all in units of the plotted
+grid cells.</p></li>
+</ul>
+<p class="rubric">Examples</p>
+<ol class="arabic simple">
+<li><dl class="simple">
+<dt>Plot a mask and the boundary used to create it</dt><dd><p>plot(latitudes, longitudes, boundary=&lt;boundary&gt;, mask=&lt;mask&gt;,
+lw_boundary=0.2)</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Plot a contour</dt><dd><p>plot(latitudes, longitudes, countour=&lt;countour&gt;,
+boundingbox=’contour’, buffer=True)</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Plot a contoursearch overlaying contour cells</dt><dd><p>plot(latitudes, longitudes, contour=&lt;contour&gt;,
+contoursearch=&lt;contoursearch&gt;, showcontour=False,
+cells=’contour’, boundingbox=’contoursearch’, buffer=True)</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Plot a geocontour overlaid onto a map projection with natural features</dt><dd><p>plot(latitudes, longitudes, geocontour=&lt;geocontour&gt;,
+cells=’geocontour’, features=’natural’)</p>
+</dd>
+</dl>
+</li>
+</ol>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="geocontour.output.save">
+<span class="sig-prename descclassname"><span class="pre">geocontour.output.</span></span><span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">latitudes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">longitudes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contour</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contoursearch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">geocontour</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vertices</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'save'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'np'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maskouttxt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outformat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'%8.3f'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outdelim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'</span> <span class="pre">'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geocontour.output.save" title="Permalink to this definition"></a></dt>
+<dd><p>Save any/all geocontour-created elements:</p>
+<ul class="simple">
+<li><p><cite>boundary</cite></p></li>
+<li><p><cite>mask</cite></p></li>
+<li><p><cite>contour</cite></p></li>
+<li><p><cite>contoursearch</cite></p></li>
+<li><p><cite>geocontour</cite></p></li>
+<li><p><cite>vertices</cite></p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>latitudes</strong> (<em>ndarray</em>) – 1D Nx1 array of latitude points (degrees)</p></li>
+<li><p><strong>longitudes</strong> (<em>ndarray</em>) – 1D Nx1 array of longitude points (degrees)</p></li>
+<li><p><strong>boundary</strong> (<em>ndarray</em><em>, </em><em>optional</em>) – 2D Nx2 array of latitude/longitude points (degrees) with the
+last point equal to the first</p></li>
+<li><p><strong>mask</strong> (<em>ndarray</em><em>, </em><em>optional</em>) – 2D MxN bool array where M=len(<cite>latitudes</cite>) and
+N=len(<cite>longitudes</cite>)</p></li>
+<li><p><strong>contour</strong> (<em>ndarray</em><em>, </em><em>optional</em>) – 2D Nx2 array of ordered latitude/longitude points (degrees)
+describing the edge of a mask</p></li>
+<li><p><strong>contoursearch</strong> (<em>ndarray</em><em>, </em><em>optional</em>) – 2D Nx2 array of ordered latitude/longitude points (degrees)
+describing the cells searched during contour tracing</p></li>
+<li><p><strong>geocontour</strong> (<em>ndarray</em><em>, </em><em>optional</em>) – 3D Nx2x5 array defining a list of N contour cells (column 1),
+their edge points (columns 2,3), segment lengths (column 4), and
+outward unit vectors (column 5)</p></li>
+<li><p><strong>vertices</strong> (<em>ndarray</em><em>, </em><em>optional</em>) – 2D Nx2 array of latitude/longitude points (degrees)</p></li>
+<li><p><strong>outname</strong> (<em>str</em><em>, </em><em>default='save'</em>) – the filename/path for the saved elements</p></li>
+<li><p><strong>outtype</strong> (<em>{'np'</em><em>, </em><em>'xyz'}</em><em>, </em><em>default='np'</em>) – <p>select the output filetype</p>
+<blockquote>
+<div><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">np</span></code></dt><dd><p>A numpy binary file that stores each element as a
+separate array/object</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">xyz</span></code></dt><dd><p>An xyz format text file (lat, lon, [data])</p>
+</dd>
+</dl>
+</div></blockquote>
+</p></li>
+<li><p><strong>maskouttxt</strong> (<em>bool</em><em>, </em><em>default=False</em>) – select to also save a mask as a (1/0) text file</p></li>
+<li><p><strong>outformat</strong> (<em>format_str</em><em>, </em><em>default='%8.3f'</em>) – formatting string for latitude and longitude values (in .xyz
+file)</p></li>
+<li><p><strong>outdelim</strong> (<em>str</em><em>, </em><em>default=' '</em>) – delimiter string for columns in output (in .xyz file)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="geocontour.maskutil.html" class="btn btn-neutral float-left" title="geocontour.maskutil module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Benjamin Krichman.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

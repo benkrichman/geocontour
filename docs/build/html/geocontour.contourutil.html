@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>geocontour.contourutil module &mdash; geocontour 1.2.1 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="geocontour.geocontour module" href="geocontour.geocontour.html" />
+    <link rel="prev" title="geocontour.contourtrace module" href="geocontour.contourtrace.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            geocontour
+              <img src="_static/icon_geocontour.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                1.2.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="readme_link.html">Introduction</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="geocontour.html">geocontour package</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="geocontour.html#subpackages">Subpackages</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="geocontour.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="geocontour.check.html">geocontour.check module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geocontour.contourtrace.html">geocontour.contourtrace module</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">geocontour.contourutil module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#utility-functions-for-operations-involving-contours-and-contour-searches">Utility functions for operations involving contours and contour searches</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#geocontour.contourutil.findstart"><code class="docutils literal notranslate"><span class="pre">findstart()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#geocontour.contourutil.parsestart"><code class="docutils literal notranslate"><span class="pre">parsestart()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#geocontour.contourutil.setstop"><code class="docutils literal notranslate"><span class="pre">setstop()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#geocontour.contourutil.clean"><code class="docutils literal notranslate"><span class="pre">clean()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#geocontour.contourutil.fancysearch"><code class="docutils literal notranslate"><span class="pre">fancysearch()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="geocontour.geocontour.html">geocontour.geocontour module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geocontour.grid.html">geocontour.grid module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geocontour.masksearch.html">geocontour.masksearch module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geocontour.maskutil.html">geocontour.maskutil module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geocontour.output.html">geocontour.output module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">geocontour</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="geocontour.html">geocontour package</a></li>
+      <li class="breadcrumb-item active">geocontour.contourutil module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/geocontour.contourutil.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-geocontour.contourutil">
+<span id="geocontour-contourutil-module"></span><h1>geocontour.contourutil module<a class="headerlink" href="#module-geocontour.contourutil" title="Permalink to this heading"></a></h1>
+<section id="utility-functions-for-operations-involving-contours-and-contour-searches">
+<h2>Utility functions for operations involving contours and contour searches<a class="headerlink" href="#utility-functions-for-operations-involving-contours-and-contour-searches" title="Permalink to this heading"></a></h2>
+</section>
+<dl class="py function">
+<dt class="sig sig-object py" id="geocontour.contourutil.findstart">
+<span class="sig-prename descclassname"><span class="pre">geocontour.contourutil.</span></span><span class="sig-name descname"><span class="pre">findstart</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mask</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">searchdir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ru'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geocontour.contourutil.findstart" title="Permalink to this definition"></a></dt>
+<dd><p>Find starting cell for contour, given a mask and a search criteria</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mask</strong> (<em>ndarray</em>) – 2D MxN bool array where M=len(<cite>latitudes</cite>) and
+N=len(<cite>longitudes</cite>)</p></li>
+<li><p><strong>searchdir</strong> (<em>{'dr'</em><em>, </em><em>'ul'</em><em>, </em><em>'ru'</em><em>, </em><em>'ld'</em><em>, </em><em>'dl'</em><em>, </em><em>'ur'</em><em>, </em><em>'rd'</em><em>, </em><em>'lu'}</em>) – <p>2 char string describing the search directions
+[e.g. ‘dr’ will search rows moving downward and columns moving
+rightward, in that order]</p>
+<blockquote>
+<div><dl class="simple">
+<dt>for a desired clockwise search:</dt><dd><p>{‘dr’, ‘ul’, ‘ru’, ‘ld’}</p>
+</dd>
+<dt>for a desired counterclockwise search:</dt><dd><p>{‘dl’, ‘ur’, ‘rd’, ‘lu’}</p>
+</dd>
+</dl>
+</div></blockquote>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>startcell</strong> (<em>ndarray</em>) – 1x2 array containing the indices of the start cell</p></li>
+<li><p><strong>startorientation</strong> (<em>ndarray</em>) – 1x2 array describing the orientation (entry direction) of the
+start cell</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#geocontour.contourutil.parsestart" title="geocontour.contourutil.parsestart"><code class="xref py py-obj docutils literal notranslate"><span class="pre">parsestart</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="geocontour.contourutil.parsestart">
+<span class="sig-prename descclassname"><span class="pre">geocontour.contourutil.</span></span><span class="sig-name descname"><span class="pre">parsestart</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">buffermask</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geocontour.contourutil.parsestart" title="Permalink to this definition"></a></dt>
+<dd><p>Check start input for contour tracing</p>
+<p>Mainly used internally for contour trace functions</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>start</strong> (<em>array_like</em>) – <p>2x2 array describing the start cell and orientation</p>
+<blockquote>
+<div><dl class="simple">
+<dt>row 1: indices of the start cell</dt><dd><p>e.g. for start cell [2,3] second row (lat) and third
+column (lon)</p>
+</dd>
+<dt>row 2: the start orientation</dt><dd><p>e.g. orientation [0,1] points right, [1,0] points down</p>
+</dd>
+</dl>
+</div></blockquote>
+</p></li>
+<li><p><strong>buffermask</strong> (<em>ndarray</em>) – 2D M+1xN+1 bool array where M=len(<cite>latitudes</cite>) and
+N=len(<cite>longitudes</cite>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>startcell</strong> (<em>ndarray</em>) – 1x2 array containing the indices of the start cell</p></li>
+<li><p><strong>startorientation</strong> (<em>ndarray</em>) – 1x2 array describing the orientation (entry direction) of the
+start cell</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#geocontour.contourutil.findstart" title="geocontour.contourutil.findstart"><code class="xref py py-obj docutils literal notranslate"><span class="pre">findstart</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="geocontour.contourutil.setstop">
+<span class="sig-prename descclassname"><span class="pre">geocontour.contourutil.</span></span><span class="sig-name descname"><span class="pre">setstop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stop</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">startvisits</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">startcell</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">startorientation</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geocontour.contourutil.setstop" title="Permalink to this definition"></a></dt>
+<dd><p>Create a stopping function for use in contour tracing while loop</p>
+<p>Mainly used internally for contour trace functions</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>stop</strong> (<em>{'Elisoff'</em><em>, </em><em>'Nvisits'</em><em>, </em><em>'either'}</em><em>, </em><em>default='either'</em>) – <p>selector for the stopping criterion</p>
+<blockquote>
+<div><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">Elisoff</span></code></dt><dd><p>stops when the start cell has been re-visited with the
+same orientation as started with</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Nvisits</span></code></dt><dd><p>stops when the start cell has been re-visited N number
+of times (N set by <cite>startvisits</cite> parameter)</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">either</span></code></dt><dd><p>stops when either Elisoff or Nvisits has been satisfied</p>
+</dd>
+</dl>
+</div></blockquote>
+</p></li>
+<li><p><strong>startvisits</strong> (<em>int</em><em>, </em><em>default=3</em>) – the number of times re-visiting the start cell will trigger an
+end to the search</p></li>
+<li><p><strong>startcell</strong> (<em>ndarray</em>) – 1x2 array containing the indices of the start cell</p></li>
+<li><p><strong>startorientation</strong> (<em>ndarray</em>) – 1x2 array describing the orientation (entry direction) of the
+start cell</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>checkbreak</strong> – stopping function that takes a cell, orientation, and start
+visit counter as input</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>function</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#geocontour.contourutil.parsestart" title="geocontour.contourutil.parsestart"><code class="xref py py-obj docutils literal notranslate"><span class="pre">parsestart</span></code></a></p>
+</div>
+<p class="rubric">Notes</p>
+<p><cite>startvisits</cite> parameter will only be utilized when <cite>stop</cite> parameter
+is set to ‘Nvisits’ or ‘either’</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="geocontour.contourutil.clean">
+<span class="sig-prename descclassname"><span class="pre">geocontour.contourutil.</span></span><span class="sig-name descname"><span class="pre">clean</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">contourcells</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">searchcells</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">latitudes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">longitudes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">closecontour</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remcontourrepeat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remsearchrepeat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geocontour.contourutil.clean" title="Permalink to this definition"></a></dt>
+<dd><p>Returns a cleaned contour that will pass checks</p>
+<p>Mainly used internally for contour trace functions</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>contourcells</strong> (<em>array_like</em>) – list of 1x2 numpy arrays containing contour indices</p></li>
+<li><p><strong>searchcells</strong> (<em>array_like</em>) – list of 1x2 numpy arrays containing contour search indices</p></li>
+<li><p><strong>latitudes</strong> (<em>ndarray</em><em>, </em><em>optional</em>) – 1D Nx1 array of latitude points (degrees)</p></li>
+<li><p><strong>longitudes</strong> (<em>ndarray</em><em>, </em><em>optional</em>) – 1D Nx1 array of longitude points (degrees)</p></li>
+<li><p><strong>remcontourrepeat</strong> (<em>bool</em><em>, </em><em>default=True</em>) – select whether to remove consecutive repeating cells in the
+output <cite>contour</cite></p></li>
+<li><p><strong>remsearchrepeat</strong> (<em>bool</em><em>, </em><em>default=False</em>) – select whether to remove consecutive repeating cells in the
+output <cite>contoursearch</cite></p></li>
+<li><p><strong>closecontour</strong> (<em>bool</em><em>, </em><em>default=True</em>) – select whether to close the output <cite>contour</cite> (first cell = last
+cell)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>contour</strong> (<em>ndarray</em>) – 2D Nx2 array of ordered latitude/longitude points (degrees)
+describing the edge of a mask</p></li>
+<li><p><strong>contoursearch</strong> (<em>ndarray</em>) – 2D Nx2 array of ordered latitude/longitude points (degrees)
+describing the cells searched during contour tracing</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>If <cite>latitudes</cite>/<cite>longitudes</cite> not provided, returned
+<cite>contour</cite>/<cite>contoursearch</cite> will be indices of the input mask</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="geocontour.contourutil.fancysearch">
+<span class="sig-prename descclassname"><span class="pre">geocontour.contourutil.</span></span><span class="sig-name descname"><span class="pre">fancysearch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">contoursearch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contraction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shift</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.25</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geocontour.contourutil.fancysearch" title="Permalink to this definition"></a></dt>
+<dd><p>Create a contour search that is visually more easy to follow via:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>contraction, which ranges from 0 (no change) to 0.5
+(completely flattened to contour cell edges)</p></li>
+<li><p>shift, which ranges from 0 (no change) to 0.5 (half a grid
+cell)</p></li>
+</ul>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>contoursearch</strong> (<em>ndarray</em>) – 2D Nx2 array of ordered latitude/longitude points (degrees)
+describing the cells searched during contour tracing</p></li>
+<li><p><strong>contraction</strong> (<em>float</em><em>, </em><em>default=0.2</em>) – value determining how much <cite>contoursearch</cite> “shrinks” towards
+<cite>contour</cite> cell edges</p></li>
+<li><p><strong>shift</strong> (<em>float</em><em>, </em><em>default=0.25</em>) – value determining how much <cite>contoursearch</cite> “shifts” to avoid
+doubling back on itself</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>fancycontoursearch</strong> – 2D Nx2 array of ordered latitude/longitude points describing the
+cells searched during contour tracing, with <cite>contraction</cite> and
+<cite>shift</cite> applied</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>ndarray</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="geocontour.output.html#geocontour.output.plot" title="geocontour.output.plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">geocontour.output.plot</span></code></a></p>
+</div>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="geocontour.contourtrace.html" class="btn btn-neutral float-left" title="geocontour.contourtrace module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="geocontour.geocontour.html" class="btn btn-neutral float-right" title="geocontour.geocontour module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Benjamin Krichman.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
