@@ -1,7 +1,6 @@
 """
 Functions serving as example use cases for geocontour
 =====================================================
-
 """
 import numpy as np
 import geocontour.masksearch as gcms
