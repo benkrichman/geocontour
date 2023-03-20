@@ -4,7 +4,7 @@ __pycache__
 *.py.swp
 
 #setup.py dirs
-build
+/build
 dist
 *.egg-info
 .eggs
