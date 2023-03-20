@@ -13,4 +13,9 @@ python:
 
 #sphinx
 sphinx:
+  builder: html
   configuration: docs/source/conf.py
+
+#build
+  jobs:
+    - sphinx-apidoc -Mfe -o source/ ../geocontour
