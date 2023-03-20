@@ -17,5 +17,6 @@ sphinx:
   configuration: docs/source/conf.py
 
 #build
+build:
   jobs:
     - sphinx-apidoc -Mfe -o source/ ../geocontour
