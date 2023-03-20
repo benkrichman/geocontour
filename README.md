@@ -25,6 +25,9 @@ To run a full test of internal functions (minus cartopy features):
 ```python
 geocontour.tests.full()
 ```
+## Documentation
+
+Find the full documentation hosted [here](https://geocontour.readthedocs.io/en/latest/index.html).
 
 ## Citation
 
