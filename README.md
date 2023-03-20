@@ -145,8 +145,8 @@ geocontour.output.plot(latitudes,longitudes,contour=contour,cells='contour',titl
 ```
 
 <p float="middle">
-<img src=https://github.com/benkrichman/geocontour/raw/main/images/example_small_contoursearch.png width="400" height="400"/>
-<img src=https://github.com/benkrichman/geocontour/raw/main/images/example_small_contour.png width="400" height="400"/>
+<img src=https://github.com/benkrichman/geocontour/raw/main/images/example_small_contoursearch.png width="340" height="340"/>
+<img src=https://github.com/benkrichman/geocontour/raw/main/images/example_small_contour.png width="340" height="340"/>
 </p>
 
 ### construct geocontour
@@ -162,8 +162,8 @@ geocontour.output.plot(latitudes,longitudes,geocontour=geocontour_simp,buffer='o
 ```
 
 <p float="middle">
-<img src=https://github.com/benkrichman/geocontour/raw/main/images/example_small_geocontour.png width="400" height="400"/>
-<img src=https://github.com/benkrichman/geocontour/raw/main/images/example_small_geocontour_simp.png width="400" height="400"/>
+<img src=https://github.com/benkrichman/geocontour/raw/main/images/example_small_geocontour.png width="340" height="340"/>
+<img src=https://github.com/benkrichman/geocontour/raw/main/images/example_small_geocontour_simp.png width="340" height="340"/>
 </p>
 
 ### project geocontour against map features
