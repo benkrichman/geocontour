@@ -8,6 +8,8 @@ version: 2
 #python
 python:
   version: 3
+  install:
+    - requirements: docs/requirements.txt
 
 #sphinx
 sphinx:
