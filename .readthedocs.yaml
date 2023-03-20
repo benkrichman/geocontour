@@ -16,8 +16,3 @@ sphinx:
   builder: html
   configuration: docs/source/conf.py
 
-#build
-build:
-  jobs:
-    pre_build:
-      - sphinx-apidoc -Mfe -o source/ ../geocontour
