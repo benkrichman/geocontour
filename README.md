@@ -64,12 +64,12 @@ Useful mask operators
 ### Contours
 
 Implements 4 existing algorithms for contour tracing, and two improvements on known algorithms
-- square tracing [^IPP][^Toussaint]
-- moore neighbor tracing [^IPP][^Toussaint]
+- square tracing [^1][^2]
+- moore neighbor tracing [^1][^2]
 - improved moore neighbor tracing (capturing inside corners)
-- pavlidis tracing [^IPP][^Pavlidis]
+- pavlidis tracing [^1][^3]
 - improved pavlidis tracing (capturing inside corners)
-- fast representative tracing [^FRT]
+- fast representative tracing [^4]
 
 Tuning of contours created from tracing input masks
 - trace direction
@@ -181,12 +181,10 @@ geocontour.output.plot(latitudes,longitudes,geocontour=geocontour,title='Example
 
 <img src=https://github.com/benkrichman/geocontour/raw/main/images/example_large_geocontour%2Bbordfeat.png width="800">
 
-[^IPP]: Ghuneim, A.G. (2000). *Contour Tracing*. McGill University. <https://www.imageprocessingplace.com/downloads_V3/root_downloads/tutorials/contour_tracing_Abeer_George_Ghuneim/alg.html>
+[^1]: Ghuneim, A.G. (2000). *Contour Tracing*. McGill University. <https://www.imageprocessingplace.com/downloads_V3/root_downloads/tutorials/contour_tracing_Abeer_George_Ghuneim/alg.html>
 
-[^Toussaint]: Toussaint, G.T. (2010). *Grids Connectivity and Contour Tracing* [Lesson Notes]. McGill University. <http://www-cgrl.cs.mcgill.ca/~godfried/teaching/mir-reading-assignments/Chapter-2-Grids-Connectivity-Contour-Tracing.pdf>
+[^2]: Toussaint, G.T. (2010). *Grids Connectivity and Contour Tracing* [Lesson Notes]. McGill University. <http://www-cgrl.cs.mcgill.ca/~godfried/teaching/mir-reading-assignments/Chapter-2-Grids-Connectivity-Contour-Tracing.pdf>
 
-[^Pavlidis]: Pavlidis, T. (1982) Algorithms for Graphics and Image Processing. Computer Science Press, New York, NY. <https://doi.org/10.1007/978-3-642-93208-3>
+[^3]: Pavlidis, T. (1982) Algorithms for Graphics and Image Processing. Computer Science Press, New York, NY. <https://doi.org/10.1007/978-3-642-93208-3>
 
-[^FRT]: Seo, J., Chae, S., Shim, J., Kim, D., Cheong, C., & Han, T.-D. (2016). Fast Contour-Tracing Algorithm Based on a Pixel-Following Method for Image Sensors. Sensors, 16(3), 353. <https://doi.org/10.3390/s16030353>
-
-[^Osborne]: Osborne, P. (2013). The Mercator Projections. Zenodo. <https://doi.org/10.5281/zenodo.35392>
+[^4]: Seo, J., Chae, S., Shim, J., Kim, D., Cheong, C., & Han, T.-D. (2016). Fast Contour-Tracing Algorithm Based on a Pixel-Following Method for Image Sensors. Sensors, 16(3), 353. <https://doi.org/10.3390/s16030353>
