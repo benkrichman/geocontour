@@ -29,5 +29,5 @@ myst_enable_extensions=['html_image']
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
 html_theme = 'sphinx_rtd_theme'
-html_static_path = ['_static']
+html_static_path = ['source/_static']
 html_logo = 'icon_geocontour.png'
