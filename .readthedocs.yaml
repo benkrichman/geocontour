@@ -8,8 +8,8 @@ version: 2
 # python
 python:
   install:
-    - requirements: docs/requirements.txt
-    - method: pip
+    requirements: docs/requirements.txt
+    method: pip
 
 # sphinx
 sphinx:
