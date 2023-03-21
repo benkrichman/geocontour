@@ -34,14 +34,14 @@ Find the full documentation hosted [here](https://geocontour.readthedocs.io/en/l
 
 If geocontour played a significant role in your work and you would like to cite it, the following is suggested (APA):
 
-Krichman, B. (2023). *geocontour* (Version 1.2.2) [Computer Software]. https://doi.org/10.5281/zenodo.7707058
+Krichman, B. (2023). *geocontour* (Version 1.2.2) [Computer Software]. https://doi.org/10.5281/zenodo.7757447
 
 Bibtex:
 
 ```latex
 @software{geocontour,
 author={Krichman, Benjamin},
-doi={10.5281/zenodo.7707058},
+doi={10.5281/zenodo.7757447},
 license={MIT},
 month={3},
 year={2023},
