@@ -5,13 +5,13 @@
 # Required
 version: 2
 
-#python
+# python
 python:
   version: 3
   install:
     - requirements: docs/requirements.txt
 
-#sphinx
+# sphinx
 sphinx:
   builder: html
   configuration: docs/source/conf.py
