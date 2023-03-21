@@ -16,7 +16,7 @@ sphinx:
   configuration: docs/source/conf.py
 
 # build
-#build:
-#  tools:
-#    python: 3
+build:
+  tools:
+    python: 3
 
