@@ -9,7 +9,6 @@ version: 2
 python:
   install:
     - requirements: docs/requirements.txt
-    - method: pip
 
 # sphinx
 sphinx:
