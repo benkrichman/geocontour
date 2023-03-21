@@ -19,5 +19,5 @@ sphinx:
 # build
 build:
   tools:
-    python: '3.9'
+    python: "3"
 
