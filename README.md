@@ -68,13 +68,15 @@ Useful mask operators
 
 ### Contours
 
-Implements 4 existing algorithms for contour tracing, and two improvements on known algorithms
-- square tracing [^1][^2]
-- moore neighbor tracing [^1][^2]
+Implements 6 existing algorithms for contour tracing, and two improvements on known algorithms
+- square tracing (a.k.a. simple boundary follower/Papert's turtle algorithm) [^3][^5][^7][^8]
+- moore neighbor tracing [^3][^8]
 - improved moore neighbor tracing (capturing inside corners)
-- pavlidis tracing [^1][^3]
+- pavlidis tracing [^3][^6]
 - improved pavlidis tracing (capturing inside corners)
-- fast representative tracing [^4]
+- modified simple boundary follower [^4]
+- improved simple boundary follower [^1][^2][^7]
+- fast representative tracing [^7]
 
 Tuning of contours created from tracing input masks
 - trace direction
@@ -186,10 +188,19 @@ geocontour.output.plot(latitudes,longitudes,geocontour=geocontour,title='Example
 
 <img src=https://github.com/benkrichman/geocontour/raw/main/images/example_large_geocontour%2Bbordfeat.png width="800">
 
-[^1]: Ghuneim, A.G. (2000). *Contour Tracing*. McGill University. <https://www.imageprocessingplace.com/downloads_V3/root_downloads/tutorials/contour_tracing_Abeer_George_Ghuneim/alg.html>
+[^1]: Cheong, C.-H., & Han, T.-D. (2006). Improved Simple Boundary Following Algorithm. Journal of KIISE: Software and Applications, 33(4), 427–439. <https://koreascience.kr/article/JAKO200622219415761.pdf>
 
-[^2]: Toussaint, G.T. (2010). *Grids Connectivity and Contour Tracing* [Lesson Notes]. McGill University. <http://www-cgrl.cs.mcgill.ca/~godfried/teaching/mir-reading-assignments/Chapter-2-Grids-Connectivity-Contour-Tracing.pdf>
+[^2]: Cheong, C.-H., Seo, J., & Han, T.-D. (2006). Advanced Contour Tracing Algorithms based on Analysis of Tracing Conditions. Proceedings of the 33rd KISS Fall Conference, 33, 431–436. <https://koreascience.kr/article/CFKO200614539217302.pdf>
 
-[^3]: Pavlidis, T. (1982) Algorithms for Graphics and Image Processing. Computer Science Press, New York, NY. <https://doi.org/10.1007/978-3-642-93208-3>
+[^3]: Ghuneim, A.G. (2000). *Contour Tracing*. McGill University. <https://www.imageprocessingplace.com/downloads_V3/root_downloads/tutorials/contour_tracing_Abeer_George_Ghuneim/alg.html>
 
-[^4]: Seo, J., Chae, S., Shim, J., Kim, D., Cheong, C., & Han, T.-D. (2016). Fast Contour-Tracing Algorithm Based on a Pixel-Following Method for Image Sensors. Sensors, 16(3), 353. <https://doi.org/10.3390/s16030353>
+[^4]: Gose, E., Johnsonbaugh, R., & Jost, S. (1996). Pattern recognition and image analysis. Prentice Hall PTR.
+
+[^5]: Papert, S. (1973). Uses of Technology to Enhance Education (No. 298; Artificial Intelligence). Massachusetts Institute of Technology. <https://dspace.mit.edu/handle/1721.1/6213>
+
+[^6]: Pavlidis, T. (1982) Algorithms for Graphics and Image Processing. Computer Science Press, New York, NY. <https://doi.org/10.1007/978-3-642-93208-3>
+
+[^7]: Seo, J., Chae, S., Shim, J., Kim, D., Cheong, C., & Han, T.-D. (2016). Fast Contour-Tracing Algorithm Based on a Pixel-Following Method for Image Sensors. Sensors, 16(3), 353. <https://doi.org/10.3390/s16030353>
+
+[^8]: Toussaint, G.T. (2010). *Grids Connectivity and Contour Tracing* [Lesson Notes]. McGill University. <http://www-cgrl.cs.mcgill.ca/~godfried/teaching/mir-reading-assignments/Chapter-2-Grids-Connectivity-Contour-Tracing.pdf>
+
