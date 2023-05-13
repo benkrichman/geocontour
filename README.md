@@ -204,3 +204,4 @@ geocontour.output.plot(latitudes,longitudes,geocontour=geocontour,title='Example
 
 [^8]: Toussaint, G.T. (2010). *Grids Connectivity and Contour Tracing* [Lesson Notes]. McGill University. <http://www-cgrl.cs.mcgill.ca/~godfried/teaching/mir-reading-assignments/Chapter-2-Grids-Connectivity-Contour-Tracing.pdf>
 
+
