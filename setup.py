@@ -5,7 +5,7 @@ with open('README.md','r') as ldf:
 
 st.setup(
     name='geocontour',
-    version='1.2.2',
+    version='1.3.0',
     license='MIT',
     url='https://github.com/benkrichman/geocontour',
     description='Utilities for masking, contour tracing, and geocontour construction with gridded geographic data',

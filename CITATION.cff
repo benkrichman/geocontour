@@ -1,4 +1,4 @@
-cff-version: 1.2.2
+cff-version: 1.3.0
 message: "If you use this software, please cite it as below."
 abstract: "Utilities for masking, contour tracing, and geocontour construction with gridded geographic data"
 authors:
@@ -7,8 +7,8 @@ authors:
     given-names: Benjamin
     orcid: "https://orcid.org/0000-0002-7481-8281"
 title: "geocontour"
-date-released: 2023-03-21
-doi: "10.5281/zenodo.7757447"
+date-released: 2023-05-13
+doi: "10.5281/zenodo.7402714"
 keywords:
   - python
   - geospatial
@@ -17,4 +17,4 @@ keywords:
   - gridded-data
 license: MIT
 repository-code: "https://github.com/benkrichman/geocontour"
-version: "1.2.2"
+version: "1.3.0"
