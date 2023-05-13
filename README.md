@@ -69,12 +69,12 @@ Useful mask operators
 ### Contours
 
 Implements 6 existing algorithms for contour tracing, and two improvements on known algorithms
-- square tracing (a.k.a. simple boundary follower/Papert's turtle algorithm) [^3][^5][^7][^8]
+- square tracing (a.k.a. simple boundary follower/Papert's turtle algorithm) [^3][^4][^5][^7][^8]
 - moore neighbor tracing [^3][^8]
 - improved moore neighbor tracing (capturing inside corners)
 - pavlidis tracing [^3][^6]
 - improved pavlidis tracing (capturing inside corners)
-- modified simple boundary follower [^4]
+- modified simple boundary follower [^1][^2][^4]
 - improved simple boundary follower [^1][^2][^7]
 - fast representative tracing [^7]
 

@@ -182,7 +182,7 @@ def contourtrace(numtests=10,runspertest=1,boundname='generic_boundary',spacing=
     Returns
     -------
     results : ndarray
-        2D Nx7 array of timing results in units of seconds where N is
+        2D Nx9 array of timing results in units of seconds where N is
         equal to len(`spacing`)
  
             column1: number of cells in mask
@@ -197,7 +197,11 @@ def contourtrace(numtests=10,runspertest=1,boundname='generic_boundary',spacing=
 
             column6: pavlidis_imp() timing
 
-            column7: TSR() timing
+            column7: MSBF() timing
+
+            column8: ISBF() timing
+
+            column9: TSR() timing
 
     See Also
     --------
@@ -248,6 +252,12 @@ def contourtrace(numtests=10,runspertest=1,boundname='generic_boundary',spacing=
         pavlidis_impfunc=(lambda: gcct.pavlidis_imp(mask,lats,lons))
         TM=tm.Timer(pavlidis_impfunc)
         pavlidis_imptimes=TM.repeat(numtests,runspertest)
+        MSBFfunc=(lambda: gcct.MSBF(mask,lats,lons))
+        TM=tm.Timer(MSBFfunc)
+        MSBFtimes=TM.repeat(numtests,runspertest)
+        ISBFfunc=(lambda: gcct.ISBF(mask,lats,lons))
+        TM=tm.Timer(ISBFfunc)
+        ISBFtimes=TM.repeat(numtests,runspertest)
         TSRfunc=(lambda: gcct.TSR(mask,lats,lons))
         TM=tm.Timer(TSRfunc)
         TSRtimes=TM.repeat(numtests,runspertest)
@@ -257,6 +267,8 @@ def contourtrace(numtests=10,runspertest=1,boundname='generic_boundary',spacing=
             moore_imptime=np.mean(moore_imptimes)
             pavlidistime=np.mean(pavlidistimes)
             pavlidis_imptime=np.mean(pavlidis_imptimes)
+            MSBFtime=np.mean(MSBFtimes)
+            ISBFtime=np.mean(ISBFtimes)
             TSRtime=np.mean(TSRtimes)
         elif stat=='median':
             squaretime=np.median(squaretimes)
@@ -264,6 +276,8 @@ def contourtrace(numtests=10,runspertest=1,boundname='generic_boundary',spacing=
             moore_imptime=np.median(moore_imptimes)
             pavlidistime=np.median(pavlidistimes)
             pavlidis_imptime=np.median(pavlidis_imptimes)
+            MSBFtime=np.median(MSBFtimes)
+            ISBFtime=np.median(ISBFtimes)
             TSRtime=np.median(TSRtimes)
         elif stat=='min':
             squaretime=np.min(squaretimes)
@@ -271,6 +285,8 @@ def contourtrace(numtests=10,runspertest=1,boundname='generic_boundary',spacing=
             moore_imptime=np.min(moore_imptimes)
             pavlidistime=np.min(pavlidistimes)
             pavlidis_imptime=np.min(pavlidis_imptimes)
+            MSBFtime=np.min(MSBFtimes)
+            ISBFtime=np.min(ISBFtimes)
             TSRtime=np.min(TSRtimes)
         elif stat=='max':
             squaretime=np.max(squaretimes)
@@ -278,11 +294,13 @@ def contourtrace(numtests=10,runspertest=1,boundname='generic_boundary',spacing=
             moore_imptime=np.max(moore_imptimes)
             pavlidistime=np.max(pavlidistimes)
             pavlidis_imptime=np.max(pavlidis_imptimes)
+            MSBFtime=np.max(MSBFtimes)
+            ISBFtime=np.max(ISBFtimes)
             TSRtime=np.max(TSRtimes)
         else:
             sys.exit('ERROR - stat=\''+stat+'\' is not a valid selection, valid selections are \'mean\'/\'median\'/\'min\'/\'max\'')
-        output.append([numcells,squaretime,mooretime,moore_imptime,pavlidistime,pavlidis_imptime,TSRtime])
-        print('\n'+str(numcells)+' cells in mask:\n   '+stat+' square time: '+str(squaretime)+'\n   '+stat+' moore time: '+str(mooretime)+'\n   '+stat+' moore_imp time: '+str(moore_imptime)+'\n   '+stat+' pavlidis time: '+str(pavlidistime)+'\n   '+stat+' pavlidis_imp time: '+str(pavlidis_imptime)+'\n   '+stat+' TSR time: '+str(TSRtime))
+        output.append([numcells,squaretime,mooretime,moore_imptime,pavlidistime,pavlidis_imptime,MSBFtime,ISBFtime,TSRtime])
+        print('\n'+str(numcells)+' cells in mask:\n   '+stat+' square time: '+str(squaretime)+'\n   '+stat+' moore time: '+str(mooretime)+'\n   '+stat+' moore_imp time: '+str(moore_imptime)+'\n   '+stat+' pavlidis time: '+str(pavlidistime)+'\n   '+stat+' pavlidis_imp time: '+str(pavlidis_imptime)+'\n   '+stat+' MSBF time: '+str(MSBFtime)+'\n   '+stat+' ISBF time: '+str(ISBFtime)+'\n   '+stat+' TSR time: '+str(TSRtime))
     
     results=np.array(output)
     if plot==True:
@@ -293,7 +311,9 @@ def contourtrace(numtests=10,runspertest=1,boundname='generic_boundary',spacing=
         ax.plot(results[:,0],results[:,3],label='moore_imp')
         ax.plot(results[:,0],results[:,4],label='pavlidis')
         ax.plot(results[:,0],results[:,5],label='pavlidis_imp')
-        ax.plot(results[:,0],results[:,6],label='TSR')
+        ax.plot(results[:,0],results[:,6],label='MSBF')
+        ax.plot(results[:,0],results[:,7],label='ISBF')
+        ax.plot(results[:,0],results[:,8],label='TSR')
         ax.grid()
         if logax==True:
             ax.set_xscale('log')
