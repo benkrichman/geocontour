@@ -1,0 +1,76 @@
+###inspired by https://i.stack.imgur.com/242FM.png (and corresponding SE post)
+
+#ID 1 (FR is full, R is full, BR is full, BBR is full)
+#old - fail
+#new - pass
+#boundary=np.array([[0.5,0.5],[2.5,0.5],[2.5,1.5],[3.5,1.5],[3.5,0.5],[4.5,0.5],[4.5,1.5],[5.5,1.5],[5.5,2.5],[4.5,2.5],[4.5,3.5],[2.5,3.5],[2.5,2.5],[-1.5,2.5],[-1.5,1.5],[0.5,1.5],[0.5,0.5]])
+#longitudes=np.arange(0,5,1)
+#latitudes=np.arange(-2,7,1)[::-1]
+
+#ID 2 (FR is full, R is full, BR is full, BBR is empty)
+#old - pass
+#new - pass
+#boundary=np.array([[0.5,0.5],[2.5,0.5],[2.5,1.5],[3.5,1.5],[3.5,0.5],[4.5,0.5],[4.5,1.5],[5.5,1.5],[5.5,2.5],[4.5,2.5],[4.5,3.5],[2.5,3.5],[2.5,2.5],[-0.5,2.5],[-0.5,1.5],[0.5,1.5],[0.5,0.5]])
+#longitudes=np.arange(0,5,1)
+#latitudes=np.arange(-2,7,1)[::-1]
+
+#ID 3 (FR is full, R is full, BR is empty, BBR is full)
+#old - pass
+#new - pass
+#boundary=np.array([[0.5,0.5],[2.5,0.5],[2.5,1.5],[3.5,1.5],[3.5,0.5],[4.5,0.5],[4.5,1.5],[5.5,1.5],[5.5,2.5],[4.5,2.5],[4.5,3.5],[2.5,3.5],[2.5,2.5],[0.5,2.5],[0.5,1.5],[-0.5,1.5],[-0.5,2.5],[-1.5,2.5],[-1.5,1.5],[0.5,1.5],[0.5,0.5]])
+#longitudes=np.arange(0,5,1)
+#latitudes=np.arange(-2,7,1)[::-1]
+
+#ID 4 (FR is full, R is full, BR is empty, BBR is empty)
+#old - pass
+#new - pass
+#boundary=np.array([[0.5,0.5],[2.5,0.5],[2.5,1.5],[3.5,1.5],[3.5,0.5],[4.5,0.5],[4.5,1.5],[5.5,1.5],[5.5,2.5],[4.5,2.5],[4.5,3.5],[2.5,3.5],[2.5,2.5],[0.5,2.5],[0.5,1.5],[0.5,0.5]])
+#longitudes=np.arange(0,5,1)
+#latitudes=np.arange(-2,7,1)[::-1]
+
+#ID 5 (FR is full, R is empty, BR is full, BBR is full)
+#old - fail
+#new - pass
+#boundary=np.array([[0.5,0.5],[2.5,0.5],[2.5,1.5],[3.5,1.5],[3.5,0.5],[4.5,0.5],[4.5,1.5],[5.5,1.5],[5.5,2.5],[4.5,2.5],[4.5,3.5],[2.5,3.5],[2.5,2.5],[1.5,2.5],[1.5,1.5],[0.5,1.5],[0.5,2.5],[-1.5,2.5],[-1.5,1.5],[0.5,1.5],[0.5,0.5]])
+#longitudes=np.arange(0,5,1)
+#latitudes=np.arange(-2,7,1)[::-1]
+
+#ID 6 (FR is full, R is empty, BR is full, BBR is empty)
+#old - pass
+#new - pass
+#boundary=np.array([[0.5,0.5],[2.5,0.5],[2.5,1.5],[3.5,1.5],[3.5,0.5],[4.5,0.5],[4.5,1.5],[5.5,1.5],[5.5,2.5],[4.5,2.5],[4.5,3.5],[2.5,3.5],[2.5,2.5],[1.5,2.5],[1.5,1.5],[0.5,1.5],[0.5,2.5],[-0.5,2.5],[-0.5,1.5],[0.5,1.5],[0.5,0.5]])
+#longitudes=np.arange(0,5,1)
+#latitudes=np.arange(-2,7,1)[::-1]
+
+#ID 7 (FR is full, R is empty, BR is empty, BBR is full)
+#old - fail
+#new - pass
+#boundary=np.array([[0.5,0.5],[2.5,0.5],[2.5,1.5],[3.5,1.5],[3.5,0.5],[4.5,0.5],[4.5,1.5],[5.5,1.5],[5.5,2.5],[4.5,2.5],[4.5,3.5],[-1.5,3.5],[-1.5,1.5],[-0.5,1.5],[-0.5,2.5],[1.5,2.5],[1.5,1.5],[0.5,1.5],[0.5,0.5]])
+#longitudes=np.arange(0,5,1)
+#latitudes=np.arange(-2,7,1)[::-1]
+
+#ID 8 (FR is full, R is empty, BR is empty, BBR is empty)
+#old - fail
+#new - fail
+#boundary=np.array([[0.5,0.5],[2.5,0.5],[2.5,1.5],[3.5,1.5],[3.5,0.5],[4.5,0.5],[4.5,1.5],[5.5,1.5],[5.5,2.5],[4.5,2.5],[4.5,3.5],[2.5,3.5],[2.5,2.5],[1.5,2.5],[1.5,1.5],[0.5,1.5],[0.5,0.5]])
+#longitudes=np.arange(0,5,1)
+#latitudes=np.arange(-2,7,1)[::-1]
+
+#ID 8 (FR is empty, R is empty, BR is empty, BBR is empty)
+#old - fail
+#new - fail
+#boundary=np.array([[0.5,0.5],[2.5,0.5],[2.5,1.5],[3.5,1.5],[3.5,0.5],[4.5,0.5],[4.5,1.5],[5.5,1.5],[5.5,2.5],[4.5,2.5],[4.5,3.5],[2.5,3.5],[2.5,2.5],[2.5,1.5],[1.5,1.5],[0.5,1.5],[0.5,0.5]])
+#longitudes=np.arange(0,5,1)
+#latitudes=np.arange(-2,7,1)[::-1]
+
+###other Moore tests
+
+#setup to fail all cw and ccw starts
+#boundary=np.array([[0.5,0.5],[1.5,0.5],[1.5,1.5],[3.5,1.5],[3.5,0.5],[4.5,0.5],[4.5,1.5],[3.5,1.5],[3.5,3.5],[4.5,3.5],[4.5,4.5],[3.5,4.5],[3.5,3.5],[1.5,3.5],[1.5,4.5],[0.5,4.5],[0.5,3.5],[1.5,3.5],[1.5,1.5],[0.5,1.5],[0.5,0.5]])
+#longitudes=np.arange(0,6,1)
+#latitudes=np.arange(0,6,1)[::-1]
+
+#setup to fail multiple tests and out of bounds check cells
+#boundary=np.array([[0.5,1.5],[2.5,1.5],[2.5,0.5],[2.5,0.5],[3.5,0.5],[3.5,3],[4.5,3.5],[4,4.5],[1.5,3.5],[0.5,1.5]])
+#longitudes=np.arange(0,6,1)
+#latitudes=np.arange(0,5,1)[::-1]
