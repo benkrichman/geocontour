@@ -18,7 +18,7 @@ try:
 except:
     cp_exists='n'
 
-def plot(latitudes,longitudes,boundary=None,mask=None,contour=None,contoursearch=None,geocontour=None,vertices=None,boundingbox='all',buffer=False,grid=True,cells='default',showcontour=True,startcell=True,contourarrows=True,contoursearcharrows=True,fancycontoursearch=True,contoursearch_contraction=0.2,contoursearch_shift=0.25,geocontourvectors=True,emptycellcolor='lightgrey',fullcellcolor='sandybrown',boundarycolor='tab:blue',contourcolor='olivedrab',contoursearchcolor='firebrick',geocontourcolor='olivedrab',vertexcolor='tab:cyan',gridcolor='black',lw_boundary=0.1,lw_contour=0.1,lw_contoursearch='auto',lw_geocontour=0.1,mw_contourarrows=0.5,mw_contoursearcharrows='auto',mw_vertices=0.4,features=None,title=None,labs=True,outname='plot',outdpi='high',transp=False):
+def plot(latitudes,longitudes,boundary=None,mask=None,contour=None,contoursearch=None,geocontour=None,vertices=None,boundingbox='all',buffer=False,grid=True,cells='default',undermask=False,showcontour=True,startcell=True,contourarrows=True,contoursearcharrows=True,fancycontoursearch=True,contoursearch_contraction=0.2,contoursearch_shift=0.25,geocontourvectors=True,emptycellcolor='lightgrey',fullcellcolor='sandybrown',undermaskcolor='slategrey',boundarycolor='tab:blue',contourcolor='olivedrab',contoursearchcolor='firebrick',geocontourcolor='olivedrab',vertexcolor='tab:cyan',gridcolor='black',lw_boundary=0.1,lw_contour=0.1,lw_contoursearch='auto',lw_geocontour=0.1,mw_contourarrows=0.5,mw_contoursearcharrows='auto',mw_vertices=0.4,features=None,title=None,labs=True,outname='plot',outdpi='high',transp=False):
     """
     Plot any/all geocontour-created elements:
 
@@ -81,6 +81,9 @@ def plot(latitudes,longitudes,boundary=None,mask=None,contour=None,contoursearch
                 `contour` cells
             ``geocontour``
                 `geocontour` cells
+    undermask : bool, default=False
+        show/hide the mask cells independently of the `cells` input
+        [allows showing a mask underlay beneath selected contour cells]
     showcontour : bool, default=True
         show/hide the `contour` (if provided)
         [allows showing contour cells without line plot of `contour`]
@@ -108,6 +111,8 @@ def plot(latitudes,longitudes,boundary=None,mask=None,contour=None,contoursearch
         color for unmasked cells
     fullcellcolor : matplotlib_color, default='sandybrown'
         color for masked cells
+    undermaskcolor : matplotlib_color, default='slategrey'
+        color for mask underlay cells
     boundarycolor : matplotlib_color, default='tab:blue'
         color for `boundary` (if provided)
     contourcolor : matplotlib_color, default='olivedrab'
@@ -369,12 +374,19 @@ def plot(latitudes,longitudes,boundary=None,mask=None,contour=None,contoursearch
          pltmask[latinds,loninds]=1
     else:
         sys.exit('ERROR - cells=\''+cells+'\' is not a valid selection, valid selections are \'none\'/\'mask\'/\'maskedge-8\'/\'maskedge-4\'/\'contour\'/\'geocontour\'')
+    if undermask==True:
+        if mask is not None:
+            pltmask+=mask
+        else:
+            sys.exit('ERROR - Can not set undermask=True if no mask input provided')
+    else:
+        pltmask+=pltmask
     if latdir=='inc':
         org='lower'
     elif latdir=='dec':
         org='upper'
     ext=[gridlonmin,gridlonmax,gridlatmin,gridlatmax]
-    cmp=mplc.ListedColormap([emptycellcolor,fullcellcolor])
+    cmp=mplc.ListedColormap([emptycellcolor,undermaskcolor,fullcellcolor])
     plt.ioff()
     yminor=np.arange(ylimmin,ylimmax+latspc,latspc)
     xminor=np.arange(xlimmin,xlimmax+lonspc,lonspc)
@@ -405,7 +417,7 @@ def plot(latitudes,longitudes,boundary=None,mask=None,contour=None,contoursearch
         ax.set_ylabel('Latitude (deg)')
     ax.set_ylim((ylimmin,ylimmax))
     ax.set_xlim((xlimmin,xlimmax)) 
-    ax.imshow(pltmask,aspect='equal',interpolation='none',vmin=0,vmax=1,extent=ext,origin=org,cmap=cmp,zorder=-1)
+    ax.imshow(pltmask,aspect='equal',interpolation='none',vmin=0,vmax=2,extent=ext,origin=org,cmap=cmp,zorder=-1)
     pdw=ds.plotdatasize(ax,axis='xy',mult=(latspc+lonspc)/2,plottype='line')
     pds=ds.plotdatasize(ax,axis='xy',mult=(latspc+lonspc)/2,plottype='scatter')
     if features is None:
