@@ -502,7 +502,7 @@ def pavlidis(mask,latitudes=None,longitudes=None,direction='cw',start='auto',sto
                 of times (N set by `startvisits` parameter)
             ``either``
                 stops when either Elisoff or Nvisits has been satisfied
-    startvisits : int, default=3
+    startvisits : int, default=1
         the number of times re-visiting the start cell will trigger an
         end to the search
     remcontourrepeat : bool, default=True
@@ -679,7 +679,7 @@ def pavlidis_imp(mask,latitudes=None,longitudes=None,direction='cw',start='auto'
                 of times (N set by `startvisits` parameter)
             ``either``
                 stops when either Elisoff or Nvisits has been satisfied
-    startvisits : int, default=3
+    startvisits : int, default=1
         the number of times re-visiting the start cell will trigger an
         end to the search
     remcontourrepeat : bool, default=True
@@ -817,7 +817,7 @@ def pavlidis_imp(mask,latitudes=None,longitudes=None,direction='cw',start='auto'
     contour,contoursearch=gccu.clean(contourcells,searchcells,latitudes=latitudes,longitudes=longitudes,closecontour=closecontour,remcontourrepeat=remcontourrepeat,remsearchrepeat=remsearchrepeat)
     return contour,contoursearch
 
-def MSBF(mask,latitudes=None,longitudes=None,direction='cw',start='auto',stop='either',startvisits=4,remcontourrepeat=True,remsearchrepeat=False,closecontour=True):
+def MSBF(mask,latitudes=None,longitudes=None,direction='cw',start='auto',stop='either',startvisits=3,remcontourrepeat=True,remsearchrepeat=False,closecontour=True):
     """
     Find the contour of a mask using the modified simple boundary
     following algorithm
@@ -973,7 +973,7 @@ def MSBF(mask,latitudes=None,longitudes=None,direction='cw',start='auto',stop='e
     contour,contoursearch=gccu.clean(contourcells,searchcells,latitudes=latitudes,longitudes=longitudes,closecontour=closecontour,remcontourrepeat=remcontourrepeat,remsearchrepeat=remsearchrepeat)
     return contour,contoursearch
 
-def ISBF(mask,latitudes=None,longitudes=None,direction='cw',start='auto',stop='either',startvisits=4,remcontourrepeat=True,remsearchrepeat=False,closecontour=True):
+def ISBF(mask,latitudes=None,longitudes=None,direction='cw',start='auto',stop='either',startvisits=3,remcontourrepeat=True,remsearchrepeat=False,closecontour=True):
     """
     Find the contour of a mask using the improved simple boundary
     following algorithm
@@ -1159,7 +1159,7 @@ def ISBF(mask,latitudes=None,longitudes=None,direction='cw',start='auto',stop='e
     contour,contoursearch=gccu.clean(contourcells,searchcells,latitudes=latitudes,longitudes=longitudes,closecontour=closecontour,remcontourrepeat=remcontourrepeat,remsearchrepeat=remsearchrepeat)
     return contour,contoursearch
 
-def TSR(mask,latitudes=None,longitudes=None,direction='cw',start='auto',stop='either',startvisits=4,remcontourrepeat=True,remsearchrepeat=False,closecontour=True):
+def TSR(mask,latitudes=None,longitudes=None,direction='cw',start='auto',stop='either',startvisits=3,remcontourrepeat=True,remsearchrepeat=False,closecontour=True):
     """
     Find the contour of a mask using the two-step representative tracing
     algorithm
