@@ -607,30 +607,21 @@ def pavlidis(mask,latitudes=None,longitudes=None,direction='cw',start='auto',sto
             searchcells.append(FO)
             contourcells.append(FO)
             cell=FO
-            if (cell==startcell).all():
-                Nvisits+=1
-            rotations=0
-            breakloop=checkbreak(cell,orientation,Nvisits)
             orientation=outsideturn(orientation)
+            rotations=0
         elif buffermask[F[0],F[1]]==True:
             searchcells.append(FO)
             searchcells.append(F)
             contourcells.append(F)
             cell=F
-            if (cell==startcell).all():
-                Nvisits+=1
             rotations=0
-            breakloop=checkbreak(cell,orientation,Nvisits)
         elif buffermask[FI[0],FI[1]]==True:
             searchcells.append(FO)
             searchcells.append(F)
             searchcells.append(FI)
             contourcells.append(FI)
             cell=FI
-            if (cell==startcell).all():
-                Nvisits+=1
             rotations=0
-            breakloop=checkbreak(cell,orientation,Nvisits)
         else:
             searchcells.append(FO)
             searchcells.append(F)
@@ -639,6 +630,9 @@ def pavlidis(mask,latitudes=None,longitudes=None,direction='cw',start='auto',sto
             rotations+=1
         if rotations>3:
             sys.exit('ERROR - Stuck on isolated cell '+str(cell))
+        if (cell==startcell).all() and len(contourcells)>1:
+            Nvisits+=1
+        breakloop=checkbreak(cell,orientation,Nvisits)
     contour,contoursearch=gccu.clean(contourcells,searchcells,latitudes=latitudes,longitudes=longitudes,closecontour=closecontour,remcontourrepeat=remcontourrepeat,remsearchrepeat=remsearchrepeat)
     return contour,contoursearch
 
@@ -779,20 +773,14 @@ def pavlidis_imp(mask,latitudes=None,longitudes=None,direction='cw',start='auto'
             searchcells.append(FO)
             contourcells.append(FO)
             cell=FO
-            if (cell==startcell).all():
-                Nvisits+=1
             rotations=0
-            breakloop=checkbreak(cell,orientation,Nvisits)
             orientation=outsideturn(orientation)
         elif buffermask[F[0],F[1]]==True:
             searchcells.append(FO)
             searchcells.append(F)
             contourcells.append(F)
             cell=F
-            if (cell==startcell).all():
-                Nvisits+=1
             rotations=0
-            breakloop=checkbreak(cell,orientation,Nvisits)
         elif buffermask[FI[0],FI[1]]==True:
             if buffermask[I[0],I[1]]==True:
                 contourcells.append(I)
@@ -802,10 +790,7 @@ def pavlidis_imp(mask,latitudes=None,longitudes=None,direction='cw',start='auto'
             searchcells.append(FI)
             contourcells.append(FI)
             cell=FI
-            if (cell==startcell).all():
-                Nvisits+=1
             rotations=0
-            breakloop=checkbreak(cell,orientation,Nvisits)
         else:
             searchcells.append(FO)
             searchcells.append(F)
@@ -814,6 +799,9 @@ def pavlidis_imp(mask,latitudes=None,longitudes=None,direction='cw',start='auto'
             rotations+=1
         if rotations>3:
             sys.exit('ERROR - Stuck on isolated cell '+str(cell))
+        if (cell==startcell).all() and len(contourcells)>1:
+            Nvisits+=1
+        breakloop=checkbreak(cell,orientation,Nvisits)
     contour,contoursearch=gccu.clean(contourcells,searchcells,latitudes=latitudes,longitudes=longitudes,closecontour=closecontour,remcontourrepeat=remcontourrepeat,remsearchrepeat=remsearchrepeat)
     return contour,contoursearch
 
