@@ -13,8 +13,8 @@ sys.path.insert(0, os.path.abspath(os.path.join('..', '..', 'geocontour/geoconto
 project = 'geocontour'
 copyright = '2023, Benjamin Krichman'
 author = 'Benjamin Krichman'
-release = '1.3.0'
-version = '1.3.0'
+release = '1.3.1'
+version = '1.3.1'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
